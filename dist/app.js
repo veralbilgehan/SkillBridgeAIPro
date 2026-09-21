@@ -3041,6 +3041,9 @@ setTimeout(() => {
     };
 
     window.updateDbChain = function(level) {
+        const _chk = document.getElementById('pb-sector');
+        if (!_chk) return;
+
         const sectorEl = document.getElementById('pb-sector');
         const subEl = document.getElementById('pb-subsector');
         const posEl = document.getElementById('pb-position');
