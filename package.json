@@ -1,0 +1,13 @@
+{
+  "name": "skillbridge-ai-pro",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-worker.mjs",
+    "start": "node scripts/build-worker.mjs && node scripts/local-server.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
+

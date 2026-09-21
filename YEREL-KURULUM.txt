@@ -1,0 +1,18 @@
+SKILLBRIDGEAIPRO - WINDOWS YEREL KURULUM
+
+1. Node.js 20 LTS sürümünü https://nodejs.org adresinden kurun.
+2. .env.example dosyasını kopyalayın ve kopyanın adını .env yapın.
+3. .env dosyasında GEMINI_API_KEY= satırına anahtarınızı yazın.
+4. BASLAT.bat dosyasına çift tıklayın.
+5. Tarayıcı otomatik açılmazsa http://localhost:8787 adresini açın.
+
+TASARIM VE KOD DÜZENLEME
+- Sayfa tasarımı ve renkler: dist/styles.css
+- Sayfa içerikleri ve düğme işlevleri: dist/app.js
+- Ana HTML ve başlık: dist/index.html
+- Beceri/yetkinlik tabloları: dist/matrix-data.js
+- Güvenli Gemini API sunucusu: worker/index.js
+
+Bir dosyayı değiştirdikten sonra çalışan siyah pencereyi kapatın ve BASLAT.bat dosyasını yeniden açın.
+
+Gerçek .env dosyasını paylaşmayın veya Git'e yüklemeyin.

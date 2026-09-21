@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="SkillBridgeAIPro değerlendirme ve yönetim paneli">
+  <title>SkillBridgeAIPro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b1220'/%3E%3Cpath d='M18 20h29v8H28v5h15v8H28v5h19v8H18z' fill='%232dd4bf'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css?v=52">
+</head>
+<body>
+  <script>
+    window.onerror = function(msg, url, line, col, error) {
+      document.body.innerHTML += '<div style="color:red; padding:20px; font-family:monospace; z-index:9999; position:relative;">' + 
+        '<b>Error:</b> ' + msg + '<br>' +
+        '<b>URL:</b> ' + url + '<br>' +
+        '<b>Line:</b> ' + line + ':' + col + '<br>' +
+        '</div>';
+      return false;
+    };
+  </script>
+  <div id="app"></div>
+  <script src="./matrix-data.js?v=22"></script>
+  <script src="./app.js?v=999"></script>
+
+  <style>
+    /* Google Translate Widget Styling */
+    #google_translate_element {
+      position: fixed;
+      visibility: hidden !important; width: 0 !important; height: 0 !important; position: absolute !important; overflow: hidden !important;
+      left: 20px;
+      z-index: 99999;
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      font-family: sans-serif;
+      border: 1px solid #e2e8f0;
+    }
+    /* Hide the Google Translate top banner */
+    .skiptranslate iframe {
+      display: none !important;
+    }
+    body {
+      top: 0px !important;
+    }
+    /* Style the select dropdown */
+    .goog-te-combo {
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      font-size: 14px;
+      outline: none;
+      cursor: pointer;
+    }
+  </style>
+  <div id="google_translate_element"></div>
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'tr',
+        includedLanguages: 'tr,en,fr,es,de,ar',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+</body>
+</html>

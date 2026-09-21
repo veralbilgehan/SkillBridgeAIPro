@@ -1,0 +1,10 @@
+const fs = require('fs');
+let c = fs.readFileSync('dist/app.js', 'utf8');
+c = c.replace(/\\\\'secure-exam\\\\'/g, "'secure-exam'");
+c = c.replace(/\\\\'evaluation\\\\'/g, "'evaluation'");
+c = c.replace(/\\\\'\.modal\\\\'/g, "'.modal'");
+c = c.replace(/\\\\'Rapor indiriliyor\.\.\.\\\\'/g, "'Rapor indiriliyor...'");
+c = c.replace(/\\\\'Değerlendirme sonucu e-posta ile gönderildi\.\\\\'/g, "'Değerlendirme sonucu e-posta ile gönderildi.'");
+c = c.replace(/\\\\'DeA,,erlendirme sonucu e-posta ile gAA nderildi\.\\\\'/g, "'Değerlendirme sonucu e-posta ile gönderildi.'");
+fs.writeFileSync('dist/app.js', c);
+console.log('Fixed syntax in app.js');
