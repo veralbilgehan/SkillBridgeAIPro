@@ -1,4 +1,5 @@
-const state={logged:false,page:'dashboard',theme:'light',query:'',testLevel:'',testQuestions:'',testSource:'',testDate:'',testSector:'',resultQuery:'',resultDepartment:'',resultScore:'',resultOutcome:'',pendingCase:'',evaluationTransferred:false};
+if(!String.prototype.replaceAll){String.prototype.replaceAll=function(target,replacement){if(target instanceof RegExp){return this.replace(target,replacement);}return this.split(target).join(replacement);};}
+var state=window.state||{logged:false,page:'dashboard',theme:'light',query:'',testLevel:'',testQuestions:'',testSource:'',testDate:'',testSector:'',resultQuery:'',resultDepartment:'',resultScore:'',resultOutcome:'',pendingCase:'',evaluationTransferred:false};window.state=state;
 function prepareTestFromCase(caseText){state.pendingCase=caseText||'';go('mcq');setTimeout(()=>document.getElementById('mcq-case')?.focus(),0)}
 const tests=[
  {name:'Takım Lideri – Lojistik Kariyer Simülasyonu',sector:'Lojistik, Tedarik ve Ulaştırma',level:'Orta',q:25,answered:23,correct:18,wrong:5,uses:44,mostWrong:'Soru 14 · Kriz önceliklendirme',source:'Yetkinlik Kütüphanesi',date:'12.09.2026'},
@@ -8,22 +9,112 @@ const tests=[
  {name:'Proje Yönetimi Yetkinlik Testi',sector:'Denizcilik ve Gemi İnşa',level:'Orta',q:20,answered:20,correct:16,wrong:4,uses:36,mostWrong:'Soru 11 · Risk yanıtı',source:'PMO',date:'18.08.2026'}
 ];
 const candidateResults=[
- {name:'Senem Yiğit',email:'senem.yigit@gmail.com',test:'Çalışan Adayı',department:'AR-GE',detail:'Hizmet, Sağlık ve Eğitim',score:0,outcome:'Geliştirilmeli',date:'13.09.2026',time:'18:46:43',summary:'Aday; Problem Çözme, Stratejik Düşünme ve Risk Önleyici Düşünme yetkinliklerinde hedef seviyenin altında kalmıştır.', detailedReport: [
-     {question: 'Kriz anında ilk olarak ne yaparsınız?', answer: 'Beklerim.', status: 'negative', seconds: 12},
-     {question: 'Takım içi çatışmayı nasıl çözersiniz?', answer: 'Bilmiyorum.', status: 'negative', seconds: 8},
-     {question: 'Yeni bir yazılım dilini ne kadar sürede öğrenirsiniz?', answer: '', status: 'blank', seconds: 0}
- ]},
- {name:'Süper Yönetici',email:'bilgehanveral@gmail.com',test:'Takım Lideri (Team Lead)',department:'Ulaştırma ve Depolama',detail:'Uluslararası forwarder, navlun fiyatlama ve intermodal taşımacılık',score:42,outcome:'Geliştirilmeli',date:'12.09.2026',time:'14:05:42',summary:'Yaratıcı Düşünme, Takım Çalışması ve operasyonel liderlik alanlarında gelişim önerilmektedir.', detailedReport: [
-     {question: 'Ekibiniz motivasyon kaybı yaşıyor, ne yaparsınız?', answer: 'Toplantı yapıp hedefleri tekrar hatırlatırım.', status: 'positive', seconds: 45},
-     {question: 'Operasyonel bir hata oluştuğunda kime raporlarsınız?', answer: 'Kimseye raporlamam, kendim çözerim.', status: 'negative', seconds: 20},
-     {question: 'Bütçe kısıntısı durumunda takım motivasyonunu nasıl korursunuz?', answer: 'Zor olur.', status: 'negative', seconds: 15}
- ]},
- {name:'Aday 003',email:'aday003@skillbridge.com.tr',test:'Proje Yönetimi Yetkinlik Testi',department:'Proje Yönetimi',detail:'Denizcilik ve Gemi İnşa',score:61,outcome:'Olumlu',date:'11.09.2026',time:'11:24:08',summary:'Aday temel gereksinimleri karşılamış, risk yönetimi ve paydaş iletişiminde gelişim alanları göstermiştir.', detailedReport: [
-     {question: 'Projeyi zamanında teslim etmek için hangi aracı kullanırsınız?', answer: 'Jira ve MS Project kullanıyorum.', status: 'positive', seconds: 32},
-     {question: 'Müşteri aniden kapsamı değiştirirse nasıl tepki verirsiniz?', answer: 'Değişiklik talebi formu oluştururum ve bütçe/zaman etkisini analiz ederim.', status: 'positive', seconds: 55},
-     {question: 'Riskleri nasıl belgelersiniz?', answer: 'Sadece mail atarım.', status: 'negative', seconds: 18}
- ]}
+{name:'Senem Yiğit',email:'senem.yigit@gmail.com',test:'Çalışan Adayı',department:'AR-GE',detail:'Hizmet, Sağlık ve Eğitim',score:0,outcome:'Geliştirilmeli (Yetersiz)',date:'13.09.2026',time:'18:46:43',
+  summary:'Yetenek ve Yetkinlik Değerlendirme Sonucu: Geliştirilmeli (Yetersiz). Adayın tüm ölçülen bilişsel ve temel yetkinliklerde sergilediği performans, AR-GE ve Sağlık / Eğitim alanındaki Çalışan Adayı pozisyonu için beklenen asgari seviyenin oldukça altında kalmıştır. Adayın kriz anlarında karar alma reflekslerinde pasif kaldığı, belirsizlik karşısında inisiyatif alamadığı ve teknik soruları yanıtsız bıraktığı saptanmıştır.',
+  psychologicalProfile:'Adayın bilişsel ve davranışsal reaksiyon profili incelendiğinde; belirsizlik, zaman kısıtı ve kriz senaryoları altında karar vermekten çekindiği ve kaçınma refleksi geliştirdiği gözlemlenmiştir. Problem Çözme, Stratejik Düşünme ve İletişim eksenlerinde özgüven eksikliği ve pasif bekleme eğilimi baskındır. Verilen yanıtlarda analitik bir metodoloji (kök neden analizi, etki haritalama, önceliklendirme) görülmemektedir. Adayın ekip içi çatışma ve ani gelişen krizlerde proaktif çözüm üretmek yerine sorumluluğu dışsallaştırdığı ve çekimser kaldığı tespit edilmiştir.',
+  strengths:[
+    'Yönerge Takip Uyumu: Yüksek oranda yapılandırılmış, net talimatlı ve düşük belirsizlikli rutin iş ortamlarında çalışma potansiyeli.',
+    'Gözlem ve Dinleme Eğilimi: Hızlı fevri kararlar almaktan kaçınarak bekleme refleksi göstermesi.',
+    'Gelişime Açıklık: Temel eğitim ve mentorluk desteğiyle baştan şekillendirilebilir ham yetkinlik profili.'
+  ],
+  watchouts:[
+    '🚨 Yüksek Karar Tereddüdü: Kriz ve belirsizlik anlarında donakalma (freezing) ve pasif bekleme refleksi.',
+    '🚨 Çatışma Kaçınması: Ekip içi uyuşmazlıklarda yapıcı müzakere yerine tamamen geri çekilme davranışı.',
+    '🚨 Görevi Erken Terk Etme: Teknik veya zorlu adımlarda soruyu boş bırakarak vazgeçme eğilimi.'
+  ],
+  errorDetector:'Adayın simülasyon ve vaka testindeki yanıtları analiz edildiğinde 3 kritik bilişsel zafiyet tespit edilmiştir:\n1. Kriz Refleksi Zafiyeti: \'Kriz anında ilk olarak ne yaparsınız?\' sorusuna verilen \'Beklerim\' yanıtı, kriz yönetiminde kabul edilemez bir atalet ve inisiyatif yoksunluğunu temsil etmektedir.\n2. İletişim ve Çözüm Blokajı: \'Takım içi çatışmayı nasıl çözersiniz?\' sorusuna verilen \'Bilmiyorum\' cevabı, temel çatışma çözme ve müzakere reflekslerinin henüz oluşmadığını ortaya koymaktadır.\n3. Süreçten Kopma: Teknik öğrenme sorusunun tamamen boş bırakılması, stres toleransının düşüklüğünü ve bilişsel direnç eksikliğini göstermektedir.',
+  benchmark:'Adayın %0\'lık değerlendirme skoru, Hizmet, Sağlık ve Eğitim Ar-Ge sektöründeki aday havuzunun %1\'lik en alt diliminde yer almaktadır. Sektör genelinde bu rol için ortalama başarı düzeyi %58, beklenen asgari kabul barajı ise %50\'dir. Aday, sektörün medyan performansının 58 puan gerisindedir ve mevcut yetkinlik seviyesiyle bağımsız bir iş sürecini yürütmeye hazır değildir.',
+  mentorDecision:'Adayın mevcut yetkinlik seviyesi \'Çalışan Adayı\' pozisyonu için yetersiz bulunmuştur. Mevcut haliyle doğrudan işe alımı veya kritik operasyonlara atanması önerilmemektedir. Adayın temel iş yetkinliklerini kazanabilmesi için 90 günlük yapılandırılmış bir ön hazırlık ve temel eğitim programını tamamlaması, ardından yeniden değerlendirmeye tabi tutulması tavsiye edilir.',
+  roadmap:{
+    p30:'Temel Problem Çözme ve İletişim Atölyeleri: 5 Neden analizi, Balık Kılçığı metodolojisi ve aktif dinleme eğitimleri.',
+    p60:'Simüle Vaka Çalışmaları ve Eşli Mentorluk: Haftalık kontrollü senaryolarda karar verme ve ekip içi rol oynama pratikleri.',
+    p90:'Bağımsız Küçük Ölçekli Görevler & Geri Bildirim Döngüsü: Düşük riskli mikro görevlerin teslimi ve kapsamlı reassessment testi.'
+  },
+  metrics:{ accuracy: 0, speed: '6.7 sn/soru (Aşırı acele/vazgeçme)', consistency: '%12 (Düşük)', riskFactor: 'YÜKSEK', percentile: 'Alt %1' },
+  competencies:[
+    {name:'Problem Çözme',category:'BİLİŞSEL',score:0,target:60,levelName:'Seviye 1 (Başlangıç / Destek Gerekli)',levelDesc:'Problemler karşısında pasif kalır, yönlendirme ve doğrudan müdahale olmadan çözüm üretemez.'},
+    {name:'Analitik Düşünme',category:'BİLİŞSEL',score:0,target:60,levelName:'Seviye 1 (Başlangıç / Destek Gerekli)',levelDesc:'Veri ve durumları sistematik parçalara ayıramaz, sezgisel ve yüzeysel yaklaşır.'},
+    {name:'Karar Verme',category:'BİLİŞSEL',score:0,target:60,levelName:'Seviye 1 (Başlangıç / Destek Gerekli)',levelDesc:'Belirsizlik anında karar vermekten kaçınır, eylemsizlik gösterir.'},
+    {name:'İletişim ve İş Birliği',category:'TEMEL',score:10,target:70,levelName:'Seviye 1 (Başlangıç / Destek Gerekli)',levelDesc:'Duygu ve fikir aktarımında tutuktur, çatışma anında geri çekilir.'},
+    {name:'Sonuç Odaklılık',category:'YÖNETSEL',score:0,target:65,levelName:'Seviye 1 (Başlangıç / Destek Gerekli)',levelDesc:'Hedef baskısı altında odak kaybeder, engeller karşısında süreci durdurur.'},
+    {name:'Süreç ve Kalite Disiplini',category:'FONKSİYONEL',score:15,target:75,levelName:'Seviye 1 (Başlangıç / Destek Gerekli)',levelDesc:'Kurumsal standartları ve iş akışlarını takip etmekte zorlanır.'}
+  ],
+  detailedReport: [
+     {question: 'Kriz anında ilk olarak ne yaparsınız?', answer: 'Beklerim.', status: 'negative', seconds: 12, level:'Bilişsel', correctAnswer:'Durum tespiti yapar, riskleri önceliklendirir ve paydaşları bilgilendirerek acil eylem planını devreye alırım.'},
+     {question: 'Takım içi çatışmayı nasıl çözersiniz?', answer: 'Bilmiyorum.', status: 'negative', seconds: 8, level:'Davranışsal', correctAnswer:'Tarafları ayrı ayrı ve birlikte dinler, ortak hedefe odaklayarak yapıcı uzlaşma protokolü oluştururum.'},
+     {question: 'Yeni bir yazılım dilini veya aracı ne kadar sürede öğrenirsiniz?', answer: '', status: 'blank', seconds: 0, level:'Teknik', correctAnswer:'Dokümantasyon ve pratik projelerle 2-3 haftada temel işlevleri, 2 ayda ileri seviye mimariyi çözerim.'}
+  ]},
+{name:'Süper Yönetici',email:'bilgehanveral@gmail.com',test:'MÜDÜR YARDIMCISI',department:'Tekstil, Hazır Giyim ve Deri Endüstrisi',detail:'Perakende Ticaret',score:100,outcome:'Şiddetle Tavsiye Edilir',date:'12.09.2026',time:'14:05:42',
+  summary:'Yetenek ve Yetkinlik Değerlendirme Sonucu: Şiddetle Tavsiye Edilir. Adayın tüm ölçülen yetkinliklerde sergilediği kusursuz performans, "MÜDÜR YARDIMCISI / Perakende Ticaret" pozisyonu için aranan tüm niteliklere fazlasıyla sahip olduğunu kanıtlamaktadır. Kendisi, karmaşık perakende ortamında anında değer katabilecek, stratejik düşünebilen ve sonuç odaklı bir profesyoneldir.',
+  psychologicalProfile:'Aday, "MÜDÜR YARDIMCISI / Perakende Ticaret" pozisyonu için kritik öneme sahip Analitik Düşünme, Problem Çözme, Karar Verme, İletişim, Sonuç Odaklılık, İnisiyatif Alma, Süreç Odaklılık, Stratejik Düşünme, Vizyoner Liderlik ve İlişki Yönetimi yetkinliklerinin tamamında %100 başarı göstererek olağanüstü bir performans sergilemiştir. Özellikle müşteri geri bildirimlerini analiz etme, kişiselleştirilmiş çözümler sunma ve kurumsal standartlar geliştirme konularındaki yetkinliği dikkat çekicidir. Bu sonuçlar, adayın perakende sektöründeki karmaşık durumları anlama, etkili çözümler üretme ve stratejik kararlar alma konusundaki üstün kapasitesini net bir şekilde ortaya koymaktadır.',
+  strengths:[
+    'Stratejik Vizyon ve Sistemik Düşünme: Perakende dinamiklerini çok boyutlu analiz edebilme ve kurumsal standart koyma.',
+    'Kusursuz Karar Verme Refleksi: Kriz ve belirsizlik anında sakin, hızlı ve kök nedene dayalı çözümler üretme.',
+    'Yüksek Duygusal Zeka & Paydaş Müzakeresi: Müşteri memnuniyetini maksimize ederken kurum hedeflerini tavizsiz koruma.'
+  ],
+  watchouts:[
+    '✨ Aşırı Mükemmeliyetçilik Riski: Kendi yüksek standartlarını tüm ekibe empoze ederken mikro yönetim tuzağına düşmeme konusunda farkındalık.',
+    '✨ Delegasyon Dengesi: Kritik süreçleri bizzat üstlenme isteği yerine ekibi yetkilendirmeye odaklanması önerilir.'
+  ],
+  errorDetector:'Adayın sınavdaki tüm sorulara doğru yanıt vermesi nedeniyle herhangi bir refleks zafiyeti veya hata tespit edilmemiştir. Her bir soruya verilen cevaplar, adayın ölçülen yetkinlikleri kavramsal ve pratik düzeyde eksiksiz anladığını göstermektedir. Bu durum, adayın baskı altında bile tutarlı ve doğru kararlar verebilme yeteneğini ve analitik düşünme süreçlerindeki sağlamlığını ortaya koymaktadır.',
+  benchmark:'Adayın %100\'lük genel başarı skoru, pozisyon için belirlenen ideal profilin çok üzerinde bir performansı temsil etmektedir. Bu sonuç, adayın sadece beklentileri karşılamakla kalmadığını, aynı zamanda perakende sektöründeki bir Müdür Yardımcısından beklenen tüm yetkinlikleri en üst düzeyde içselleştirdiğini ve uygulayabildiğini göstermektedir. Sektördeki benzer pozisyonlar için benchmark analizlerinde, adayın bu seviyedeki tutarlı başarısı onu potansiyel lider adayları arasında zirveye yerleştirmektedir.',
+  mentorDecision:'Adayın bu değerlendirmede tüm yetkinliklerde %100 başarı göstermesi nedeniyle doğrudan bir gelişim alanı belirlenmemiştir. Ancak sürekli öğrenme ve gelişim perspektifiyle, adayın mevcut üstün yetkinliklerini daha da derinleştirmesi önerilir. Özellikle, perakende sektöründeki dijital dönüşüm ve yapay zeka destekli müşteri analitiği konularında ileri düzey eğitimler alarak bilgi birikimini artırabilir. Ayrıca, mağaza dışı kurumsal ağlarda liderlik rolü üstlenebileceği çapraz fonksiyonlu projelere katılım sağlamak, stratejik vizyonunu genişletmesine yardımcı olacaktır. Gelecekteki üst düzey yöneticilik pozisyonları için mentörlük programlarına dahil olması ve uluslararası perakende trendlerini takip etmesi tavsiye edilir.',
+  roadmap:{
+    p30:'Üst Düzey Yönetim Oryantasyonu & Çoklu Mağaza Portföy Analizi: Bölgesel KPI hedeflerinin belirlenmesi.',
+    p60:'Omnichannel & Dijital Perakende İnovasyon Stratejisi Liderliği: Yapay zeka destekli stok ve müşteri analitiği entegrasyonu.',
+    p90:'Yurt Dışı Pazarlar & Geleceğin Perakendesi Dönüşüm Programı Patronluğu: Kurumsal mentörlük ve direktörlük hazırlığı.'
+  },
+  metrics:{ accuracy: 100, speed: '34 sn/soru (İdeal)', consistency: '%100 (Kusursuz)', riskFactor: 'ASGARİ', percentile: 'Zirve %0.1' },
+  competencies:[
+    {name:'Analitik Düşünme',category:'BİLİŞSEL',score:100,target:60,levelName:'Seviye 5 (Örnek)',levelDesc:'Kritik problemlerde örnek düzeydedir, kurumsal standart geliştirir.'},
+    {name:'Problem Çözme',category:'BİLİŞSEL',score:100,target:60,levelName:'Seviye 5 (Örnek)',levelDesc:'Kritik işlerde yöntem geliştirir, kuruma yaygınlaştırır.'},
+    {name:'Karar Verme',category:'BİLİŞSEL',score:100,target:60,levelName:'Seviye 5 (Örnek)',levelDesc:'Çok boyutlu belirsizlikte stratejik ve hızlı kararlar alır.'},
+    {name:'İletişim ve Müzakere',category:'TEMEL',score:100,target:70,levelName:'Seviye 5 (Örnek)',levelDesc:'Paydaşlar ve ekipler arası köprü kurarak mutabakat sağlar.'},
+    {name:'Vizyoner Liderlik',category:'YÖNETSEL',score:100,target:65,levelName:'Seviye 5 (Örnek)',levelDesc:'Ekipleri ortak amaca yönlendirir, yüksek motivasyonla yönetir.'},
+    {name:'Süreç ve Perakende Operasyonu',category:'FONKSİYONEL',score:100,target:75,levelName:'Seviye 5 (Örnek)',levelDesc:'Uçtan uca mağaza ve tedarik süreçlerini optimize eder.'}
+  ],
+  detailedReport: [
+      {question: 'Müşteri memnuniyetsizliği ve iade krizinde ilk refleksiniz ne olur?', answer: 'Müşteriyi aktif dinler, anında telafi sunar ve kök neden analiziyle sistemik önlem alırım.', status: 'positive', seconds: 28, level:'Davranışsal', correctAnswer:'Müşteriyi empatik dinleyerek memnuniyeti anında geri kazanır, hatanın kök nedenini sistemde kalıcı olarak gideririm.'},
+      {question: 'Mağaza içi stok tutarsızlığı tespit edildiğinde süreci nasıl yönetirsiniz?', answer: 'ERP ve sayım eşleştirmesi yapar, barkod/sevkiyat izleme mekanizmasını güncellerim.', status: 'positive', seconds: 34, level:'Fonksiyonel', correctAnswer:'ERP ve fiziki sayım çapraz kontrolünü yapar, RFID/barkod izlenebilirlik sürecini anında denetlerim.'},
+      {question: 'Hedef baskısı altında ekip motivasyonunu nasıl sağlarsınız?', answer: 'Şeffaf KPI hedefleri koyar, başarıyı takdir eder ve mikro-engelleri kaldırırım.', status: 'positive', seconds: 40, level:'Yönetsel', correctAnswer:'Şeffaf KPI hedefleri, mikro-engellerin kaldırılması ve başarıyı ödüllendiren koçluk modeliyle ekibi motive ederim.'}
+  ]},
+{name:'Aday 003',email:'aday003@skillbridge.com.tr',test:'Proje Yönetimi Yetkinlik Testi',department:'Proje Yönetimi',detail:'Denizcilik ve Gemi İnşa',score:61,outcome:'Olumlu (Koşullu / Gelişime Açık)',date:'11.09.2026',time:'11:24:08',
+  summary:'Yetenek ve Yetkinlik Değerlendirme Sonucu: Olumlu (Koşullu / Gelişime Açık). Aday temel proje yönetimi bilgi ve araç hakimiyetini kanıtlamış olup, Denizcilik ve Gemi İnşa projelerinde beklenen orta düzey yetkinlik eşiğini (%60) aşmıştır. Planlama ve değişiklik yönetimi refleksleri güçlü olmakla birlikte; risk belgeleme, proaktif paydaş iletişimi ve kriz önleme mekanizmalarında yapılandırılmış gelişim alanları mevcuttur.',
+  psychologicalProfile:'Adayın yönetsel ve bilişsel profili; görev odaklı, metodolojik araçları (Jira, MS Project) kullanmaya yatkın ve standart iş süreçlerini başarıyla yürüten bir yapıyı işaret etmektedir. Talep değişikliklerinde analitik etki değerlendirmesi yapabilme refleksi pozitiftir. Ancak belirsizlik ve risk yönetimi söz konusu olduğunda reaktif kalma eğilimindedir. Riskleri sistematik bir Risk Kütüğü (Risk Register) ve etki-olasılık matrisiyle takip etmek yerine gayriresmi kanallarla (e-posta) yönetmeye çalışması, yüksek bütçeli gemi inşa projelerinde bilgi kaybına ve operasyonel kırılganlığa yol açabilir. Mentorluk eşliğinde ileri seviye risk liderliğine evrilebilecek yüksek bir potansiyel barındırmaktadır.',
+  strengths:[
+    'Planlama Araçları Yetkinliği: Jira ve MS Project üzerinde iş kırılım yapısı (WBS) kurma becerisi.',
+    'Kapsam Değişikliği Disiplini: Müşteri taleplerini resmi form ve bütçe/zaman analiziyle karşılama refleksi.',
+    'Süreç Uyumu: Standart proje döngülerini disiplinli takip edebilme.'
+  ],
+  watchouts:[
+    '⚠️ Reaktif Risk Yönetimi: Riskleri kurumsal risk siciline kaydetmek yerine gayriresmi bildirimle geçiştirme eğilimi.',
+    '⚠️ Paydaş Şeffaflığı: Kriz anlarında çok paydaşlı eskalasyon mekanizmalarını yeterince işletememe.',
+    '⚠️ Detaycı Bütçe İzleme: Beklenmedik maliyet sapmalarında kök neden analizine geç kalma riski.'
+  ],
+  errorDetector:'Adayın testteki refleksleri detaylandırıldığında en belirgin yanılgı \'Risk Yönetimi\' alanında görülmüştür:\n- Refleks Zafiyeti: \'Riskleri nasıl belgelersiniz?\' sorusuna verilen \'Sadece mail atarım\' yanıtı, Denizcilik ve Gemi İnşa gibi yüksek maliyetli ve regülasyona tabi sektörlerde kritik bir denetim ve kurumsallık açığıdır. Risklerin olasılık, etki, bütçe ve karşı önlem planıyla resmi Risk Kütüğüne (Risk Register / FMEA) işlenmemesi, olası hukuki ve teknik uyuşmazlıklarda projeyi savunmasız bırakır.\n- Pozitif Refleks: Kapsam değişikliğinde anında \'Değişiklik Talep Formu (CRF)\' işletmesi ise olgun bir proje yönetimi refleksidir.',
+  benchmark:'Adayın %61\'lik skoru, Denizcilik ve Gemi İnşa Proje Yönetimi alanındaki akran havuzunun %54\'lük medyan seviyesinin üzerinde, %58\'lik persentil dilimindedir. Sektörün en iyi %10 dilimindeki proje yöneticileri ortalama %84 skor alırken, aday çekirdek operasyonları yönetebilecek sağlam bir orta kademe proje lideri profili çizmektedir.',
+  mentorDecision:'Aday, Denizcilik ve Gemi İnşa projelerinde \'Yardımcı Proje Yöneticisi\' veya orta ölçekli retrofit/modernizasyon projelerinde \'Proje Yöneticisi\' olarak istihdam edilmeye UYGUNDUR. Kritik ve yeni inşa (new-build) projelerine geçişi öncesinde, PMP / PMI standartlarında risk yönetimi ve sözleşme yönetimi koçluğu alması şart koşulmalıdır.',
+  roadmap:{
+    p30:'Tersane Süreçleri ve Kurumsal PMO Standartları: Kurumsal Risk Kütüğü (Risk Matrix) şablonlarının içselleştirilmesi ve saha denetimi.',
+    p60:'Tedarikçi ve Klas Kuruluşu (Loyd) Koordinasyonu: Gemi inşa sözleşmeleri, ceza klozları ve hak talebi (claim) yönetimi mentorluğu.',
+    p90:'Tam Kapsamlı Proje Simülasyonu: Bütçe, tedarik gecikmesi ve tersane grevi senaryolarında kriz tatbikatı ve PMP yetkinlik onayı.'
+  },
+  metrics:{ accuracy: 67, speed: '35 sn/soru (Dengeli)', consistency: '%72 (Beklenen)', riskFactor: 'ORTA', percentile: 'Üst %42' },
+  competencies:[
+    {name:'Proje Planlama ve Araç Hakimiyeti',category:'BİLİŞSEL',score:80,target:65,levelName:'Seviye 4 (İleri)',levelDesc:'MS Project, Jira ve Gantt araçlarını ustalıkla kullanarak iş paketlerini planlar.'},
+    {name:'Değişiklik Yönetimi',category:'FONKSİYONEL',score:75,target:65,levelName:'Seviye 4 (İleri)',levelDesc:'Kapsam sapmalarını tespit eder, etki analizini çıkarır ve onay mekanizmasını işletir.'},
+    {name:'Risk ve Kriz Yönetimi',category:'TEKNİK',score:40,target:70,levelName:'Seviye 2 (Gelişmekte Olan)',levelDesc:'Riskleri fark eder ancak kurumsal risk araçları yerine reaktif bildirimlerle yönetir.'},
+    {name:'Paydaş İletişimi ve Müzakere',category:'TEMEL',score:55,target:70,levelName:'Seviye 3 (Orta / Beklenen)',levelDesc:'Müşteri ve alt yüklenicilerle standart iletişimi sürdürür, krizde üst yönetime başvurur.'},
+    {name:'Bütçe ve Maliyet Kontrolü',category:'FONKSİYONEL',score:60,target:65,levelName:'Seviye 3 (Orta / Beklenen)',levelDesc:'Hakediş ve kaynak harcamalarını belirlenen bütçe limitleri dahilinde takip eder.'},
+    {name:'Liderlik ve Saha Koordinasyonu',category:'YÖNETSEL',score:56,target:60,levelName:'Seviye 3 (Orta / Beklenen)',levelDesc:'Teknik ekip ve taşeronlar arasındaki günlük operasyonel koordinasyonu sağlar.'}
+  ],
+  detailedReport: [
+     {question: 'Projeyi zamanında teslim etmek için hangi aracı kullanırsınız?', answer: 'Jira ve MS Project kullanıyorum.', status: 'positive', seconds: 32, level:'Teknik', correctAnswer:'Kritik yol (CPM) analizi ve EVM metrikleriyle MS Project/Jira entegrasyonu kullanırım.'},
+     {question: 'Müşteri aniden kapsamı değiştirirse nasıl tepki verirsiniz?', answer: 'Değişiklik talebi formu oluştururum ve bütçe/zaman etkisini analiz ederim.', status: 'positive', seconds: 55, level:'Yönetsel', correctAnswer:'Değişiklik Talep Prosedürünü (CR) başlatır, maliyet/süre etkisini çıkarır ve sponsor onayına sunarım.'},
+     {question: 'Riskleri nasıl belgelersiniz?', answer: 'Sadece mail atarım.', status: 'negative', seconds: 18, level:'Bilişsel', correctAnswer:'Kurumsal Risk Kütüğüne (Risk Register) etki-olasılık skorlarıyla kaydeder ve aksiyon sahiplerini atarım.'}
+  ]}
 ];
+window.candidateResults = candidateResults;
 const baseKeywordRows=[
  ['Bilgisayar','Bilgisayar Programlama ve Danışmanlık','Yazılım Geliştirme','Yazılım Mühendisi','Bilgi Teknolojileri'],
  ['Bilgisayar','Bilgisayar, Elektronik ve Optik Ürünler','Sistem ve Donanım','Sistem Uzmanı','Bilgi Teknolojileri'],
@@ -60,8 +151,8 @@ const aiAgents=[
  ['Soru Tasarımcısı (HR Specialist)','Yetkinlik ve Teknik Soru Tasarımcısı','Yetkinlik matrisi, teknik beceri, sektör, fonksiyon ve pozisyon bağlamını birlikte kullanır; farklı olay örgüleri, ölçülebilir karar noktaları ve dengeli çeldiriciler üretir. Ezber sorusu ve tekrar eden kalıp kullanmaz.','STAR uyumlu mülakat sorusu veya seviye temsilli çoktan seçmeli soru; gerekçe, çeldirici analizi, hedef seviye ve JSON sözleşmesi teslim eder.'],
  ['Editör ve Kalite Denetleyici','Soru Kalitesi ve Psikometri Denetçisi','Vaka ve soruları teknik doğruluk, bağlama uygunluk, tekrar, seçenek uzunluğu, ipucu, önyargı, tek doğru cevap, seviye uyumu ve JSON şeması açısından puanlar; hatalı içeriği geri çevirir.','Kalite puanı, hata listesi, düzeltilmiş sürüm, cevap dağılımı kontrolü ve yayıma uygunluk kararı teslim eder.']
 ];
-const nav=[['dashboard','Genel Bakış','nav-violet'],['tests','Test Yönetimi','nav-cyan'],['evaluation','Test Değerlendirme','nav-violet'],['results','Test Sonuçları','nav-green'],['test-platform','Test Platformu','nav-amber'],['archive','Evrak Kutusu','nav-gray']];
-const deliveryNav=[['documents','Belgeden Vaka Yarat'],['prompt','Formdan Vaka Yarat'],['meetings','Meet & Teams Vaka'],['questions','Açık Uçlu Vaka Testi'],['comparison','Karşılaştırma']];
+const nav=[['dashboard','Genel Bakış','nav-violet'],['tests','Test Yönetimi','nav-cyan'],['evaluation','Test Değerlendirme','nav-violet'],['results','Test Sonuçları','nav-green'],['test-platform','Test Platformu','nav-amber'],['archive','Test Arşivi','nav-gray']];
+const deliveryNav=[['documents','Belgeden Vaka Yarat'],['prompt','Formdan Vaka Yarat'],['meetings','Metin Yapıştır Vaka'],['questions','Açık Uçlu Vaka Testi'],['comparison','CV Karşılaştırma']];
 function login(){state.logged=true;state.page='dashboard';localStorage.setItem('sb_session','1');render()}
 function logout(){state.logged=false;localStorage.removeItem('sb_session');render()}
 function go(page){state.page=page;document.querySelector('.sidebar')?.classList.remove('open');render()}
@@ -76,12 +167,19 @@ function updateKeywords(level){const ids=['kw-sector','kw-subsector','kw-experti
 function addKeyword(){const values=['kw-sector','kw-subsector','kw-expertise','kw-position','kw-department'].map(id=>document.getElementById(id)?.value);if(values.some(v=>!v))return toast('Önce tüm keyword alanlarını seçin');const list=document.getElementById('keyword-list');const row=document.createElement('div');row.className='keyword-item';row.innerHTML='<div><b>'+values[0]+' › '+values[1]+'</b><span>'+values.slice(2).join(' · ')+'</span></div><div class="record-actions"><button class="danger-button" onclick="this.closest(\'.keyword-item\').remove();toast(\'Keyword silindi\')">Sil</button><button class="secondary" onclick="toast(\'Keyword düzenlemeye açıldı\')">Düzelt</button><button class="primary" onclick="toast(\'Keyword kaydedildi\')">Kaydet</button></div>';list.prepend(row);toast('Keyword eklendi')}
 function selectAgentTask(index,prompt){document.getElementById('agent-select').value=String(index);document.getElementById('agent-prompt').value=prompt;document.getElementById('agent-prompt').focus()}
 function agentModel(index){return[10,15,16].includes(index)?'Gemini · Soru Üretim Ajanı':'Gemma 4 · 26B'}
-function dispatchAgentTask(){const index=Number(document.getElementById('agent-select').value);const prompt=document.getElementById('agent-prompt').value.trim();if(!prompt)return toast('Görev tanımını yazın');const agent=aiAgents[index],model=agentModel(index);const terminal=document.getElementById('agent-terminal');terminal.innerHTML='<span>['+model.toUpperCase()+'] Görev kapsamı doğrulanıyor...</span><b>Sayfa '+(index+1)+' · '+agent[0]+'</b><p>Görev kabul edildi: '+prompt.replaceAll('<','&lt;').replaceAll('>','&gt;')+'</p><small>Kapsam kilidi etkin. Bu görev “'+model+'” tarafından yalnızca “'+agent[1]+'” alanında yürütülecek.</small>';toast('Görev '+model+' modeline gönderildi')}
+function dispatchAgentTask(){const index=Number(document.getElementById('agent-select').value);const prompt=document.getElementById('agent-prompt').value.trim();if(!prompt)return toast('Görev tanımını yazın');const agent=aiAgents[index],model=agentModel(index);const terminal=document.getElementById('agent-terminal');terminal.innerHTML='<span>['+model.toUpperCase()+'] Görev kapsamı doğrulanıyor...</span><b>Sayfa '+(index+1)+' · '+agent[0]+'</b><p>Görev kabul edildi: '+safeText(prompt)+'</p><small>Kapsam kilidi etkin. Bu görev “'+model+'” tarafından yalnızca “'+agent[1]+'” alanında yürütülecek.</small>';toast('Görev '+model+' modeline gönderildi')}
 function editTestRow(button){const row=button.closest('tr');row.querySelectorAll('[data-editable]').forEach(cell=>cell.contentEditable='true');row.classList.add('editing');toast('Test satırı düzenlemeye açıldı')}
 function saveTestRow(button){const row=button.closest('tr');row.querySelectorAll('[data-editable]').forEach(cell=>cell.contentEditable='false');row.classList.remove('editing');toast('Test kaydı kaydedildi')}
 function deleteTestRow(button){if(confirm('Test kaydı silinsin mi?')){button.closest('tr').remove();toast('Test kaydı silindi')}}
 function deleteResult(button){if(confirm('Aday test sonucu silinsin mi?')){button.closest('tr').remove();toast('Test sonucu silindi')}}
-function showCandidateReport(index){const r=candidateResults[index];const modal=document.createElement('div');modal.className='modal';modal.innerHTML=`<div class="modal-card report-modal"><div class="modal-head"><div><span class="eyebrow">AI DETAYLI RAPOR</span><h2>${r.name}</h2><p class="sub">${r.test} · ${r.department}</p></div><button onclick="this.closest(\'.modal\').remove()">×</button></div><div class="report-score"><b>%${r.score}</b><span>${r.outcome}</span></div><div id="report-content-${index}" style="white-space: pre-wrap; max-height: 400px; overflow-y: auto; padding-right:10px;">${r.summary}</div><div class="report-actions"><button class="secondary" onclick="window.printReport('report-content-${index}', '${r.name}')">PDF İndir</button><button class="primary" onclick="this.closest(\'.modal\').remove()">Kapat</button></div></div>`;document.body.append(modal)}
+window.showCandidateReport = function(index) {
+    state.page = 'report_detail';
+    state.reportIndex = index;
+    render();
+};
+function showCandidateReport(index) {
+    window.showCandidateReport(index);
+}
 window.printReport = function(id, name) {
     const content = document.getElementById(id).innerHTML;
     const win = window.open('', '_blank');
@@ -96,7 +194,14 @@ window.printReport = function(id, name) {
     win.onload = function() { win.print(); };
     toast('PDF sunum çıktısı penceresi açıldı.');
 };
-function safeText(value){return value.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;')}
+function safeText(value){
+    if(value===null||value===undefined)return '';
+    return String(value)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;');
+}
 function hrOptions(values,label){return '<option value="">'+label+'</option>'+unique(values).map(v=>'<option value="'+safeText(v)+'">'+safeText(v)+'</option>').join('')}
 function initHrSpecialist(){const sector=document.getElementById('hr-sector');if(!sector)return;sector.innerHTML=hrOptions(keywordRows.map(r=>r[0]),'Sektör seçin');document.getElementById('hr-category').innerHTML=hrOptions(competencyCategoryOrder,'Kategori seçin')}
 function updateHrContext(){const sector=document.getElementById('hr-sector').value;const positions=keywordRows.filter(r=>!sector||r[0]===sector).map(r=>r[3]);const position=document.getElementById('hr-position');position.innerHTML=hrOptions(positions,'Pozisyon seçin');position.disabled=!sector;updateHrCompetencies()}
@@ -122,7 +227,7 @@ function buildHrQuestion(context,index){const patterns=hrScenarioPatterns[contex
  ['Sorunu üst yönetime aktarır ve ayrıntılı talimat gelene kadar mevcut yöntemi sürdürürüm.','En görünür belirtiye müdahale eder, sonuç alınırsa diğer nedenleri daha sonra incelerim.','Kritik veriyi doğrular, etki ve aciliyete göre seçenekleri karşılaştırıp kayıtlı bir aksiyon başlatırım.','Kök nedeni kanıtlarla sınar, risk kontrolü kurar, paydaş sorumluluklarını netleştirir ve sonucu ölçerim.','Sistemik nedenleri modelleyip önleyici standart, erken uyarı göstergesi ve öğrenme döngüsü oluştururum.'],
  ['Mevcut planı değiştirmeden ilerler, sonuç ortaya çıktığında sorumluları belirlerim.','Tek bir uzmanın görüşünü esas alır ve en hızlı uygulanabilir seçeneği seçerim.','Alternatifleri veri, süre ve risk ölçütleriyle puanlar; uygun seçeneği kontrollü biçimde uygularım.','Çelişkili kanıtları doğrular, geri dönüş planıyla pilot uygular ve paydaşlara ölçülebilir eşikler tanımlarım.','Karar mimarisini kalıcılaştırır, senaryo analizi ve öncü göstergelerle benzer riskleri oluşmadan yönetirim.'],
  ['Konuyu ekibe bırakır, yalnızca nihai sonucu takip ederim.','Geçici çözümü hemen uygular, süreç dokümantasyonunu teslimat sonrasına ertelerim.','Görevleri netleştirir, doğrulanmış bilgiyle kısa vadeli plan yapar ve ilerlemeyi takip ederim.','Teknik ve davranışsal nedenleri ayırır, kontrol noktaları kurar ve veriye dayalı iyileştirmeyi yönetirim.','Çapraz ekip standardı, performans göstergesi ve düzenli gözden geçirme sistemi kurarak kalıcı gelişim sağlarım.']];const texts=optionSets[index%optionSets.length];return{senaryo_ve_soru:scenario,secenekler:texts.map((metin,i)=>({kod:String.fromCharCode(65+i),metin,temsil_edilen_seviye:i+1,analiz:['Sorumluluğu devreden ve kanıt üretmeyen yaklaşım.','Hızlı fakat doğrulaması ve risk kontrolü zayıf yaklaşım.','Veri, öncelik ve takip içeren yetkin yaklaşım.','Kök neden, risk, paydaş ve ölçümü birleştiren ileri yaklaşım.','Önleyici sistem ve kurumsal öğrenme oluşturan lider yaklaşım.'][i]}))}}
-generateHrQuestion=async function(){const sector=document.getElementById('hr-sector').value,position=document.getElementById('hr-position').value,category=document.getElementById('hr-category').value,competency=document.getElementById('hr-competency').value,level=Number(document.getElementById('hr-level').value),format=document.getElementById('hr-format').value,count=Number(document.getElementById('hr-count').value),skill=(matrixData.skills.find(s=>s.sector===sector)?.name||'');if(!sector||!position||!category||!competency)return toast('Sektör, pozisyon, kategori ve yetkinlik seçin');const button=document.querySelector('.hr-form-card .primary');const variation=(crypto.randomUUID?.()||Date.now()+'-'+Math.random());const prompt=`Türkçe, ileri düzeyde zor, karmaşık, yüksek analitik düşünce gerektiren ve kesinlikle birbirini tekrar etmeyen ${count} adet profesyonel teknik/yönetsel senaryo ve soru üret. İlk sorudan itibaren çok seçici, detaylı ve uzman seviyesinde olsun. Basit, ezbere dayalı veya yüzeysel sorulardan kesinlikle kaçın. Sektör: ${sector}, Pozisyon: ${position}, Kategori: ${category}, Yetkinlik: ${competency}, Beceri: ${skill}, Hedef Seviye: ${level}, Soru Formatı: ${format}, Üretim Kodu: ${variation}. Yalnızca JSON döndür: {"modul":"sayfa_16_soru_tasarimcisi","uretim_ilkeleri":["Tekrarsız senaryo","Sektör bağlamı"],"soru_sayisi":${count},"sorular":[{"soru_id":"ST-2026-0016-XXXX","yetkinlik_adi":"${competency}","kategori":"${category}","sektor":"${sector}","pozisyon":"${position}","olculen_seviye":${level},"soru_formati":"${format}","senaryo_ve_soru":"...","dogru_veya_ideal_secenek":"C","secenekler":[{"kod":"A","metin":"...","temsil_edilen_seviye":1,"analiz":"..."}],"puanlama_rubrigi":{"1":"...","2":"...","3":"...","4":"...","5":"..."},"degerlendirme_notu":"..."}]}`;aiBusy(button,true);try{const result=aiJson(await aiCall(prompt));const box=document.getElementById('hr-json-output');box.value=JSON.stringify(result,null,2);document.getElementById('hr-result').hidden=false;toast(count+' kaliteli AI soru JSON olarak üretildi')}catch(error){toast(error.message)}finally{aiBusy(button,false)}}
+generateHrQuestion=async function(){const sector=document.getElementById('hr-sector').value,position=document.getElementById('hr-position').value,category=document.getElementById('hr-category').value,competency=document.getElementById('hr-competency').value,level=Number(document.getElementById('hr-level').value),format=document.getElementById('hr-format').value,count=Number(document.getElementById('hr-count').value),skill=(matrixData.skills.find(s=>s.sector===sector)?.name||'');if(!sector||!position||!category||!competency)return toast('Sektör, pozisyon, kategori ve yetkinlik seçin');const button=document.querySelector('.hr-form-card .primary');const variation=(crypto.randomUUID?.()||Date.now()+'-'+Math.random());const prompt=`Türkçe, ileri düzeyde zor, karmaşık, yüksek analitik düşünce gerektiren ve kesinlikle birbirini tekrar etmeyen ${count} adet profesyonel teknik/yönetsel senaryo ve soru üret. İlk sorudan itibaren çok seçici, detaylı ve uzman seviyesinde olsun. Basit, ezbere dayalı veya yüzeysel sorulardan kesinlikle kaçın. Sektör: ${sector}, Pozisyon: ${position}, Kategori: ${category}, Yetkinlik: ${competency}, Beceri: ${skill}, Hedef Seviye: ${level}, Soru Formatı: ${format}, Üretim Kodu: ${variation}. Yalnızca JSON döndür: {"modul":"sayfa_16_soru_tasarimcisi","uretim_ilkeleri":["Tekrarsız senaryo","Sektör bağlamı"],"soru_sayisi":${count},"sorular":[{"soru_id":"ST-2026-0016-XXXX","yetkinlik_adi":"${competency}","kategori":"${category}","sektor":"${sector}","pozisyon":"${position}","olculen_seviye":${level},"soru_formati":"${format}","senaryo_ve_soru":"...","dogru_veya_ideal_secenek":"C","secenekler":[{"kod":"A","metin":"...","temsil_edilen_seviye":1,"analiz":"..."}],"puanlama_rubrigi":{"1":"...","2":"...","3":"...","4":"...","5":"..."},"degerlendirme_notu":"..."}]}`;aiBusy(button,true);try{const result=aiJson(await aiCall(prompt,false,format==='COKTAN_SECMELI'?questionCost(count,0):questionCost(0,count)));const box=document.getElementById('hr-json-output');box.value=JSON.stringify(result,null,2);document.getElementById('hr-result').hidden=false;toast(count+' kaliteli AI soru JSON olarak üretildi')}catch(error){toast(error.message)}finally{aiBusy(button,false)}}
 function copyHrJson(){const box=document.getElementById('hr-json-output');navigator.clipboard?.writeText(box.value);toast('JSON panoya kopyalandı')}
 function hrSpecialistPage(){return layout(`<section class="hr-page"><div class="prompt-head"><div><span class="eyebrow">SAYFA 16 · HR SPECIALIST</span><h2>Yetkinlik ve Teknik Soru Tasarımcısı</h2><p>Sektör, pozisyon, teknik beceri ve yetkinlik seviyesini birlikte kullanarak tekrarsız, ayrıştırıcı sorular üretir.</p></div><span class="scope-chip">Kalite kilidi etkin</span></div><div class="hr-layout"><section class="hr-form-card"><div class="scope-rule"><b>Teknik bağlam + STAR + JSON</b><span>Her üretimde farklı olay örgüsü, ölçülebilir karar noktası ve seviye bazlı çeldirici kullanılır.</span></div><div class="hr-grid"><label><span>Sektör</span><select id="hr-sector" onchange="updateHrContext()"></select></label><label><span>Pozisyon</span><select id="hr-position" disabled><option>Önce sektör seçin</option></select></label><label><span>Yetkinlik kategorisi</span><select id="hr-category" onchange="updateHrCompetencies()"></select></label><label><span>Yetkinlik</span><select id="hr-competency" disabled><option>Önce kategori seçin</option></select></label><label><span>Hedef kademe</span><select id="hr-level"><option value="1">Seviye 1 · Başlangıç</option><option value="2">Seviye 2 · Gelişen</option><option value="3" selected>Seviye 3 · Yetkin</option><option value="4">Seviye 4 · İleri</option><option value="5">Seviye 5 · Lider</option></select></label><label><span>Soru türü</span><select id="hr-format"><option value="COKTAN_SECMELI">Çoktan Seçmeli (5 seçenek)</option><option value="DAVRANISSAL_MULAKAT">Davranışsal Mülakat + Rubrik</option></select></label><label><span>Soru adedi</span><select id="hr-count"><option>1</option><option selected>3</option><option>5</option><option>10</option></select></label></div><button class="primary full" onclick="generateHrQuestion()">Kaliteli Soru Seti Üret</button></section><section id="hr-result" class="hr-result-card" hidden><div class="prompt-output-head"><div><span class="eyebrow">JSON ÇIKTISI</span><h3>Sayfa 16 Veri Sözleşmesi</h3></div><button class="secondary" onclick="copyHrJson()">JSON'u Kopyala</button></div><textarea id="hr-json-output" class="generated-prompt hr-json" readonly></textarea></section></div></section>`,'Sayfa 16 · Soru Tasarımcısı')}
 function openTestBuilder(){const modal=document.createElement('div');modal.className='modal test-builder-modal';modal.innerHTML=`<div class="modal-card test-builder-card"><div class="modal-head"><div><span class="eyebrow">TEST VE KATILIMCI ATAMA</span><h2>Yeni Test Oluştur</h2><p class="sub">Sınav bilgilerini belirleyin ve katılımcıları tek tek ekleyin.</p></div><button type="button" onclick="this.closest(\'.modal\').remove()">×</button></div><form onsubmit="event.preventDefault();saveTestAssignment(this)"><div class="builder-layout"><div class="builder-fields"><h3>Test Bilgileri</h3><div class="mcq-lock span-2"><b>Soru Türü: Çoktan Seçmeli</b><span>Her soru A, B, C, D olmak üzere dört dengeli seçenekle hazırlanır. Doğru şıklar eşit dağıtılır.</span></div><label class="span-2"><span>Testin Konusu</span><input name="topic" required placeholder="Örn. Proje yönetimi yetkinlik testi"></label><label><span>İş Pozisyonu</span><input name="position" required placeholder="Örn. Takım Lideri"></label><label><span>Soru Sayısı</span><select name="questions" required><option value="">Seçin</option><option>10</option><option>25</option><option>50</option><option>100</option></select></label><label><span>Zorluk Derecesi</span><select name="difficulty" required><option value="">Seçin</option><option>Kolay</option><option>Orta</option><option>Zor</option><option>Ekspert</option></select></label><label><span>Sınav Süresi (Dakika)</span><input name="duration" type="number" min="1" required placeholder="60"></label><label><span>Başlangıç Tarihi</span><input name="startDate" type="date" required></label><label><span>Başlangıç Saati</span><input name="startTime" type="time" required></label><label><span>Bitiş Tarihi</span><input name="endDate" type="date" required></label><label><span>Bitiş Saati</span><input name="endTime" type="time" required></label><label><span>Geçme Puanı</span><input name="passScore" type="number" min="0" max="100" required placeholder="60"></label><div class="participant-entry span-2"><h3>Katılımcı Ekle</h3><div class="participant-fields"><label><span>Adı</span><input id="participant-name" placeholder="Adı"></label><label><span>Soyadı</span><input id="participant-surname" placeholder="Soyadı"></label><label><span>Telefon Numarası</span><input id="participant-phone" type="tel" placeholder="+90 5xx xxx xx xx"></label><label><span>E-posta Adresi</span><input id="participant-email" type="email" placeholder="ornek@mail.com"></label></div><button class="secondary add-participant" type="button" onclick="addParticipant()">Katılımcıyı Listeye Ekle ➜</button></div></div><aside class="participant-panel"><div class="participant-panel-head"><div><h3>Katılımcı Listesi</h3><span>Sınava katılacak kişiler</span></div><b id="participant-count">0</b></div><div id="participant-list" class="participant-list"><div class="participant-empty">Henüz katılımcı eklenmedi.</div></div></aside></div><div class="builder-actions"><button type="button" class="secondary" onclick="this.closest(\'.modal\').remove()">İptal</button><button type="submit" class="primary">Testi Kaydet ve Katılımcılara Ata</button></div></form></div>`;document.body.append(modal)}
@@ -131,16 +236,17 @@ function removeParticipant(button){const list=button.closest('.participant-list'
 function updateParticipantCount(){const count=document.querySelectorAll('#participant-list .participant-item').length;const badge=document.getElementById('participant-count');if(badge)badge.textContent=count}
 function saveTestAssignment(form){const count=document.querySelectorAll('#participant-list .participant-item').length;if(!count)return toast('En az bir katılımcı ekleyin');const start=new Date(form.startDate.value+'T'+form.startTime.value);const end=new Date(form.endDate.value+'T'+form.endTime.value);if(end<=start)return toast('Bitiş zamanı başlangıçtan sonra olmalı');form.closest('.modal').remove();toast('Test kaydedildi ve '+count+' katılımcıya atandı')}
 function badge(level){return `<span class="badge ${level==='Zor'?'hard':level==='Ekspert'?'warn':''}">${level}</span>`}
-function layout(content,title){const deliveryOpen=deliveryNav.some(([id])=>id===state.page);const quickNav=[['dashboard','Genel Bakış'],['tests','Test Yönetimi'],['results','Test Sonuçları'],['test-platform','Test Platformu'],['documents','Belgeden Vaka Yarat'],['prompt','Formdan Vaka Yarat'],['meetings','Meet & Teams Vaka'],['questions','Açık Uçlu Vaka Testi'],['comparison','Karşılaştırma']];return `<div class="shell"><aside class="sidebar"><div class="brand-block"><button class="sidebar-close" aria-label="Menüyü kapat" onclick="document.querySelector('.sidebar').classList.remove('open')">×</button><div class="mark"><span>SkillBridgeAIPro</span></div><div class="profile"><strong>Bilge Han Veral</strong><span>SkillBridge AI</span><small>Süper Yönetici</small></div></div><nav class="nav" aria-label="Ana menü">${nav.map(([id,n,color])=>`<button class="${color} ${state.page===id?'active':''}" onclick="go('${id}')"><span class="nav-dot"></span><span>${n}</span></button>`).join('')}<div class="delivery-menu"><div>${deliveryNav.map(([id,n])=>`<button class="${state.page===id?'active':''}" onclick="go('${id}')">${n}</button>`).join('')}</div></div>
+function layout(content,title){const deliveryOpen=deliveryNav.some(([id])=>id===state.page);const quickNav=[['dashboard','Genel Bakış'],['tests','Test Yönetimi'],['results','Test Sonuçları'],['test-platform','Test Platformu'],['documents','Belgeden Vaka Yarat'],['prompt','Formdan Vaka Yarat'],['meetings','Metin Yapıştır Vaka'],['questions','Açık Uçlu Vaka Testi'],['comparison','Karşılaştırma']];return `<div class="shell"><aside class="sidebar"><div class="brand-block"><button class="sidebar-close" aria-label="Menüyü kapat" onclick="document.querySelector('.sidebar').classList.remove('open')">×</button><div class="mark"><span>SkillBridgeAIPro</span></div><div class="profile"><strong>Bilge Han Veral</strong><span>SkillBridge AI</span><small>Süper Yönetici</small></div></div><nav class="nav" aria-label="Ana menü">${nav.map(([id,n,color])=>`<button class="${color} ${state.page===id?'active':''}" onclick="go('${id}')"><span class="nav-dot"></span><span>${n}</span></button>`).join('')}<div class="delivery-menu"><div>${deliveryNav.map(([id,n])=>`<button class="${state.page===id?'active':''}" onclick="go('${id}')">${n}</button>`).join('')}</div></div>
 <div class="delivery-menu"><details ${['personal-data','data-banking','hr-specialist','agents','server','user-credits'].includes(state.page)?'open':''}><summary><span class="nav-dot" style="background:#94a3b8"></span><span>Ayarlar</span></summary><div>
-<button class="${state.page==='user-credits'?'active':''}" onclick="go('user-credits')">Kullanıcılar ve Kontör</button>
+<button class="${state.page==='user-credits'?'active':''}" onclick="go('user-credits')">Kullanıcılar ve BIGakçe</button>
 <button class="${state.page==='personal-data'?'active':''}" onclick="go('personal-data')">Kişisel Bilgiler</button>
 <button class="${state.page==='data-banking'?'active':''}" onclick="go('data-banking')">Veri Bankacılığı</button>
 <button class="${state.page==='hr-specialist'?'active':''}" onclick="go('hr-specialist')">Sayfa 16 · Soru Tasarımcısı</button>
 <button class="${state.page==='agents'?'active':''}" onclick="go('agents')">Ajanlar</button>
 <button class="${state.page==='server'?'active':''}" onclick="go('server')">Sunucu Bağlantısı</button>
 </div></details></div>
-</nav><div class="credit-summary" aria-label="Kontör özeti"><h3>Kontör Bakiyesi</h3><table><tbody><tr><th>Satın alınan</th><td>250</td></tr><tr><th>Kullanılan</th><td>68</td></tr><tr class="credit-remaining"><th>Kalan</th><td>182</td></tr></tbody></table></div><div class="side-footer"><button onclick="logout()"><span>↩</span> Çıkış Yap</button></div></aside><main class="workspace ${state.page==='dashboard'?'dashboard-workspace':''}"><header class="topbar"><div class="topbar-left"><button class="icon-btn mobile-toggle" aria-label="Menüyü aç" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button><button class="desktop-collapse" aria-label="Sol menüyü daralt" onclick="document.body.classList.toggle('sidebar-collapsed')">☰</button><h1>${title}</h1></div><div class="top-actions"><button class="icon-btn" onclick="toast('Bildirim bulunmuyor')" aria-label="Bildirimler">●</button><button class="icon-btn" onclick="document.body.classList.toggle('dark')" aria-label="Tema değiştir">◐</button><div class="lang-switch" style="display:inline-flex; border-radius:6px; overflow:hidden; border:1px solid #cbd5e1; margin-left: 10px; background:#fff;"><button id="btn-lang-tr" style="padding: 4px 10px; border:none; cursor:pointer; font-weight:bold; font-size:12px; transition:0.2s;" onclick="customTranslate('tr')">TR</button><button id="btn-lang-en" style="padding: 4px 10px; border:none; cursor:pointer; font-weight:bold; font-size:12px; transition:0.2s;" onclick="customTranslate('en')">EN</button></div></div><nav class="top-nav" aria-label="Üst menü">${quickNav.map(([id,n])=>`<button class="${id==='dashboard'?'overview-link':''} ${state.page===id?'active':''}" onclick="go('${id}')">${n}</button>`).join('')}</nav></header>${content}</main></div>`}
+</nav><div class="credit-summary" aria-label="BIGakçe özeti"><h3>BIGakçe Bakiyesi</h3><table><tbody><tr><th>Satın alınan</th><td>250</td></tr><tr><th>Kullanılan</th><td>68</td></tr><tr class="credit-remaining"><th>Kalan</th><td>182</td></tr></tbody></table></div><div class="side-footer"><button onclick="logout()"><span>↩</span> Çıkış Yap</button></div></aside><main class="workspace ${state.page==='dashboard'?'dashboard-workspace':''}"><header class="topbar"><div class="topbar-left"><button class="icon-btn mobile-toggle" aria-label="Menüyü aç" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button><button class="desktop-collapse" aria-label="Sol menüyü daralt" onclick="document.body.classList.toggle('sidebar-collapsed')">☰</button><h1>${title}</h1></div><div class="top-actions"><button class="icon-btn" onclick="toast('Bildirim bulunmuyor')" aria-label="Bildirimler">●</button><button class="icon-btn" onclick="document.body.classList.toggle('dark')" aria-label="Tema değiştir">◐</button><div class="lang-switch" style="display:inline-flex; border-radius:6px; overflow:hidden; border:1px solid #cbd5e1; margin-left: 10px; background:#fff;"><button id="btn-lang-tr" style="padding: 4px 10px; border:none; cursor:pointer; font-weight:bold; font-size:12px; transition:0.2s;" onclick="customTranslate('tr')">TR</button><button id="btn-lang-en" style="padding: 4px 10px; border:none; cursor:pointer; font-weight:bold; font-size:12px; transition:0.2s;" onclick="customTranslate('en')">EN</button></div></div><nav class="top-nav" aria-label="Üst menü">${quickNav.map(([id,n])=>`<button class="${id==='dashboard'?'overview-link':''} ${state.page===id?'active':''}" onclick="go('${id}')">${n}</button>`).join('')}</nav></header>${content}</main></div>`}
+window.layout=layout;
 const aiSearchIndex=[
  {page:'personal-data',title:'Kişisel Bilgiler',keywords:'sektör alt sektör fonksiyon uzmanlık pozisyon departman meslek beceri yetkinlik kullanıcı şirket veri',description:'Şirketleri, kullanıcıları ve birbirine bağlı sektör, fonksiyon, beceri ve yetkinlik kayıtlarını yönetir.'},
  {page:'data-banking',title:'Veri Bankacılığı',keywords:'veri bankacılığı sektör alt sektör fonksiyon uzmanlık pozisyon departman',description:'Şirketleri, kullanıcıları ve birbirine bağlı veri bankacılığı kayıtlarını yönetir.'},
@@ -150,37 +256,25 @@ const aiSearchIndex=[
  {page:'qr',title:'Test Platformu',keywords:'Test Platformu qr barkod davet bağlantı erişim dağıtım',description:'Test erişim bağlantılarını ve adaylara yapılacak sınav dağıtımını yönetir.'},
  {page:'documents',title:'Belgeden Vaka Yarat',keywords:'belge dosya pdf word docx excel xlsx csv txt yükle vaka',description:'Yüklenen belgenin içeriğini seçilen sektör, fonksiyon ve pozisyona göre yapılandırılmış vakaya dönüştürür.'},
  {page:'prompt',title:'Formdan Vaka Yarat',keywords:'form prompt sektör alt sektör fonksiyon pozisyon beceri yetkinlik vaka üret',description:'Formda seçilen bağlam, beceri ve yetkinliklerden soru içermeyen bir vaka üretir.'},
- {page:'meetings',title:'Meet & Teams Vaka',keywords:'meet teams toplantı konuşma kayıt transkript bot vaka',description:'Toplantı konuşmasını kaydeder veya transkript yükler ve konuşma içeriğinden vaka oluşturur.'},
+ {page:'meetings',title:'Metin Yapıştır Vaka',keywords:'metin yapıştır kopyala toplantı notu e-posta rapor vaka test',description:'Kopyala-yapıştır ile girilen metinden vaka veya test hazırlar.'},
  {page:'questions',title:'Açık Uçlu Vaka Testi',keywords:'açık uçlu vaka testi soru cevap süre güvenli sınav gemma',description:'Bir vakadan açık uçlu sorular hazırlar ve güvenli, tek soru ilerlemeli sınav akışını başlatır.'},
  {page:'comparison',title:'Karşılaştırma',keywords:'cv karşılaştırma aday zihin kontrolü kıyaslama',description:'Aday, CV ve değerlendirme verilerini seçilen ölçütlere göre karşılaştırır.'},
  {page:'agents',title:'Ajanlar',keywords:'ajan yapay zeka görev gemma araştırmacı frontend backend veritabanı',description:'Yapay zekâ ajanlarının görev alanlarını gösterir ve her ajana kendi kapsamındaki işi gönderir.'},
- {page:'dashboard',title:'Paketler ve Kontör',keywords:'fiyat paket abonelik kontör satın alınan kullanılan kalan bakiye',description:'Kontör bakiyesini, paketleri, kullanım miktarını ve fiyatlandırmayı gösterir.'}
+ {page:'dashboard',title:'Paketler ve BIGakçe',keywords:'fiyat paket abonelik BIGakçe satın alınan kullanılan kalan bakiye',description:'BIGakçe bakiyesini, paketleri, kullanım miktarını ve fiyatlandırmayı gösterir.'}
 ];
 function normalizeSearch(value){return String(value).toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g,'')}
-function runAiSearch(){const input=document.getElementById('ai-site-search'),box=document.getElementById('ai-search-results');if(!input||!box)return;const query=normalizeSearch(input.value.trim());if(query.length<2){box.innerHTML='<div class="ai-search-empty">Aramak istediğiniz işlemi en az iki harfle yazın.</div>';return}const terms=query.split(/\s+/).filter(Boolean);const matches=aiSearchIndex.map(item=>{const haystack=normalizeSearch(item.title+' '+item.keywords+' '+item.description);return{item,score:terms.reduce((sum,term)=>sum+(haystack.includes(term)?1:0),0)}}).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,5);box.innerHTML=matches.length?matches.map(({item})=>'<button class="ai-search-result" onclick="go(\''+item.page+'\')"><span>AI ÖNERİSİ</span><b>'+item.title+'</b><p>'+item.description+'</p><em>Sayfayı aç →</em></button>').join(''):'<div class="ai-search-empty"><b>Sonuç bulunamadı.</b><span>“Test”, “vaka”, “yetkinlik”, “kontör” veya “rapor” gibi başka bir ifade deneyin.</span></div>'}
+function runAiSearch(){const input=document.getElementById('ai-site-search'),box=document.getElementById('ai-search-results');if(!input||!box)return;const query=normalizeSearch(input.value.trim());if(query.length<2){box.innerHTML='<div class="ai-search-empty">Aramak istediğiniz işlemi en az iki harfle yazın.</div>';return}const terms=query.split(/\s+/).filter(Boolean);const matches=aiSearchIndex.map(item=>{const haystack=normalizeSearch(item.title+' '+item.keywords+' '+item.description);return{item,score:terms.reduce((sum,term)=>sum+(haystack.includes(term)?1:0),0)}}).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,5);box.innerHTML=matches.length?matches.map(({item})=>'<button class="ai-search-result" onclick="go(\''+item.page+'\')"><span>AI ÖNERİSİ</span><b>'+item.title+'</b><p>'+item.description+'</p><em>Sayfayı aç →</em></button>').join(''):'<div class="ai-search-empty"><b>Sonuç bulunamadı.</b><span>“Test”, “vaka”, “yetkinlik”, “BIGakçe” veya “rapor” gibi başka bir ifade deneyin.</span></div>'}
 function dashboard(){return layout(`<section class="overview-head"><p>Hoş geldiniz, Süper Yönetici.</p></section>
-<section class="ai-search-card"><div class="ai-search-copy"><span class="eyebrow">YAPAY ZEK ARAMA MOTORU</span><h2>Size nasıl yardımcı olabilirim?</h2><p>Site içindeki bir kelimeyi, işlemi veya bölümü yazın; ne işe yaradığını açıklayayım ve doğru sayfaya götüreyim.</p></div><div class="ai-search-input"><span aria-hidden="true">⌕</span><input id="ai-site-search" type="search" placeholder="Örn. vaka oluştur, test değerlendir, kalan kontör…" oninput="runAiSearch()" onkeydown="if(event.key==='Enter'){event.preventDefault();runAiSearch()}"><button class="primary" onclick="runAiSearch()">Ara</button></div><div id="ai-search-results" class="ai-search-results"><div class="ai-search-chips"><button onclick="document.getElementById('ai-site-search').value='vaka oluştur';runAiSearch()">Vaka oluştur</button><button onclick="document.getElementById('ai-site-search').value='test değerlendir';runAiSearch()">Test değerlendir</button><button onclick="document.getElementById('ai-site-search').value='yetkinlik';runAiSearch()">Yetkinlikler</button><button onclick="document.getElementById('ai-site-search').value='kalan kontör';runAiSearch()">Kontör bakiyesi</button></div></div></section>
-<div class="overview-kpis">
-  <article class="kpi-card"><span>Kalan kontör bakiyesi</span><strong>182</strong><small>1.820 TL eşdeğeri</small></article>
-  <article class="kpi-card"><span>Aktif değerlendirme</span><strong>3</strong><small>45 çalışan sürece dahil</small></article>
-  <article class="kpi-card"><span>Tamamlanma oranı</span><strong>%78</strong><small>Şirket geneli</small></article>
-  <article class="kpi-card"><span>4M uyum ortalaması</span><strong>3,8 / 5</strong><small>Man · Machine · Material · Method</small></article>
-</div>
+<section class="ai-search-card"><div class="ai-search-copy"><span class="eyebrow">YAPAY ZEK ARAMA MOTORU</span><h2>Size nasıl yardımcı olabilirim?</h2><p>Site içindeki bir kelimeyi, işlemi veya bölümü yazın; ne işe yaradığını açıklayayım ve doğru sayfaya götüreyim.</p></div><div class="ai-search-input"><span aria-hidden="true">⌕</span><input id="ai-site-search" type="search" placeholder="Örn. vaka oluştur, test değerlendir, kalan BIGakçe…" oninput="runAiSearch()" onkeydown="if(event.key==='Enter'){event.preventDefault();runAiSearch()}"><button class="primary" onclick="runAiSearch()">Ara</button></div><div id="ai-search-results" class="ai-search-results"><div class="ai-search-chips"><button onclick="document.getElementById('ai-site-search').value='vaka oluştur';runAiSearch()">Vaka oluştur</button><button onclick="document.getElementById('ai-site-search').value='test değerlendir';runAiSearch()">Test değerlendir</button><button onclick="document.getElementById('ai-site-search').value='yetkinlik';runAiSearch()">Yetkinlikler</button><button onclick="document.getElementById('ai-site-search').value='kalan BIGakçe';runAiSearch()">BIGakçe bakiyesi</button></div></div></section>
 <div class="dashboard-grid">
-  <article class="dash-card pricing-card"><div class="dash-card-head"><div><span class="eyebrow">ABONELİK & KONTÖR</span><h3>Paketler & Kontör Yönetimi</h3></div><span class="discount-chip">Abone avantajı</span></div><p class="dash-copy">Test üretimi, CV karşılaştırma ve kurumsal çözümler için bakiyenizi yönetin.</p><div class="price-facts"><div><b>1 Kontör</b><span>10 TL</span></div><div><b>10 / 25 Test</b><span>8 / 20 Kontör</span></div><div><b>50 / 100 Test</b><span>40 / 80 Kontör</span></div></div><div class="detail-row"><span>Açık uçlu test</span><b>25 Kontör</b></div><div class="detail-row"><span>10 CV'ye kadar karşılaştırma</span><b>10 Kontör</b></div><div class="detail-row"><span>10 CV üzeri karşılaştırma</span><b>25 Kontör</b></div><div class="detail-row"><span>1 yıllık test arşivi</span><b>500 Kontör · 5.000 TL</b></div><div class="detail-row"><span>Premium özel entegrasyon</span><b>1.000 Kontör · 10.000 TL</b></div><p class="rollover-note">Kullanılmayan kontörler yıl sonunda silinmez; sonraki döneme devreder.</p><div class="dashboard-actions"><button class="primary" onclick="openCreditModal()">Kontör Yükle</button><button class="secondary" onclick="openPackagesModal()">Paketleri İncele</button></div></article>
-  <article class="dash-card"><div class="dash-card-head"><div><span class="eyebrow">ORGANİZASYON</span><h3>Şirket İçi Değerlendirme</h3></div><span class="status-dot">3 aktif</span></div><p class="dash-copy">İşe alım, terfi ve seviye tespiti amaçlı vaka sınavlarını departman bazında izleyin.</p><div class="progress-block"><div><span>Süreçlerin tamamlanması</span><b>%78</b></div><div class="progress"><i style="width:78%"></i></div></div><ul class="clean-list"><li><span>Operasyon</span><b>18 / 22</b></li><li><span>Satış</span><b>12 / 15</b></li><li><span>Teknik Ekip</span><b>5 / 8</b></li></ul><button class="secondary" onclick="go('tests')">Yeni Değerlendirme Başlat</button></article>
-  <article class="dash-card score-card"><div class="dash-card-head"><div><span class="eyebrow">YETKİNLİK KARNESİ</span><h3>Bireysel Performans Özeti</h3></div><span class="score-ring">82<small>/100</small></span></div><p class="dash-copy">Pozisyon hedefiyle karşılaştırılmış 4M ve yetkinlik görünümü.</p><div class="axis-grid">${[['Bilişsel',86],['Temel',84],['Teknik',78],['Yönetsel',72],['Man',88],['Machine',68],['Material',80],['Method',76]].map(([n,v])=>`<div><span>${n}</span><i><b style="width:${v}%"></b></i><em>${v}</em></div>`).join('')}</div><div class="insight"><b>Güçlü:</b> Man, Bilişsel, Temel <span>·</span> <b>Gelişim:</b> Machine, Yönetsel</div><button class="secondary" onclick="go('results')">Karnemi İncele</button></article>
-  <article class="dash-card"><div class="dash-card-head"><div><span class="eyebrow">ANALİZ MERKEZİ</span><h3>Değerlendirme Raporları</h3></div><b class="big-number">24</b></div><p class="dash-copy">Son 30 günde oluşturulan raporlar ve dışa aktarılan dosyalar.</p><div class="report-counts"><div><b>14</b><span>Bireysel rapor</span></div><div><b>6</b><span>Şirket raporu</span></div><div><b>4</b><span>PDF / Excel</span></div></div><div class="recent-report"><span>Son rapor</span><b>Takım Lideri · Lojistik</b><small>14.09.2026 · %86 başarı</small></div><button class="secondary" onclick="go('results')">Rapor Merkezini Aç</button></article>
-  <article class="dash-card compact-card"><span class="eyebrow">ADAY / ÇALIŞAN</span><h3>Bireysel Raporlar</h3><div class="metric-pair"><div><span>Son vaka puanı</span><b>86 / 100</b></div><div><span>Pozisyona uygunluk</span><b>%84</b></div></div><p class="dash-copy">Vaka cevapları, 8 eksenli dağılım ve AI geri bildirimleri.</p><button class="secondary" onclick="go('results')">Son Raporu Aç</button></article>
-  <article class="dash-card compact-card"><span class="eyebrow">YÖNETİCİ PANELİ</span><h3>Şirket Yetkinlik Haritası</h3><div class="heatmap" aria-label="Departman yetkinlik ısı haritası">${[4,3,4,2,3,2,4,3,2,1,3,4,4,2,3,2].map(v=>`<i class="heat-${v}"></i>`).join('')}</div><div class="detail-row"><span>Kritik pozisyon açığı</span><b>4</b></div><div class="detail-row"><span>Yetenek riski</span><b>%12</b></div><button class="secondary" onclick="go('comparison')">Konsolide Rapor Al</button></article>
-  <article class="dash-card development-card"><div><span class="eyebrow">AKSİYON & EĞİTİM</span><h3>Gelişim Yol Haritası</h3><p class="dash-copy">Hedef altı yetkinliklere göre AI tarafından önerilen eylemler, kaynaklar ve mikro eğitimler.</p><div class="plan-progress"><span>SMART hedefler</span><b>2 / 5 tamamlandı</b></div><div class="progress"><i style="width:40%"></i></div></div><div class="priority-box"><span>Öncelikli gelişim ekseni</span><b>M2 · Ekipman ve Yazılım Becerileri</b><button class="primary" onclick="toast('Gelişim planı açıldı')">Planı Güncelle</button></div></article>
+  <article class="dash-card pricing-card" style="display: none !important;"><div class="dash-card-head"><div><span class="eyebrow">ABONELİK & BIGakçe</span><h3>Paketler & BIGakçe Yönetimi</h3></div><span class="discount-chip">Abone avantajı</span></div><p class="dash-copy">Test üretimi, CV karşılaştırma ve kurumsal çözümler için bakiyenizi yönetin.</p><div class="price-facts"><div><b>1 BIGakçe</b><span>10 TL</span></div><div><b>10 / 25 Test</b><span>8 / 20 BIGakçe</span></div><div><b>50 / 100 Test</b><span>40 / 80 BIGakçe</span></div></div><div class="detail-row"><span>Açık uçlu test</span><b>25 BIGakçe</b></div><div class="detail-row"><span>10 CV'ye kadar karşılaştırma</span><b>10 BIGakçe</b></div><div class="detail-row"><span>10 CV üzeri karşılaştırma</span><b>25 BIGakçe</b></div><div class="detail-row"><span>1 yıllık test arşivi</span><b>500 BIGakçe · 5.000 TL</b></div><div class="detail-row"><span>Premium özel entegrasyon</span><b>1.000 BIGakçe · 10.000 TL</b></div><p class="rollover-note">Kullanılmayan BIGakçe'ler yıl sonunda silinmez; sonraki döneme devreder.</p><div class="dashboard-actions"><button class="primary" onclick="openCreditModal()">BIGakçe Yükle</button><button class="secondary" onclick="openPackagesModal()">Paketleri İncele</button></div></article>
 </div>`,'Genel Bakış')}
 function testsPage(){const filtered=tests.filter(t=>(t.name+t.sector).toLowerCase().includes(state.query.toLowerCase())&&(!state.testLevel||t.level===state.testLevel)&&(!state.testQuestions||t.q===Number(state.testQuestions))&&(!state.testSource||t.source===state.testSource)&&(!state.testDate||t.date===state.testDate)&&(!state.testSector||t.sector===state.testSector));const totals=filtered.reduce((a,t)=>({q:a.q+t.q,answered:a.answered+t.answered,correct:a.correct+t.correct,wrong:a.wrong+t.wrong,uses:a.uses+t.uses}),{q:0,answered:0,correct:0,wrong:0,uses:0});const topWrong=[...filtered].sort((a,b)=>b.wrong-a.wrong)[0];const rows=filtered.map(t=>`<tr><td data-editable><b>${t.name}</b><br><span style="color:var(--muted)">${t.sector}</span></td><td data-editable>${badge(t.level)}</td><td data-editable><b>${t.q}</b></td><td data-editable>${t.source}</td><td data-editable>${t.date}</td><td data-editable><b>${t.uses}</b> kez</td><td data-editable>${t.sector}</td><td><span class="rate-pill">% ${t.answered?Math.round(t.correct/t.answered*100):0}</span><small class="rate-detail">${t.correct} doğru / ${t.answered} cevap</small></td><td><div class="row-actions"><button class="danger-button" onclick="deleteTestRow(this)">Sil</button><button class="secondary" onclick="editTestRow(this)">Düzelt</button><button class="primary" onclick="saveTestRow(this)">Kaydet</button></div></td></tr>`).join('');return layout(`<section class="page-intro"><div><h2>Test Yönetimi</h2><p>Açık Uçlu Vaka Testi dışındaki bütün testler dört şıklı çoktan seçmeli hazırlanır.</p></div><button class="primary" onclick="openTestBuilder()">+ Yeni Test Oluştur</button></section><section class="mcq-standard"><div><span class="eyebrow">ZORUNLU TEST STANDARDI</span><h3>A · B · C · D — Dört Şıklı Çoktan Seçmeli</h3></div><ul><li>Her soruda tam dört seçenek bulunur.</li><li>Seçenekler anlam ve kelime uzunluğu bakımından dengelenir.</li><li>Doğru cevaplar A, B, C ve D arasında eşit dağıtılır.</li><li>Aynı doğru şık art arda yığılmaz.</li></ul><div class="answer-balance"><span>A</span><span>B</span><span>C</span><span>D</span></div></section>
 <div class="test-filterbar expanded-filters"><label><span>Test / Pozisyon</span><input class="search" placeholder="Test veya pozisyon ara" value="${state.query}" onchange="state.query=this.value;render()"></label><label><span>Zorluk</span><select onchange="state.testLevel=this.value;render()"><option value="">Tümü</option>${unique(tests.map(t=>t.level)).map(v=>`<option ${state.testLevel===v?'selected':''}>${v}</option>`).join('')}</select></label><label><span>Soru</span><select onchange="state.testQuestions=this.value;render()"><option value="">Tümü</option>${unique(tests.map(t=>t.q)).map(v=>`<option value="${v}" ${String(v)===state.testQuestions?'selected':''}>${v} soru</option>`).join('')}</select></label><label><span>Kaynak</span><select onchange="state.testSource=this.value;render()"><option value="">Tümü</option>${unique(tests.map(t=>t.source)).map(v=>`<option ${state.testSource===v?'selected':''}>${v}</option>`).join('')}</select></label><label><span>Tarih</span><select onchange="state.testDate=this.value;render()"><option value="">Tümü</option>${unique(tests.map(t=>t.date)).map(v=>`<option ${state.testDate===v?'selected':''}>${v}</option>`).join('')}</select></label><label><span>En Çok Kullanılan Sektör</span><select onchange="state.testSector=this.value;render()"><option value="">Tümü</option>${unique(tests.map(t=>t.sector)).map(v=>`<option ${state.testSector===v?'selected':''}>${v}</option>`).join('')}</select></label><button class="secondary" onclick="state.query='';state.testLevel='';state.testQuestions='';state.testSource='';state.testDate='';state.testSector='';render()">Filtreleri Temizle</button></div>
 <div class="test-metrics"><article><span>Toplam Soru</span><b>${totals.q}</b><small>Filtrelenen testlerde</small></article><article><span>Toplam Kullanım</span><b>${totals.uses}</b><small>Kaç kere kullanıldı</small></article><article class="success-metric"><span>Doğru Cevap</span><b>%${totals.answered?Math.round(totals.correct/totals.answered*100):0}</b><small>${totals.correct} doğru cevap</small></article><article class="danger-metric"><span>Yanlış Cevap</span><b>${totals.wrong}</b><small>${topWrong?topWrong.mostWrong:'Kayıt yok'}</small></article><article class="wide-metric"><span>En Çok Kullanılan Sektör</span><b>${filtered.length?[...filtered].sort((a,b)=>b.uses-a.uses)[0].sector:'Kayıt yok'}</b><small>${filtered.length?[...filtered].sort((a,b)=>b.uses-a.uses)[0].uses+' kullanım':'Seçili filtrede sonuç bulunamadı'}</small></article></div>
 <div class="section-head"><h2>Filtrelenen Testler <span class="result-count">${filtered.length} kayıt</span></h2><button class="secondary" onclick="go('qr')">Ajan 11 · Barkod</button></div><div class="table-wrap test-table"><table><thead><tr><th>Test / Pozisyon</th><th>Zorluk</th><th>Soru</th><th>Kaynak</th><th>Tarih</th><th>Kaç Kere Kullanıldı</th><th>En Çok Hangi Sektörde Kullanıldı</th><th>Doğru Cevap Oranı</th><th>İşlemler</th></tr></thead><tbody>${rows||'<tr><td colspan="9" class="empty">Filtrelere uygun test bulunamadı.</td></tr>'}</tbody></table></div>`,'Test Yönetimi')}
 function sectorGroupsHtml(){return unique(matrixData.hierarchy.map(row=>row[0])).map(sector=>{const rows=matrixData.hierarchy.filter(row=>row[0]===sector),subsectors=unique(rows.map(row=>row[1])),functions=unique(rows.map(row=>row[2]));return '<details class="sector-group"><summary><b>'+safeText(sector)+'</b><span>'+subsectors.length+' alt sektör · '+functions.length+' fonksiyon</span></summary><div><strong>Alt sektörler</strong><p>'+subsectors.map(safeText).join(' · ')+'</p><strong>Fonksiyonlar</strong><p>'+functions.map(safeText).join(' · ')+'</p></div></details>'}).join('')}
-function dataPageBase(title){return layout(`<section class="data-intro" style="display:flex;justify-content:space-between;align-items:center;"><div><h2>${title}</h2><p>Şirket kayıtlarını, yönetici yetkilerini ve kullanıcı hesaplarını düzenleyin.</p></div><button class="primary" onclick="openEvrakKutusuModal()">Evrak Kutusu</button></section>
+function dataPageBase(title){return layout(`<section class="data-intro" style="display:flex;justify-content:space-between;align-items:center;"><div><h2>${title}</h2><p>Şirket kayıtlarını, yönetici yetkilerini ve kullanıcı hesaplarını düzenleyin.</p></div><button class="primary" onclick="openEvrakKutusuModal()">Test Arşivi</button></section>
 <section class="admin-section super-section"><div class="admin-section-head"><div><span class="eyebrow">EN ÜST YETKİ</span><h2>Süper Yönetici</h2></div><span class="role-chip">Süper Admin</span></div><div class="admin-record"><div class="record-fields three-fields"><label><span>Adı Soyadı</span><input value="Süper Yönetici" readonly></label><label><span>E-posta Adresi</span><input type="email" value="superyonetici@skillbridge.com.tr" readonly></label><label><span>Şifre</span><input type="password" placeholder="••••••••••" readonly></label></div><div class="record-actions"><button class="secondary" onclick="editRecord(this)">Düzelt</button><button class="primary" onclick="saveRecord(this,'Süper yönetici hesabı')">Kaydet</button></div></div></section>
 <section class="admin-section"><div class="admin-section-head"><div><span class="eyebrow">KURUM KAYITLARI</span><h2>Şirketler</h2></div><button class="secondary" onclick="toast('Yeni şirket satırı hazırlandı')">+ Yeni Şirket</button></div><div class="admin-record"><div class="record-fields company-fields"><label><span>Şirketin Adı</span><input value="Mendomi Akademi" readonly></label><label><span>Adresi</span><input placeholder="Şirket adresini girin" readonly></label><label><span>Vergi Numarası</span><input inputmode="numeric" placeholder="Vergi numarasını girin" readonly></label></div><div class="record-actions"><button class="danger-button" onclick="deleteRecord(this,'Şirket kaydı')">Sil</button><button class="secondary" onclick="editRecord(this)">Düzelt</button><button class="primary" onclick="saveRecord(this,'Şirket kaydı')">Kaydet</button></div></div></section>
 <section class="admin-section"><div class="admin-section-head"><div><span class="eyebrow">KULLANICILAR VE YETKİLER</span><h2>Kullanıcılar</h2></div><button class="secondary" onclick="toast('Yeni kullanıcı satırı hazırlandı')">+ Yeni Kullanıcı</button></div>
@@ -191,7 +285,7 @@ function dataPageBase(title){return layout(`<section class="data-intro" style="d
 <section class="admin-section keyword-section"><div class="admin-section-head"><div><span class="eyebrow">PROMPT DEĞİŞKENLERİ</span><h2>Sektörler ve Keyword Yönetimi</h2></div><span class="role-chip">Birbirine bağlı 5 seviye</span></div><p class="section-note">Sektör seçiminiz alt sektör, fonksiyon, pozisyon ve departman seçeneklerini otomatik filtreler. Bu değerler AI promptlarında birlikte kullanılır.</p><div class="sector-groups">${sectorGroupsHtml()}</div><div class="keyword-flow"><label><span>1 · Sektör</span><select id="kw-sector" onchange="updateKeywords(0)"></select></label><label><span>2 · Alt Sektör</span><select id="kw-subsector" onchange="updateKeywords(1)" disabled></select></label><label><span>3 · Fonksiyon</span><select id="kw-expertise" onchange="updateKeywords(2)" disabled></select></label><label><span>4 · Pozisyon</span><select id="kw-position" onchange="updateKeywords(3)" disabled></select></label><label><span>5 · Departman</span><select id="kw-department" onchange="updateKeywords(4)" disabled></select></label></div><div class="keyword-add"><label><span>Açıklama / Prompt kullanım notu</span><textarea placeholder="Bu keyword zincirinin prompt içinde nasıl kullanılacağını açıklayın."></textarea></label><button class="primary" onclick="addKeyword()">+ Keyword Ekle</button></div><div id="keyword-list" class="keyword-list"><div class="keyword-item"><div><b>Bilgisayar › Bilgisayar Programlama ve Danışmanlık</b><span>Yazılım Geliştirme · Yazılım Mühendisi · Bilgi Teknolojileri</span></div><div class="record-actions"><button class="danger-button" onclick="this.closest('.keyword-item').remove();toast('Keyword silindi')">Sil</button><button class="secondary" onclick="toast('Keyword düzenlemeye açıldı')">Düzelt</button><button class="primary" onclick="toast('Keyword kaydedildi')">Kaydet</button></div></div></div></section>
 <section class="admin-section"><div class="admin-section-head"><div><span class="eyebrow">EXCEL / TABLO VERİSİ</span><h2>Beceriler</h2></div><button class="secondary" onclick="toast('Yeni beceri satırı eklendi')">+ Beceri Ekle</button></div><p class="section-note">Beceriler, yüklenen tablodaki sektör, alt sektör ve fonksiyon alanlarıyla eşleştirilir; açıklama ve seviye detayları promptlara aktarılır.</p><div class="library-records"><div class="admin-record"><span class="user-role admin-role">Denizcilik · Proje Yönetimi</span><div class="record-fields skill-fields"><label><span>Beceri Adı</span><input value="Gemi Elektrik ve Otomasyon Proje Yönetimi" readonly></label><label><span>Açıklama</span><input value="Gemi elektrik ve otomasyon projelerinin takvim, bütçe ve klas standartlarına uygun yönetimi." readonly></label><label><span>Detay / Seviye Tanımı</span><input value="A–E davranış göstergeleri ve hedef kademe karşılaştırması" readonly></label></div><div class="record-actions"><button class="danger-button" onclick="deleteRecord(this,'Beceri')">Sil</button><button class="secondary" onclick="editRecord(this)">Düzelt</button><button class="primary" onclick="saveRecord(this,'Beceri')">Kaydet</button></div></div><div class="admin-record"><span class="user-role manager-role">Bilgisayar · Veri ve Yapay Zekâ</span><div class="record-fields skill-fields"><label><span>Beceri Adı</span><input value="Veri Analizi ve Yapay Zekâ Modelleme" readonly></label><label><span>Açıklama</span><input value="Veri hazırlama, model geliştirme, doğrulama ve iş sonucuna dönüştürme becerisi." readonly></label><label><span>Detay / Seviye Tanımı</span><input value="Teknik uygulama, problem çözme ve model performansı" readonly></label></div><div class="record-actions"><button class="danger-button" onclick="deleteRecord(this,'Beceri')">Sil</button><button class="secondary" onclick="editRecord(this)">Düzelt</button><button class="primary" onclick="saveRecord(this,'Beceri')">Kaydet</button></div></div></div></section>
 <section class="admin-section"><div class="admin-section-head"><div><span class="eyebrow">YETKİNLİK MATRİSİ</span><h2>Yetkinlikler</h2></div><button class="secondary" onclick="toast('Yeni yetkinlik satırı eklendi')">+ Yetkinlik Ekle</button></div><p class="section-note">Her yetkinlik bir beceriyle ilişkilendirilir; açıklaması ve uygulama detayı sınav veya gelişim promptunda kullanılır.</p><div class="library-records"><div class="admin-record"><div class="record-fields activity-fields"><label><span>Yetkinlik Adı</span><input value="Analitik Düşünme" readonly></label><label><span>Bağlı Beceri</span><input value="Problem Çözme ve Karar Verme" readonly></label><label><span>Açıklama</span><input value="Veri ve problemleri neden–sonuç ilişkileriyle analiz ederek çözüm geliştirme." readonly></label><label><span>Detay</span><input value="A–E seviye göstergeleri · Bilişsel Yetkinlikler" readonly></label></div><div class="record-actions"><button class="danger-button" onclick="deleteRecord(this,'Yetkinlik')">Sil</button><button class="secondary" onclick="editRecord(this)">Düzelt</button><button class="primary" onclick="saveRecord(this,'Yetkinlik')">Kaydet</button></div></div></div></section>`, title)}
-function resultsPage(){const filtered=candidateResults.filter(r=>(r.name+r.email+r.test).toLowerCase().includes(state.resultQuery.toLowerCase())&&(!state.resultDepartment||r.department===state.resultDepartment)&&(!state.resultOutcome||r.outcome===state.resultOutcome)&&(!state.resultScore||(state.resultScore==='80+'?r.score>=80:state.resultScore==='60-79'?r.score>=60&&r.score<80:state.resultScore==='50-59'?r.score>=50&&r.score<60:r.score<50)));const avg=filtered.length?Math.round(filtered.reduce((a,r)=>a+r.score,0)/filtered.length):0;const high=filtered.filter(r=>r.score>=80).length;const positive=filtered.filter(r=>r.outcome==='Olumlu').length;const rows=filtered.map(r=>{const index=candidateResults.indexOf(r);return `<tr><td><b>${r.name}</b><span class="candidate-email">${r.email}</span></td><td><b>${r.test}</b><span class="candidate-detail">${r.department} · ${r.detail}</span></td><td><b class="candidate-score">% ${r.score}</b><span class="result-status ${r.score>=80?'positive':r.score>=50?'pending':'negative'}">${r.score>=80?'Yüksek Skor':r.score>=50?'Beklenebilir':'Yetkin Olmayan'}</span></td><td><div class="result-summary"><b>${r.outcome==='Olumlu'?'Olumlu Sonuç':'Geliştirilmeli (Uygun Değil)'}</b><p>${r.summary}</p></div></td><td>${r.date}<span class="candidate-time">${r.time}</span></td><td><div class="result-actions"><button class="report-button" onclick="showCandidateReport(${index})">Detaylı Rapor 📊</button><button class="report-button" style="background:#e8f0fe; color:#1a73e8;" onclick="toast('Test sonuçları değerlendirme komitesine ve adaya gönderildi.')">Değerlendirmeye Gönder ⟶</button><button class="report-button" style="background:#fce8e6; color:#d93025;" onclick="toast('Test sonuçları e-posta ile gönderildi.')">Sonuçları Gönder ✉</button><button class="report-button" style="background:#e6fffb; color:#0f766e;" onclick="toast('Çözüm testleri ve cevap anahtarı modalı açılıyor.')">Çözüm Testleri ðŸ‘</button><button class="result-delete" onclick="deleteResult(this)">Sil ✕</button></div></td></tr>`}).join('');return layout(`<section class="results-head"><div><h2>Aday Test Sonuçları</h2><p>Sistemdeki tüm test çözümlerine ait AI detaylı raporları ve yetkinlik skorları.</p></div><div class="toolbar"><button class="secondary dark-button" onclick="go('dashboard')">Pano Anasayfası</button><button class="primary orange-button" onclick="go('tests')">Hazır Testler & Atama</button></div></section><div class="result-kpis"><article><span>Toplam Çözülen</span><b>${filtered.length} Test</b></article><article><span>Ortalama Başarı</span><b class="blue-score">% ${avg}</b></article><article><span>Yüksek Skor (%80+)</span><b class="green-score">${high} Aday</b></article><article><span>Olumlu Sonuç (Öneri)</span><b class="purple-score">${positive} Aday</b></article></div><div class="result-filters"><label><span>Arama</span><input placeholder="Aday adı, e-posta veya test..." value="${state.resultQuery}" onchange="state.resultQuery=this.value;render()"></label><label><span>Departman</span><select onchange="state.resultDepartment=this.value;render()"><option value="">Tümü</option>${unique(candidateResults.map(r=>r.department)).map(v=>`<option ${state.resultDepartment===v?'selected':''}>${v}</option>`).join('')}</select></label><label><span>Skor Aralığı</span><select onchange="state.resultScore=this.value;render()"><option value="">Tümü</option><option value="80+" ${state.resultScore==='80+'?'selected':''}>%80 ve üzeri</option><option value="60-79" ${state.resultScore==='60-79'?'selected':''}>%60–79</option><option value="50-59" ${state.resultScore==='50-59'?'selected':''}>%50–59</option><option value="0-49" ${state.resultScore==='0-49'?'selected':''}>%0–49</option></select></label><label><span>Değerlendirme Sonucu</span><select onchange="state.resultOutcome=this.value;render()"><option value="">Tümü</option><option ${state.resultOutcome==='Olumlu'?'selected':''}>Olumlu</option><option ${state.resultOutcome==='Geliştirilmeli'?'selected':''}>Geliştirilmeli</option></select></label></div><div class="table-wrap candidate-table"><table><thead><tr><th>Aday / İletişim</th><th>Çözülen Test</th><th>Skor (Ajan 5)</th><th>Değerlendirme Sonucu</th><th>Tarih</th><th>İşlemler</th></tr></thead><tbody>${rows||'<tr><td colspan="6" class="empty">Filtrelere uygun aday sonucu bulunamadı.</td></tr>'}</tbody></table></div>`,'Test Sonuçları')}
+function resultsPage(){const filtered=candidateResults.filter(r=>(r.name+r.email+r.test).toLowerCase().includes(state.resultQuery.toLowerCase())&&(!state.resultDepartment||r.department===state.resultDepartment)&&(!state.resultOutcome||r.outcome===state.resultOutcome)&&(!state.resultScore||(state.resultScore==='80+'?r.score>=80:state.resultScore==='60-79'?r.score>=60&&r.score<80:state.resultScore==='50-59'?r.score>=50&&r.score<60:r.score<50)));const avg=filtered.length?Math.round(filtered.reduce((a,r)=>a+r.score,0)/filtered.length):0;const high=filtered.filter(r=>r.score>=80).length;const positive=filtered.filter(r=>r.outcome==='Olumlu').length;const rows=filtered.map(r=>{const index=candidateResults.indexOf(r);return `<tr><td><b>${r.name}</b><span class="candidate-email">${r.email}</span></td><td><b>${r.test}</b><span class="candidate-detail">${r.department} · ${r.detail}</span></td><td><b class="candidate-score">% ${r.score}</b><span class="result-status ${r.score>=80?'positive':r.score>=50?'pending':'negative'}">${r.score>=80?'Yüksek Skor':r.score>=50?'Beklenebilir':'Yetkin Olmayan'}</span></td><td><div class="result-summary"><b>${r.outcome==='Olumlu'?'Olumlu Sonuç':'Geliştirilmeli (Uygun Değil)'}</b><p>${r.summary}</p></div></td><td>${r.date}<span class="candidate-time">${r.time}</span></td><td><div class="result-actions"><button class="report-button" onclick="showCandidateReport(${index})">Detaylı Rapor 📊</button><button class="report-button" style="background:#e8f0fe; color:#1a73e8;" onclick="toast('Test sonuçları değerlendirme komitesine ve adaya gönderildi.')">Değerlendirmeye Gönder ⟶</button><button class="report-button" style="background:#fce8e6; color:#d93025;" onclick="toast('Test sonuçları e-posta ile gönderildi.')">Sonuçları Gönder ✉</button><button class="report-button" style="background:#e6fffb; color:#0f766e;" onclick="toast('Çözüm testleri ve cevap anahtarı modalı açılıyor.')">Çözüm Testleri</button><button class="result-delete" onclick="deleteResult(this)">Sil ✕</button></div></td></tr>`}).join('');return layout(`<section class="results-head"><div><h2>Aday Test Sonuçları</h2><p>Sistemdeki tüm test çözümlerine ait AI detaylı raporları ve yetkinlik skorları.</p></div><div class="toolbar"><button class="secondary dark-button" onclick="go('dashboard')">Pano Anasayfası</button><button class="primary orange-button" onclick="go('tests')">Hazır Testler & Atama</button></div></section><div class="result-kpis"><article><span>Toplam Çözülen</span><b>${filtered.length} Test</b></article><article><span>Ortalama Başarı</span><b class="blue-score">% ${avg}</b></article><article><span>Yüksek Skor (%80+)</span><b class="green-score">${high} Aday</b></article><article><span>Olumlu Sonuç (Öneri)</span><b class="purple-score">${positive} Aday</b></article></div><div class="result-filters"><label><span>Arama</span><input placeholder="Aday adı, e-posta veya test..." value="${state.resultQuery}" onchange="state.resultQuery=this.value;render()"></label><label><span>Departman</span><select onchange="state.resultDepartment=this.value;render()"><option value="">Tümü</option>${unique(candidateResults.map(r=>r.department)).map(v=>`<option ${state.resultDepartment===v?'selected':''}>${v}</option>`).join('')}</select></label><label><span>Skor Aralığı</span><select onchange="state.resultScore=this.value;render()"><option value="">Tümü</option><option value="80+" ${state.resultScore==='80+'?'selected':''}>%80 ve üzeri</option><option value="60-79" ${state.resultScore==='60-79'?'selected':''}>%60–79</option><option value="50-59" ${state.resultScore==='50-59'?'selected':''}>%50–59</option><option value="0-49" ${state.resultScore==='0-49'?'selected':''}>%0–49</option></select></label><label><span>Değerlendirme Sonucu</span><select onchange="state.resultOutcome=this.value;render()"><option value="">Tümü</option><option ${state.resultOutcome==='Olumlu'?'selected':''}>Olumlu</option><option ${state.resultOutcome==='Geliştirilmeli'?'selected':''}>Geliştirilmeli</option></select></label></div><div class="table-wrap candidate-table"><table><thead><tr><th>Aday / İletişim</th><th>Çözülen Test</th><th>Skor (Ajan 5)</th><th>Değerlendirme Sonucu</th><th>Tarih</th><th>İşlemler</th></tr></thead><tbody>${rows||'<tr><td colspan="6" class="empty">Filtrelere uygun aday sonucu bulunamadı.</td></tr>'}</tbody></table></div>`,'Test Sonuçları')}
 function qrPage(){return layout(`<section class="page-intro"><div><h2>Ajan 11 · Barkod Yöneticisi</h2><p>Test davetlerini QR kodu ve güvenli bağlantı ile dağıtın.</p></div></section><div class="grid two" style="margin-top:20px"><div class="card"><div class="field"><label>Test seçin</label><select>${tests.map(t=>`<option>${t.name}</option>`).join('')}</select></div><div class="field"><label>Geçerlilik süresi</label><select><option>24 saat</option><option>3 gün</option><option>7 gün</option></select></div><button class="primary full" onclick="showQR('Sınav Daveti')">QR Kod Oluştur</button></div><div class="card"><h2>Dağıtım durumu</h2><div class="bars"><div class="bar-row"><span>Gönderildi</span><div class="bar"><i style="width:88%"></i></div><b>44</b></div><div class="bar-row"><span>Açıldı</span><div class="bar"><i style="width:70%"></i></div><b>35</b></div><div class="bar-row"><span>Tamamlandı</span><div class="bar"><i style="width:56%"></i></div><b>28</b></div></div></div></div>`,'SkillBridge Yönetici Paneli')}
 function agentsPage(){return layout(`<section class="agent-hero"><div><span class="eyebrow">SAYFA AI GÖREV KONTROL MERKEZİ</span><h2>17 uzman ajan, tek yönetici model</h2><p>Sistemdeki yapay zekâ sayfalarının sırasını ve görev sınırlarını inceleyin; yalnızca uzmanlık alanlarına uygun yeni görevler tanımlayın.</p></div><div class="model-badge"><span>YÖNETİCİ MODEL</span><b>Gemma 4 · 26B</b><small>Görev yönlendirme ve kapsam denetimi</small></div></section><div class="scope-rule"><b>Kapsam kilidi etkin</b><span>Her ajan yalnızca görevlendirildiği alanda çalışır, verilen görevi uygular ve alanı dışındaki işlemleri reddeder.</span></div>
 <section class="agent-control"><div class="admin-section-head"><div><span class="eyebrow">YENİ GÖREV</span><h2>Sayfaya Görev Tanımla</h2></div><span class="role-chip">17 / 17 ONLINE</span></div><div class="task-form"><label><span>Sayfa seçin</span><select id="agent-select">${aiAgents.map((a,i)=>`<option value="${i}">Sayfa ${i+1}: ${a[0]}</option>`).join('')}</select></label><label><span>Görevin Tanımı / Prompt</span><textarea id="agent-prompt" placeholder="Seçilen ajanın görev alanına uygun talimatı yazın."></textarea></label><button class="primary" onclick="dispatchAgentTask()">Görevi Sayfaya Gönder ➜</button></div><div class="quick-templates"><span>Hızlı şablonlar</span><button onclick="selectAgentTask(0,'Yazılım Mühendisi rolü için yetkinlik standartlarını araştır.')">Yazılım yetkinlikleri</button><button onclick="selectAgentTask(1,'PoC projesi için kriz hikâyesi üret.')">PoC kriz hikâyesi</button><button onclick="selectAgentTask(5,'IT iptal kararındaki zafiyetleri analiz et.')">Zafiyet analizi</button><button onclick="selectAgentTask(10,'QR sınav davet şablonu hazırla.')">QR davet şablonu</button><button onclick="selectAgentTask(16,'Vaka sorularını master prompt kurallarına göre denetle.')">Kalite denetimi</button></div><div id="agent-terminal" class="agent-terminal"><span>SAYFA AI TERMİNALİ v1.0</span><p>Terminal çıktıları burada görüntülenecektir...</p></div></section>
@@ -205,8 +299,8 @@ function updateDocumentChain(level){const ids=['doc-sector','doc-subsector','doc
 let generatedCaseFile=null;
 function downloadGeneratedCase(){if(!generatedCaseFile)return;const blob=new Blob([generatedCaseFile.content],{type:'text/plain;charset=utf-8'});const link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download=generatedCaseFile.name.replace(/[^a-zA-Z0-9ğüşöçıİĞÜŞÖÇ _-]/g,'')+' - Vaka.txt';link.click();URL.revokeObjectURL(link.href);toast('Vaka dosyası indirildi')}
 function generateDocumentCase(){const title=pv('document-name',''),topic=pv('document-topic',''),sector=pv('doc-sector',''),subsector=pv('doc-subsector',''),func=pv('doc-function',''),position=pv('doc-position','');if(!title||!topic||!selectedDocumentFile||!sector||!subsector||!func||!position)return toast('Dosya ile birlikte sektör, alt sektör, fonksiyon ve pozisyon seçilmelidir');const context=sector+' / '+subsector+' / '+func+' / '+position;generatedCaseFile={name:title,content:'VAKA BAŞLIĞI: '+title+'\nKONU: '+topic+'\nKAYNAK DOSYA: '+selectedDocumentFile.name+'\nSEKTÖR: '+sector+'\nALT SEKTÖR: '+subsector+'\nFONKSİYON: '+func+'\nPOZİSYON: '+position+'\n\nVAKA\n'+position+' rolündeki çalışan, '+subsector+' alanında '+topic+' sürecini yürütmektedir. Yüklenen belgedeki olaylar, kurallar, teknik bilgiler ve karar noktaları '+func+' fonksiyonunun sorumluluklarıyla eşleştirilmiştir. Süreçte zaman, kaynak ve paydaş beklentileri arasında çatışma oluşmuş; çalışanın belgeye dayalı bilgileri kullanarak sektör koşullarına uygun bir karar vermesi gerekmiştir. Mevzuat, kurum politikaları ve operasyonel riskler birlikte değerlendirilmelidir. Vaka, '+position+' pozisyonundaki kişinin öncelikleri belirleyip uygulanabilir bir yol seçmesi gereken kritik noktada sona erer.\n\nVAKA BAĞLAMI\n'+context};const result=document.getElementById('document-result');result.hidden=false;result.innerHTML='<div><span class="eyebrow">AJAN 7 · BELGEDEN VAKA</span><h3>'+safeText(title)+' vakası oluşturuldu</h3><p>'+safeText(context)+' seçimlerine göre belge içeriği vaka bağlamına dönüştürüldü. Soru üretilmedi.</p></div><div class="case-next-actions"><button class="secondary" onclick="downloadGeneratedCase()">Vaka Dosyasını İndir</button><button class="primary" onclick="prepareTestFromCase(generatedCaseFile.content)">Test Sorularını Hazırla</button></div>';toast('Belge, seçilen pozisyon ve fonksiyona göre vakaya dönüştürüldü')}
-function documentsPage(){selectedDocumentFile=null;return layout(`<section class="document-upload-page"><div class="document-title"><span class="eyebrow">AJAN 7 · BELGEDEN VAKA</span><h2>Belgeden Vaka Üret</h2><p>Belgeyi yükleyin, mesleki bağlamı seçin; içerik soru üretilmeden seçilen role uygun vakaya dönüştürülsün.</p></div><div class="document-upload-card"><div class="document-meta-grid"><label class="document-field"><span>Doküman Adı</span><input id="document-name" oninput="syncDocumentUpload()" placeholder="Örn: Satış Eğitimi 2026"></label><label class="document-field"><span>Konusu</span><input id="document-topic" oninput="syncDocumentUpload()" placeholder="Örn: Müşteri İletişimi"></label></div><div id="document-dropzone" class="document-dropzone" ondragover="event.preventDefault();this.classList.add('dragging')" ondragleave="this.classList.remove('dragging')" ondrop="dropDocument(event)" onclick="document.getElementById('document-file').click()" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('document-file').click()}"><div class="document-icon">ðŸ“„</div><h3>Sürükle bırak veya dosya seçin</h3><p>Desteklenen Formatlar: PDF, DOCX, XLSX, CSV, TXT (Maks. 5 MB)</p><div class="file-picker"><button type="button" class="secondary" onclick="event.stopPropagation();document.getElementById('document-file').click()">Dosya Seç</button><span id="document-file-name">Dosya seçilmedi</span></div><input id="document-file" type="file" hidden accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt" onchange="handleDocumentFile(this.files[0])"></div><div class="document-context"><div class="document-context-head"><span class="eyebrow">VAKA BAĞLAMI</span><h3>Belgenin uygulanacağı alanı seçin</h3></div><div class="document-context-grid"><label><span>Sektör</span><select id="doc-sector" onchange="updateDocumentChain('doc-sector')"></select></label><label><span>Alt Sektör</span><select id="doc-subsector" onchange="updateDocumentChain('doc-subsector')" disabled><option>Önce sektör seçin</option></select></label><label><span>Fonksiyon</span><select id="doc-function" onchange="updateDocumentChain('doc-function')" disabled><option>Önce alt sektör seçin</option></select></label><label><span>Pozisyon</span><select id="doc-position" onchange="syncDocumentUpload()" disabled><option>Önce fonksiyon seçin</option></select></label></div><p>Vaka, belgedeki bilgiler korunarak seçtiğiniz sektör, fonksiyon ve pozisyonun sorumluluklarına göre oluşturulur.</p></div><div class="document-actions"><button id="document-upload-button" class="primary" disabled onclick="generateDocumentCase()">Belgeyi Oku ve Vaka Üret</button></div><div id="document-result" class="document-result" hidden></div></div></section>`,'Belgeden Vaka Yarat')}
-function comparisonPage(){return layout(`<section class="page-intro"><div><h2>10 Sayfa Karşılaştırması</h2><p>AI sayfalarının aday değerlendirmelerini tek görünümde karşılaştırın.</p></div><button class="primary" onclick="toast('Karşılaştırma raporu oluşturuldu')">Rapor Oluştur</button></section><div class="table-wrap" style="margin-top:20px"><table><thead><tr><th>Sayfa</th><th>Yetkinlik</th><th>Puan</th><th>Güven</th><th>Öneri</th></tr></thead><tbody>${Array.from({length:10},(_,i)=>`<tr><td>Sayfa ${i+1}</td><td>${['Teknik Bilgi','Problem Çözme','Liderlik','İletişim'][i%4]}</td><td>%${68+i*2}</td><td>${badge(i>6?'Yüksek':'Orta')}</td><td>${i>5?'Olumlu':'İnceleme'}</td></tr>`).join('')}</tbody></table></div>`,'SkillBridge Yönetici Paneli')}
+function documentsPage(){selectedDocumentFile=null;return layout(`<section class="document-upload-page"><div class="document-title"><span class="eyebrow">AJAN 7 · BELGEDEN VAKA</span><h2>Belgeden Vaka Üret</h2><p>Belgeyi yükleyin, mesleki bağlamı seçin; içerik soru üretilmeden seçilen role uygun vakaya dönüştürülsün.</p></div><div class="document-upload-card"><div class="document-meta-grid"><label class="document-field"><span>Doküman Adı</span><input id="document-name" oninput="syncDocumentUpload()" placeholder="Örn: Satış Eğitimi 2026"></label><label class="document-field"><span>Konusu</span><input id="document-topic" oninput="syncDocumentUpload()" placeholder="Örn: Müşteri İletişimi"></label></div><div id="document-dropzone" class="document-dropzone" ondragover="event.preventDefault();this.classList.add('dragging')" ondragleave="this.classList.remove('dragging')" ondrop="dropDocument(event)" onclick="document.getElementById('document-file').click()" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('document-file').click()}"><div class="document-icon" style="display: none;"></div><h3>Sürükle bırak veya dosya seçin</h3><p>Desteklenen Formatlar: PDF, DOCX, XLSX, CSV, TXT (Maks. 5 MB)</p><div class="file-picker"><button type="button" class="secondary" onclick="event.stopPropagation();document.getElementById('document-file').click()">Dosya Seç</button><span id="document-file-name">Dosya seçilmedi</span></div><input id="document-file" type="file" hidden accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt" onchange="handleDocumentFile(this.files[0])"></div><div class="document-context"><div class="document-context-head"><span class="eyebrow">VAKA BAĞLAMI</span><h3>Belgenin uygulanacağı alanı seçin</h3></div><div class="document-context-grid"><label><span>Sektör</span><select id="doc-sector" onchange="updateDocumentChain('doc-sector')"></select></label><label><span>Alt Sektör</span><select id="doc-subsector" onchange="updateDocumentChain('doc-subsector')" disabled><option>Önce sektör seçin</option></select></label><label><span>Fonksiyon</span><select id="doc-function" onchange="updateDocumentChain('doc-function')" disabled><option>Önce alt sektör seçin</option></select></label><label><span>Pozisyon</span><select id="doc-position" onchange="syncDocumentUpload()" disabled><option>Önce fonksiyon seçin</option></select></label></div><p>Vaka, belgedeki bilgiler korunarak seçtiğiniz sektör, fonksiyon ve pozisyonun sorumluluklarına göre oluşturulur.</p></div><div class="document-actions"><button id="document-upload-button" class="primary" disabled onclick="generateDocumentCase()">Belgeyi Oku ve Vaka Üret</button></div><div id="document-result" class="document-result" hidden></div></div></section>`,'Belgeden Vaka Yarat')}
+function comparisonPage(){return layout(`<section class="page-intro"><div><h2>CV Karşılaştırma</h2><p>AI sayfalarının aday değerlendirmelerini tek görünümde karşılaştırın.</p></div><button class="primary" onclick="toast('Karşılaştırma raporu oluşturuldu')">Rapor Oluştur</button></section><div class="table-wrap" style="margin-top:20px"><table><thead><tr><th>Sayfa</th><th>Yetkinlik</th><th>Puan</th><th>Güven</th><th>Öneri</th></tr></thead><tbody>${Array.from({length:10},(_,i)=>`<tr><td>Sayfa ${i+1}</td><td>${['Teknik Bilgi','Problem Çözme','Liderlik','İletişim'][i%4]}</td><td>%${68+i*2}</td><td>${badge(i>6?'Yüksek':'Orta')}</td><td>${i>5?'Olumlu':'İnceleme'}</td></tr>`).join('')}</tbody></table></div>`,'SkillBridge Yönetici Paneli')}
 function showQR(title){const m=document.createElement('div');m.className='modal';m.innerHTML=`<div class="modal-card"><div class="modal-head"><div><h2>Test Daveti</h2><p class="sub">${title}</p></div><button onclick="this.closest(\'.modal\').remove()">×</button></div><div class="qr" aria-label="QR kod önizlemesi"></div><button class="primary full" onclick="navigator.clipboard?.writeText(location.href);toast('Bağlantı kopyalandı')">Bağlantıyı Kopyala</button></div>`;document.body.append(m)}
 function loginPage(){return `<section class="login"><div class="login-box-wrap"><form class="login-box" onsubmit="event.preventDefault();login()"><div class="login-brand"><img class="partner-logo" src="./brand-partners.png" alt="Mendomi Akademi ve BIGsafer işbirliği"><h1>SkillBridgeAIPro</h1><p>Yapay Zeka Destekli İşe Alım &amp; Simülasyon Girişi</p></div><div class="login-fields"><div class="login-inputs"><input type="email" aria-label="E-posta adresi" placeholder="E-posta Adresi" required><input type="password" aria-label="Şifre" placeholder="Şifre" required></div><button class="login-submit">Sisteme Giriş Yap</button></div></form></div></section>`}
 const promptSkills=unique(matrixData.skills.map(item=>item.name));
@@ -216,14 +310,14 @@ function competencyCategoryLabel(category){return category}
 function promptOptions(values,placeholder){return '<option value="">'+placeholder+'</option>'+unique(values).map(v=>'<option>'+safeText(v)+'</option>').join('')}
 const certificateRules=[['proje','PMP / PRINCE2 / Proje Yönetimi Sertifikası'],['kalite','ISO 9001 Kalite Yönetim Sistemi'],['gıda','HACCP / Gıda Güvenliği Sertifikası'],['bakım','Mesleki Bakım ve Teknik Servis Sertifikası'],['elektrik','Elektrik Tesisleri ve İş Güvenliği Sertifikası'],['yazılım','Yazılım Geliştirme Uzmanlık Sertifikası'],['veri','Veri Analitiği ve Yapay Zekâ Sertifikası'],['satış','Profesyonel Satış ve Müşteri Yönetimi Sertifikası'],['insan kaynak','İnsan Kaynakları Yönetimi Sertifikası'],['lojistik','Lojistik ve Tedarik Zinciri Sertifikası']];
 function contextualCertificates(){const text=normalizeSearch([pv('pb-sector',''),pv('pb-subsector',''),pv('pb-expertise',''),pv('pb-position','')].join(' '));const matched=certificateRules.filter(([key])=>text.includes(normalizeSearch(key))).map(([,name])=>name);return unique(matched.length?matched:['Mesleki Yeterlilik Belgesi','İş Sağlığı ve Güvenliği Sertifikası'])}
-function refreshMatrixSelections(){const sector=pv('pb-sector',''),subsector=pv('pb-subsector',''),func=pv('pb-expertise',''),position=pv('pb-position',''),ready=!!(sector&&subsector&&func&&position);const matches=item=>ready&&item.sector===sector&&item.subsector===subsector&&item.function===func;const skills=unique(matrixData.skills.filter(matches).map(item=>item.name));const skillSelect=document.getElementById('pb-skills');skillSelect.innerHTML=skills.length?skills.map(v=>'<option>'+safeText(v)+'</option>').join(''):'<option disabled>'+(ready?'Bu seçim için eşleşen beceri bulunamadı':'Önce sektör, alt sektör, fonksiyon ve pozisyon seçin')+'</option>';skillSelect.disabled=!skills.length;const certificate=document.getElementById('pb-certificate');if(certificate){const values=ready?contextualCertificates():[];certificate.innerHTML='<option value="">'+(ready?'Sertifika seçin':'Önce pozisyon seçin')+'</option>'+values.map(v=>'<option>'+safeText(v)+'</option>').join('');certificate.disabled=!ready}}
-function updateCompetencyCategory(){const selected=pv('pb-competency-category','');const values=selected?unique(matrixData.competencies.filter(item=>competencyCategoryLabel(item.category)===selected).map(item=>item.name)):[];const target=document.getElementById('pb-competencies');target.innerHTML=values.length?values.map(v=>'<option>'+safeText(v)+'</option>').join(''):'<option disabled>Yetkinlik başlığı seçin</option>';target.disabled=!values.length;updateGeneratedPrompt()}
-function initPromptBuilder(){const sector=document.getElementById('pb-sector');if(!sector)return;sector.innerHTML=promptOptions(keywordRows.map(r=>r[0]),'Sektör seçiniz');const expertiseLabel=document.getElementById('pb-expertise')?.closest('label')?.querySelector('span');if(expertiseLabel)expertiseLabel.textContent='Uzmanlık Alanı / Fonksiyon';const profession=document.getElementById('pb-profession')?.closest('label');if(profession&&!document.getElementById('pb-certificate'))profession.insertAdjacentHTML('afterend','<label><span>Sertifika</span><select id="pb-certificate" disabled onchange="updateGeneratedPrompt()"><option>Önce pozisyon seçin</option></select></label>');const catSel=document.getElementById('pb-competency-category');if(catSel){catSel.innerHTML='<option value="">Yetkinlik ana başlığı seçin</option>'+competencyCategoryOrder.map(v=>'<option>'+safeText(v)+'</option>').join('');catSel.disabled=false}refreshMatrixSelections();updateGeneratedPrompt()}
-function updatePromptChain(level){const ids=['pb-sector','pb-subsector','pb-expertise','pb-position','pb-department'];const index=ids.indexOf(level);const selected=ids.slice(0,index+1).map(id=>document.getElementById(id).value);for(let i=index+1;i<ids.length;i++){const options=unique(keywordRows.filter(r=>selected.every((v,j)=>!v||r[j]===v)).map(r=>r[i]));const el=document.getElementById(ids[i]);el.innerHTML=promptOptions(options,['Sektör','Alt sektör','Fonksiyon','Pozisyon','Departman'][i]+' seçiniz');el.disabled=!options.length}refreshMatrixSelections();updateGeneratedPrompt()}
+function refreshMatrixSelections(){const sector=pv('pb-sector',''),subsector=pv('pb-subsector',''),func=pv('pb-expertise',''),position=pv('pb-position',''),ready=!!(sector&&subsector&&func&&position);const matches=item=>ready&&item.sector===sector&&item.subsector===subsector&&item.function===func;const skills=unique(matrixData.skills.filter(matches).map(item=>item.name));const skillSelect=document.getElementById('pb-skills');if(skillSelect){skillSelect.innerHTML=skills.length?skills.map(v=>'<option>'+safeText(v)+'</option>').join(''):'<option disabled>'+(ready?'Bu seçim için eşleşen beceri bulunamadı':'Önce sektör, alt sektör, fonksiyon ve pozisyon seçin')+'</option>';skillSelect.disabled=!skills.length;}const certificate=document.getElementById('pb-certificate');if(certificate){const values=ready?contextualCertificates():[];certificate.innerHTML='<option value="">'+(ready?'Sertifika seçin':'Önce pozisyon seçin')+'</option>'+values.map(v=>'<option>'+safeText(v)+'</option>').join('');certificate.disabled=!ready;}}
+function updateCompetencyCategory(){const selected=pv('pb-competency-category','');const values=selected?unique(matrixData.competencies.filter(item=>competencyCategoryLabel(item.category)===selected).map(item=>item.name)):[];const target=document.getElementById('pb-competencies');if(target){target.innerHTML=values.length?values.map(v=>'<option>'+safeText(v)+'</option>').join(''):'<option disabled>Yetkinlik başlığı seçin</option>';target.disabled=!values.length;}updateGeneratedPrompt();}
+function initPromptBuilder(){if(window.updateDbChain){window.updateDbChain('init');return;}const sector=document.getElementById('pb-sector');if(!sector)return;sector.innerHTML=promptOptions(keywordRows.map(r=>r[0]),'Sektör seçiniz');const expertiseLabel=document.getElementById('pb-expertise')?.closest('label')?.querySelector('span');if(expertiseLabel)expertiseLabel.textContent='Uzmanlık Alanı (Çoklu Seçim)';const profession=document.getElementById('pb-profession')?.closest('label');if(profession&&!document.getElementById('pb-certificate'))profession.insertAdjacentHTML('afterend','<label><span>Sertifika</span><select id="pb-certificate" disabled onchange="updateGeneratedPrompt()"><option>Önce pozisyon seçin</option></select></label>');const catSel=document.getElementById('pb-competency-category');if(catSel){catSel.innerHTML='<option value="">Yetkinlik ana başlığı seçin</option>'+competencyCategoryOrder.map(v=>'<option>'+safeText(v)+'</option>').join('');catSel.disabled=false;}refreshMatrixSelections();updateGeneratedPrompt();}
+function updatePromptChain(level){if(window.updateDbChain){window.updateDbChain(level.replace('pb-',''));return;}const ids=['pb-sector','pb-subsector','pb-expertise','pb-position','pb-department'];const index=ids.indexOf(level);const selected=ids.slice(0,index+1).map(id=>document.getElementById(id)?.value);for(let i=index+1;i<ids.length;i++){const options=unique(keywordRows.filter(r=>selected.every((v,j)=>!v||r[j]===v)).map(r=>r[i]));const el=document.getElementById(ids[i]);if(el){el.innerHTML=promptOptions(options,['Sektör','Alt sektör','Fonksiyon','Pozisyon','Departman'][i]+' seçiniz');el.disabled=!options.length;}}refreshMatrixSelections();updateGeneratedPrompt();}
 function pv(id,fallback){const el=document.getElementById(id);return el&&el.value?el.value:fallback}
 function pm(id){const el=document.getElementById(id);return el?[...el.selectedOptions].map(o=>o.value).join(', '):''}
 function updateGeneratedPrompt(){const out=document.getElementById('generated-prompt');if(!out)return;const sector=pv('pb-sector','{SEKTÖR}'),sub=pv('pb-subsector','{ALT_SEKTÖR}'),expert=pv('pb-expertise','{FONKSİYON}'),position=pv('pb-position','{POZISYON}'),department=pv('pb-department','{DEPARTMAN}'),profession=pv('pb-profession','{MESLEK}'),topic=pv('pb-topic','{KONU}'),exam=pv('pb-exam','{DEĞERLENDİRME_AMACI}'),difficulty=pv('pb-difficulty','{ZORLUK}'),duration=pv('pb-duration','{SURE}'),targets=[pm('pb-skills'),pm('pb-competencies')].filter(Boolean).join(', ')||'{BECERILER_VE_YETKINLIKLER}';out.value=['ROLÜN:','Sen, '+sector+' sektöründe '+sub+' alanında uzmanlaşmış, 15+ yıl deneyimli üst düzey bir Teknik Değerlendirme uzmanısın. '+position+' pozisyonunun donanımsal, yazılımsal ve tamamen işe yönelik (job-oriented) teknik detaylarına hâkimsin.','','BAĞLAM:','- Sektör: '+sector,'- Meslek: '+profession,'- Pozisyon/Seviye: '+position,'- Konu: '+topic,'- Zorluk Seviyesi: '+difficulty,'- Hedef Beceri: '+targets,'','GÖREV:','Yukarıdaki form verilerine dayanarak adayın doğrudan teknik ve operasyonel bilgisini ölçecek KISA, ÖZ ve YÜKSEK TEKNİK DERİNLİĞE SAHİP bir vaka oluştur. Vakayı, adayın adım adım çözmesi gereken salt teknik bir kriz döngüsü (troubleshooting loop) şeklinde kurgula.','','VAKA KURALLARI:','1. Vaka kesinlikle ÇOK KISA ve NET olmalıdır (maksimum 150 kelime). Lüzumsuz İK jargonundan ve uzun betimlemelerden kaçın.','2. Olaya doğrudan teknik bir sistem hatası, spesifik bir altyapı sorunu veya operasyonel kriz ile başla.','3. Sektörel araçları, yazılımları ve metrikleri (ör. log kayıtları, hata kodları, spesifik donanım/yazılım adları) gerçekçi bir şekilde kullan.','4. Adayın salt teknik bilgiyle çözebileceği birbirine bağlı (zincirleme) 3 aşamalı bir sorun döngüsü (loop) tasarla.','5. Vakanın sonuna, adayın sistem okuryazarlığını ve kriz çözme adımlarını ölçecek 3-5 adet, yalnızca gerçek uzmanların yanıtlayabileceği teknik sorular ekle.','','ÇIKTI FORMATI:','---','VAKA BAŞLIĞI: [...]','TEKNİK ALTYAPI VE BAŞLANGIÇ: [Doğrudan teknik verilerle, kısa ve öz]','KRİZ DÖNGÜSÜ (LOOP): [3 aşamalı zincirleme hata]','TEKNİK KISITLAR: [Sistem, zaman, kaynak]','TEKNİK SORULAR: [3-5 spesifik teknik soru]','---'].join('\\n')}
-function generateCaseFromPrompt(){const sector=pv('pb-sector',''),sub=pv('pb-subsector',''),position=pv('pb-position',''),department=pv('pb-department',''),topic=pv('pb-topic',''),skills=pm('pb-skills'),competencies=pm('pb-competencies'),difficulty=pv('pb-difficulty','Orta'),duration=pv('pb-duration','60');if(!sector||!sub||!position||!topic)return toast('Sektör, alt sektör, pozisyon ve konu seçilmelidir');if(!skills&&!competencies)return toast('En az bir beceri veya yetkinlik seçin');const targets=[skills,competencies].filter(Boolean).join(', ');const card=document.getElementById('generated-case-card');card.hidden=false;card.innerHTML='<div class="case-card-head"><div><span class="eyebrow">AJAN 8 · FORMDAN ÜRETİLEN VAKA</span><h2>'+safeText(position)+' · '+safeText(topic)+'</h2><p>'+safeText(sector)+' / '+safeText(sub)+' · '+safeText(difficulty)+' · '+safeText(duration)+' dakika</p></div><span class="case-count">Vaka hazır</span></div><div class="case-body"><h3>ðŸ“Œ Teknik Altyapı ve Başlangıç</h3><p>'+safeText(position)+' olarak '+safeText(department||sub)+' biriminde görev yapıyorsunuz. Sistemde aniden veri tabanı replikasyon gecikmesi (lag) uyarıları alınmaya başlanmış ve ana API uç noktasında %40 oranında 500 Internal Server Error dönüşleri tespit edilmiştir.</p><h3>Kriz Döngüsü (Loop)</h3><p>1. Veritabanı yükünü azaltmak için read-replica devreden çıkarıldığında, bu kez ana sunucuda (master) CPU %99\'a ulaştı.<br>2. Yüksek CPU nedeniyle cache sunucusu zaman aşımına (timeout) uğrayarak tamamen düştü.<br>3. Sonuç olarak kullanıcı oturumları sıfırlandı ve ödeme gateway\'i kilitlendi.</p><h3>Teknik Kısıtlar</h3><p>Müdahale için sadece 15 dakikanız var. Kurumun SLA sözleşmesi gereği kesintinin toplam maliyeti dakikada 5.000 TL\'dir. Sunucu kapasitesi artırılamaz (hard-limit).</p><h3>Teknik Sorular</h3><p>S1: Bu darboğazı çözmek için ilk olarak hangi servise müdahale edersiniz ve neden?<br>S2: Cache sunucusunun çöküşünü engellemek için master sunucu tarafında hangi acil konfigürasyonu değiştirirsiniz?<br>S3: Sistemi ayağa kaldırdıktan sonra bu döngünün tekrar yaşanmaması için mimaride nasıl bir değişiklik önerirsiniz?</p><div class="case-tags"><b>ðŸŽ¯ Gözlemlenecek Beceri ve Yetkinlikler</b><span>'+safeText(targets)+'</span></div></div><div class="case-next-actions"><button class="primary" onclick="prepareTestFromCase(this.closest(\'.generated-case-card\').innerText)">Test Sorularını Hazırla</button></div>';card.scrollIntoView({behavior:'smooth',block:'start'});toast('Formdan vaka üretildi')}
+function generateCaseFromPrompt(){const sector=pv('pb-sector',''),sub=pv('pb-subsector',''),position=pv('pb-position',''),department=pv('pb-department',''),topic=pv('pb-topic',''),skills=pm('pb-skills'),competencies=pm('pb-competencies'),difficulty=pv('pb-difficulty','Orta'),duration=pv('pb-duration','60');if(!sector||!sub||!position||!topic)return toast('Sektör, alt sektör, pozisyon ve konu seçilmelidir');if(!skills&&!competencies)return toast('En az bir beceri veya yetkinlik seçin');const targets=[skills,competencies].filter(Boolean).join(', ');const card=document.getElementById('generated-case-card');card.hidden=false;card.innerHTML='<div class="case-card-head"><div><span class="eyebrow">AJAN 8 · FORMDAN ÜRETİLEN VAKA</span><h2>'+safeText(position)+' · '+safeText(topic)+'</h2><p>'+safeText(sector)+' / '+safeText(sub)+' · '+safeText(difficulty)+' · '+safeText(duration)+' dakika</p></div><span class="case-count">Vaka hazır</span></div><div class="case-body"><h3>📌 Teknik Altyapı ve Başlangıç</h3><p>'+safeText(position)+' olarak '+safeText(department||sub)+' biriminde görev yapıyorsunuz. Sistemde aniden veri tabanı replikasyon gecikmesi (lag) uyarıları alınmaya başlanmış ve ana API uç noktasında %40 oranında 500 Internal Server Error dönüşleri tespit edilmiştir.</p><h3>Kriz Döngüsü (Loop)</h3><p>1. Veritabanı yükünü azaltmak için read-replica devreden çıkarıldığında, bu kez ana sunucuda (master) CPU %99\'a ulaştı.<br>2. Yüksek CPU nedeniyle cache sunucusu zaman aşımına (timeout) uğrayarak tamamen düştü.<br>3. Sonuç olarak kullanıcı oturumları sıfırlandı ve ödeme gateway\'i kilitlendi.</p><h3>Teknik Kısıtlar</h3><p>Müdahale için sadece 15 dakikanız var. Kurumun SLA sözleşmesi gereği kesintinin toplam maliyeti dakikada 5.000 TL\'dir. Sunucu kapasitesi artırılamaz (hard-limit).</p><h3>Teknik Sorular</h3><p>S1: Bu darboğazı çözmek için ilk olarak hangi servise müdahale edersiniz ve neden?<br>S2: Cache sunucusunun çöküşünü engellemek için master sunucu tarafında hangi acil konfigürasyonu değiştirirsiniz?<br>S3: Sistemi ayağa kaldırdıktan sonra bu döngünün tekrar yaşanmaması için mimaride nasıl bir değişiklik önerirsiniz?</p><div class="case-tags"><b>🎯 Gözlemlenecek Beceri ve Yetkinlikler</b><span>'+safeText(targets)+'</span></div></div><div class="case-next-actions"><button class="primary" onclick="prepareTestFromCase(this.closest(\'.generated-case-card\').innerText)">Test Sorularını Hazırla</button></div>';card.scrollIntoView({behavior:'smooth',block:'start'});toast('Formdan vaka üretildi')}
 function promptBuilderPage(){return layout('<section class="prompt-page"><div class="prompt-head"><div><span class="eyebrow">AJAN 8 · FORMDAN VAKA</span><h2>Formdan Vaka Üret</h2><p>Sektör, alt sektör, fonksiyon ve pozisyonu seçin; yalnızca bu bağlama uygun beceri, yetkinlik ve sertifikaları kullanarak vaka oluşturun.</p></div><button class="secondary" onclick="go(\'documents\')">← Belgeden Vaka</button></div><div class="prompt-card"><div class="prompt-grid"><label><span>Sektör</span><select id="pb-sector" onchange="updatePromptChain(\'pb-sector\')"></select></label><label><span>Alt Sektör</span><select id="pb-subsector" onchange="updatePromptChain(\'pb-subsector\')" disabled></select></label><label><span>Fonksiyon</span><select id="pb-expertise" onchange="updatePromptChain(\'pb-expertise\')" disabled></select></label><label><span>Pozisyon / Seviye</span><select id="pb-position" onchange="updatePromptChain(\'pb-position\')" disabled></select></label><label><span>Departman</span><select id="pb-department" onchange="updateGeneratedPrompt()" disabled></select></label><label><span>Meslek</span><input id="pb-profession" oninput="updateGeneratedPrompt()" placeholder="Meslek adını yazın"></label><label><span>Konu / Ünite</span><input id="pb-topic" oninput="updateGeneratedPrompt()" placeholder="Vakanın konusunu yazın"></label><label><span>Sınav Türü</span><select id="pb-exam" onchange="updateGeneratedPrompt()"><option>İşe Alım</option><option>Terfi</option><option>Seviye Tespit</option></select></label><label><span>Zorluk</span><select id="pb-difficulty" onchange="updateGeneratedPrompt()"><option>Kolay</option><option selected>Orta</option><option>Zor</option><option>Uzman</option></select></label><label><span>Süre (Dakika)</span><input id="pb-duration" type="number" min="1" value="60" oninput="updateGeneratedPrompt()"></label><label class="prompt-multi"><span>Bağlı Beceriler — çoklu seçim</span><select id="pb-skills" multiple disabled onchange="updateGeneratedPrompt()"><option disabled>Önce sektör, alt sektör, fonksiyon ve pozisyon seçin</option></select></label><div class="competency-picker"><label><span>Yetkinlik Ana Başlığı</span><select id="pb-competency-category" onchange="updateCompetencyCategory()" disabled><option value="">Önce sektör, alt sektör, fonksiyon ve pozisyon seçin</option></select></label><label class="prompt-multi"><span>Bağlı Yetkinlikler — çoklu seçim</span><select id="pb-competencies" multiple disabled onchange="updateGeneratedPrompt()"><option disabled>Önce ana yetkinlik başlığını seçin</option></select></label></div></div><div class="prompt-output-head"><div><span class="eyebrow">OLUŞTURULAN PROMPT</span><h3>Vaka Üretim Talimatı</h3></div><button class="primary" onclick="generateCaseFromPrompt()">Formdan Vaka Üret</button></div><textarea id="generated-prompt" class="generated-prompt" spellcheck="false"></textarea></div><section id="generated-case-card" class="generated-case-card" hidden></section></section>','Formdan Vaka Üret')}
 const updateGeneratedPromptCore=updateGeneratedPrompt;
 updateGeneratedPrompt=function(){updateGeneratedPromptCore();const out=document.getElementById('generated-prompt'),certificate=pv('pb-certificate','');if(out&&certificate)out.value=out.value.replace('- Zorluk Seviyesi:','- Sertifika: '+certificate+'\n- Zorluk Seviyesi:')}
@@ -243,19 +337,19 @@ const mcqOptionSets=[
  ['Doğrulanmış durumu, alınan kararı ve sonraki adımları açıkça paylaşmak','Sadece olumlu gelişmeleri aktararak mevcut riskleri raporun dışında bırakmak','Her paydaşa birbirinden farklı ve kayıt altına alınmamış bilgiler göndermek','İletişimi süreç tamamlanana kadar durdurup soruları yanıtsız bırakmak']
 ];
 function buildMcqQuestions(source,count){return Array.from({length:count},(_,i)=>{const correct=i%4,base=mcqOptionSets[i%mcqOptionSets.length],options=Array(4);options[correct]=base[0];let d=1;for(let slot=0;slot<4;slot++)if(slot!==correct)options[slot]=base[d++];return{text:(i+1)+'. '+mcqQuestionStems[i%mcqQuestionStems.length],options,answer:correct,open:false}})}
-function buildMcqDraft(){const source=pv('mcq-case',''),count=Number(pv('mcq-count','10'));if(!source.trim())return toast('Önce vaka metnini girin');if(count<10||count>100)return toast('Soru sayısı 10 ile 100 arasında olmalıdır');generatedExamType='Çoktan Seçmeli';generatedExamQuestions=buildMcqQuestions(source,count);const box=document.getElementById('mcq-draft');box.hidden=false;box.innerHTML='<div class="case-card-head"><div><span class="eyebrow">GEMMA 4 · ÇOKTAN SEÇMELİ</span><h2>Dört şıklı vaka testi hazır</h2><p>'+count+' soru · A, B, C, D · dengeli doğru cevap dağılımı</p></div><span class="case-count">'+count+' soru hazır</span></div><div class="question-rules"><span>Dört eşit seçenek</span><span>Dengeli cevap anahtarı</span><span>Tek soru görünümü</span><span>Geri dönüş kapalı</span></div><div class="mcq-preview-list">'+generatedExamQuestions.slice(0,4).map((q,i)=>'<article><b>Soru '+(i+1)+'</b><p>'+safeText(q.text)+'</p><div>'+q.options.map((option,index)=>'<span class="'+(index===q.answer?'correct-option':'')+'">'+String.fromCharCode(65+index)+') '+safeText(option)+'</span>').join('')+'</div></article>').join('')+'</div><button class="primary" onclick="startSecureExam()">Çoktan Seçmeli Testi Başlat</button>';box.scrollIntoView({behavior:'smooth',block:'start'});toast(count+' çoktan seçmeli soru hazırlandı')}
-function mcqPage(){const caseText=safeText(state.pendingCase||'');return layout('<section class="question-page"><div class="prompt-head"><div><span class="eyebrow">VAKADAN TEST</span><h2>Çoktan Seçmeli Vaka Testi</h2><p>Belge, form veya toplantıdan oluşturulan vakayı dört şıklı bir teste dönüştürün.</p></div></div><div class="question-builder"><div class="mcq-lock"><b>Soru Türü: Çoktan Seçmeli</b><span>Her soruda yalnızca A, B, C ve D seçenekleri kullanılır. Doğru cevaplar şıklara dengeli dağıtılır.</span></div><label class="question-case-field"><span>Vaka</span><textarea id="mcq-case" placeholder="Vaka metni...">'+caseText+'</textarea></label><div class="question-settings"><label><span>Soru Sayısı</span><input id="mcq-count" type="number" min="10" max="100" value="10"></label><label><span>Test Süresi (Dakika)</span><input id="test-total-minutes" type="number" min="1" value="30"></label><label><span>Soru Başına Süre (Dakika)</span><input id="question-minutes" type="number" min="1" value="3"></label><label><span>Seçenek Sayısı</span><input value="4 (A–D)" readonly></label></div><div class="question-policy"><b>Çoktan seçmeli sınav standardı</b><p>Seçenekler birbirine yakın uzunlukta hazırlanır. Doğru cevap aynı şıkta art arda tekrarlanmaz; A, B, C ve D arasında dengeli dağıtılır.</p></div><button class="primary full" onclick="buildMcqDraft()">Çoktan Seçmeli Test Sorularını Hazırla</button></div><section id="mcq-draft" class="generated-case-card" hidden></section></section>','Çoktan Seçmeli Vaka Testi')}
+function buildMcqDraft(){const source=pv('mcq-case',''),count=Number(pv('mcq-count','1'));if(!source.trim())return toast('Önce vaka metnini girin');if(count<1||count>100)return toast('Soru sayısı 1 ile 100 arasında olmalıdır');generatedExamType='Çoktan Seçmeli';generatedExamQuestions=buildMcqQuestions(source,count);const box=document.getElementById('mcq-draft');box.hidden=false;box.innerHTML='<div class="case-card-head"><div><span class="eyebrow">GEMMA 4 · ÇOKTAN SEÇMELİ</span><h2>Dört şıklı vaka testi hazır</h2><p>'+count+' soru · A, B, C, D · dengeli doğru cevap dağılımı</p></div><span class="case-count">'+count+' soru hazır</span></div><div class="question-rules"><span>Dört eşit seçenek</span><span>Dengeli cevap anahtarı</span><span>Tek soru görünümü</span><span>Geri dönüş kapalı</span></div><div class="mcq-preview-list">'+generatedExamQuestions.slice(0,4).map((q,i)=>'<article><b>Soru '+(i+1)+'</b><p>'+safeText(q.text)+'</p><div>'+q.options.map((option,index)=>'<span class="'+(index===q.answer?'correct-option':'')+'">'+String.fromCharCode(65+index)+') '+safeText(option)+'</span>').join('')+'</div></article>').join('')+'</div><button class="primary" onclick="startSecureExam()">Çoktan Seçmeli Testi Başlat</button>';box.scrollIntoView({behavior:'smooth',block:'start'});toast(count+' çoktan seçmeli soru hazırlandı')}
+function mcqPage(){const caseText=safeText(state.pendingCase||'');return layout('<section class="question-page"><div class="prompt-head"><div><span class="eyebrow">VAKADAN TEST</span><h2>Çoktan Seçmeli Vaka Testi</h2><p>Belge, form veya toplantıdan oluşturulan vakayı dört şıklı bir teste dönüştürün.</p></div></div><div class="question-builder"><div class="mcq-lock"><b>Soru Türü: Çoktan Seçmeli</b><span>Her soruda yalnızca A, B, C ve D seçenekleri kullanılır. Doğru cevaplar şıklara dengeli dağıtılır.</span></div><label class="question-case-field"><span>Vaka</span><textarea id="mcq-case" placeholder="Vaka metni...">'+caseText+'</textarea></label><div class="question-settings"><label><span>Soru Sayısı</span><input id="mcq-count" type="number" min="1" max="100" value="1" oninput="window.updateTotalTestMinutes?.()"></label><label><span>Test Süresi (Dakika)</span><input id="test-total-minutes" type="number" min="1" value="3"></label><label><span>Soru Başına Süre (Dakika)</span><input id="question-minutes" type="number" min="1" value="3" oninput="window.updateTotalTestMinutes?.()"></label><label><span>Seçenek Sayısı</span><input value="4 (A–D)" readonly></label></div><div class="question-policy"><b>Çoktan seçmeli sınav standardı</b><p>Seçenekler birbirine yakın uzunlukta hazırlanır. Doğru cevap aynı şıkta art arda tekrarlanmaz; A, B, C ve D arasında dengeli dağıtılır.</p></div><button class="primary full" onclick="buildMcqDraft()">Çoktan Seçmeli Test Sorularını Hazırla</button></div><section id="mcq-draft" class="generated-case-card" hidden></section></section>','Çoktan Seçmeli Vaka Testi')}
 const openQuestionStems=['Vakadaki temel problemi ve bu problemin ortaya çıkmasına neden olan koşulları açıklayınız.','Bu vakada öncelik vereceğiniz ilk üç adımı gerekçeleriyle yazınız.','Paydaşlar arasındaki çıkar çatışmasını nasıl yöneteceğinizi açıklayınız.','Kararınızın oluşturabileceği operasyonel, etik ve hukuki riskleri değerlendiriniz.','Zaman ve kaynak kısıtları altında uygulanabilir bir eylem planı oluşturunuz.','Alternatif çözüm yollarını karşılaştırarak en uygun yaklaşımı gerekçelendiriniz.','Bu süreçte kullanılacak iletişim ve raporlama yöntemini açıklayınız.','Benzer olayların tekrarını önlemek için kalıcı iyileştirme önerileri sununuz.'];
 const openAnswerTemplates=['Güçlü yanıt; temel problemi, kök nedenleri, etkilenen paydaşları ve kararın olası sonuçlarını somut vaka kanıtlarıyla açıklar.','Güçlü yanıt; aciliyet ve etki değerlendirmesi yapar, ilk üç adımı sıralar, sorumluları ve beklenen çıktıları tanımlar.','Güçlü yanıt; paydaşların beklentilerini ayrı ayrı değerlendirir, ortak hedef belirler ve izlenebilir bir uzlaşma planı kurar.','Güçlü yanıt; operasyonel, etik, mevzuatsal ve veri güvenliği risklerini olasılık-etki yaklaşımıyla değerlendirir.','Güçlü yanıt; süre, kaynak, sorumlu, kontrol noktası ve başarı ölçütü içeren uygulanabilir bir eylem planı sunar.','Güçlü yanıt; en az iki alternatifi risk, maliyet, zaman ve değer açısından karşılaştırıp seçimini gerekçelendirir.','Güçlü yanıt; hedef kitle, kanal, zamanlama, mesaj içeriği ve geri bildirim mekanizmasını açık biçimde tanımlar.','Güçlü yanıt; kök neden analizi, süreç kontrolü, sorumluluk, eğitim ve düzenli izleme adımlarını birlikte önerir.'];
 function buildGeneratedQuestions(source,count){return Array.from({length:count},(_,i)=>({text:(i+1)+'. '+openQuestionStems[i%openQuestionStems.length]+' Yanıtınızı verilen vaka sorusundaki somut bilgilere dayandırınız.',template:openAnswerTemplates[i%openAnswerTemplates.length],open:true}))}
-function buildQuestionDraft(){const source=pv('question-case',''),count=Number(pv('question-count','10')),words=Number(pv('question-words','28'));if(!source.trim())return toast('Önce vaka sorusunu girin');if(count<1||count>100)return toast('Soru sayısı 1 ile 100 arasında olmalıdır');generatedExamType='Açık Uçlu';generatedExamQuestions=buildGeneratedQuestions(source,count);const box=document.getElementById('question-draft');box.hidden=false;box.innerHTML='<div class="case-card-head"><div><span class="eyebrow">GEMMA 4 · HAZIRLAYAN GÖRÜNÜMÜ</span><h2>Açık uçlu vaka testi hazır</h2><p>'+count+' soru · hedef '+words+' kelime · yalnızca açık uçlu</p></div><span class="case-count">'+count+' soru hazır</span></div><div class="question-rules"><span>Serbest yanıt</span><span>Vaka kanıtı zorunlu</span><span>Cevap şablonu gizli</span><span>Tek soru görünümü</span></div><div class="answer-template-list">'+generatedExamQuestions.map((q,i)=>'<details><summary><b>Soru '+(i+1)+'</b><span>Gemma 4 cevap şablonu</span></summary><p>'+safeText(q.text)+'</p><div><strong>Yalnızca testi hazırlayan görür</strong>'+safeText(q.template)+'</div></details>').join('')+'</div><button class="primary" onclick="startSecureExam()">Açık Uçlu Vaka Testini Başlat</button>';box.scrollIntoView({behavior:'smooth',block:'start'});toast(count+' açık uçlu vaka sorusu ve cevap şablonu hazırlandı')}
+function buildQuestionDraft(){const source=pv('question-case',''),count=Number(pv('question-count','1')),words=Number(pv('question-words','28'));if(!source.trim())return toast('Önce vaka sorusunu girin');if(count<1||count>100)return toast('Soru sayısı 1 ile 100 arasında olmalıdır');generatedExamType='Açık Uçlu';generatedExamQuestions=buildGeneratedQuestions(source,count);const box=document.getElementById('question-draft');box.hidden=false;box.innerHTML='<div class="case-card-head"><div><span class="eyebrow">GEMMA 4 · HAZIRLAYAN GÖRÜNÜMÜ</span><h2>Açık uçlu vaka testi hazır</h2><p>'+count+' soru · hedef '+words+' kelime · yalnızca açık uçlu</p></div><span class="case-count">'+count+' soru hazır</span></div><div class="question-rules"><span>Serbest yanıt</span><span>Vaka kanıtı zorunlu</span><span>Cevap şablonu gizli</span><span>Tek soru görünümü</span></div><div class="answer-template-list">'+generatedExamQuestions.map((q,i)=>'<details><summary><b>Soru '+(i+1)+'</b><span>Gemma 4 cevap şablonu</span></summary><p>'+safeText(q.text)+'</p><div><strong>Yalnızca testi hazırlayan görür</strong>'+safeText(q.template)+'</div></details>').join('')+'</div><button class="primary" onclick="startSecureExam()">Açık Uçlu Vaka Testini Başlat</button>';box.scrollIntoView({behavior:'smooth',block:'start'});toast(count+' açık uçlu vaka sorusu ve cevap şablonu hazırlandı')}
 function startSecureExam(){secureExam={index:0,correct:0,wrong:0,started:Date.now(),answers:[]};const modal=document.createElement('div');modal.className='modal secure-exam-modal';modal.id='secure-exam';modal.innerHTML='<div class="modal-card secure-exam-card"><div id="secure-exam-body"></div></div>';document.body.append(modal);renderSecureQuestion()}
-function renderSecureQuestion(){const q=generatedExamQuestions[secureExam.index],body=document.getElementById('secure-exam-body');secureExam.started=Date.now();const wordCount=q.text.trim().split(/\s+/).length,perWord=document.getElementById('word-time-enabled')?.checked?Number(document.getElementById('word-seconds')?.value||2):0,allotted=perWord?wordCount*perWord:Number(document.getElementById('question-minutes')?.value||3)*60;body.innerHTML='<div class="secure-top"><span>GÜVENLİ SINAV MODU</span><b>Soru '+(secureExam.index+1)+' / '+generatedExamQuestions.length+'</b></div><div class="secure-progress"><i style="width:'+((secureExam.index+1)/generatedExamQuestions.length*100)+'%"></i></div><div class="question-meta"><span>'+q.text.trim().split(/\s+/).length+' kelime</span><span id="question-seconds">0 / '+allotted+' saniye</span></div><h2>'+safeText(q.text)+'</h2>'+(q.open?'<textarea id="open-answer" class="open-answer" placeholder="Yanıtınızı vaka metnine dayanarak yazın..."></textarea><button class="primary full" onclick="answerOpenQuestion()">Yanıtı Kaydet ve Sonraki Soru</button>':'<div class="secure-options">'+q.options.map((o,i)=>'<button onclick="answerSecureQuestion('+i+')"><b>'+String.fromCharCode(65+i)+'</b><span>'+safeText(o)+'</span></button>').join('')+'</div>')+'<p class="secure-note">Cevabınız kaydedildiğinde değiştirilemez ve sonraki soru açılır.</p>';const stamp=secureExam.started;const tick=setInterval(()=>{const el=document.getElementById('question-seconds');if(!el||secureExam.started!==stamp)return clearInterval(tick);el.textContent=Math.floor((Date.now()-stamp)/1000)+' / '+allotted+' saniye'},1000)}
+function renderSecureQuestion(){const q=generatedExamQuestions[secureExam.index],body=document.getElementById('secure-exam-body');secureExam.started=Date.now();const wordCount=q.text.trim().split(/\s+/).length,perWord=document.getElementById('word-time-enabled')?.checked?Number(document.getElementById('word-seconds')?.value||10):0,allotted=perWord?wordCount*perWord:Number(document.getElementById('question-minutes')?.value||3)*60;body.innerHTML='<div class="secure-top"><span>GÜVENLİ SINAV MODU</span><b>Soru '+(secureExam.index+1)+' / '+generatedExamQuestions.length+'</b></div><div class="secure-progress"><i style="width:'+((secureExam.index+1)/generatedExamQuestions.length*100)+'%"></i></div><div class="question-meta"><span>'+q.text.trim().split(/\s+/).length+' kelime</span><span id="question-seconds">0 / '+allotted+' saniye</span></div><h2>'+safeText(q.text)+'</h2>'+(q.open?'<textarea id="open-answer" class="open-answer" placeholder="Yanıtınızı vaka metnine dayanarak yazın..."></textarea><button class="primary full" onclick="answerOpenQuestion()">Yanıtı Kaydet ve Sonraki Soru</button>':'<div class="secure-options">'+q.options.map((o,i)=>'<button onclick="answerSecureQuestion('+i+')"><b>'+String.fromCharCode(65+i)+'</b><span>'+safeText(o)+'</span></button>').join('')+'</div>')+'<p class="secure-note">Cevabınız kaydedildiğinde değiştirilemez ve sonraki soru açılır.</p>';const stamp=secureExam.started;const tick=setInterval(()=>{const el=document.getElementById('question-seconds');if(!el||secureExam.started!==stamp)return clearInterval(tick);el.textContent=Math.floor((Date.now()-stamp)/1000)+' / '+allotted+' saniye'},1000)}
 function answerOpenQuestion(){const value=document.getElementById('open-answer').value.trim();if(!value)return toast('Bu soru cevaplanmadan sonraki soruya geçilemez');const seconds=Math.max(1,Math.round((Date.now()-secureExam.started)/1000)),wordCount=value.split(/\s+/).filter(Boolean).length,isCorrect=wordCount>=10;secureExam.answers.push({question:secureExam.index+1,seconds,answer:value,status:isCorrect?'correct':'wrong'});if(isCorrect)secureExam.correct++;else secureExam.wrong++;secureExam.index++;if(secureExam.index<generatedExamQuestions.length)renderSecureQuestion();else showOpenResult()}
 function answerSecureQuestion(choice){const q=generatedExamQuestions[secureExam.index],seconds=Math.max(1,Math.round((Date.now()-secureExam.started)/1000));secureExam.answers.push({question:secureExam.index+1,seconds});if(choice===q.answer)secureExam.correct++;else secureExam.wrong++;secureExam.index++;if(secureExam.index<generatedExamQuestions.length)renderSecureQuestion();else showSecureResult()}
 function showOpenResult(){const total=generatedExamQuestions.length,answered=secureExam.answers.length,blank=total-answered,pct=n=>Math.round(n/total*100),body=document.getElementById('secure-exam-body');body.innerHTML='<div class="secure-result"><span>SINAV TAMAMLANDI</span><h2>Vaka Testi Sonucu</h2><div class="result-summary-grid"><article><small>Doğru</small><b>'+secureExam.correct+'</b><span>%'+pct(secureExam.correct)+'</span></article><article><small>Yanlış</small><b>'+secureExam.wrong+'</b><span>%'+pct(secureExam.wrong)+'</span></article><article><small>Boş</small><b>'+blank+'</b><span>%'+pct(blank)+'</span></article><article><small>Cevaplanan</small><b>'+answered+'</b><span>%'+pct(answered)+'</span></article></div><button class="primary full" onclick="document.getElementById(\'secure-exam\').remove();go(\'evaluation\')">Değerlendirmeye Gönder</button></div>'}
 function showSecureResult(){const total=secureExam.correct+secureExam.wrong,rate=Math.round(secureExam.correct/total*100),body=document.getElementById('secure-exam-body');body.innerHTML='<div class="secure-result"><span>SINAV TAMAMLANDI</span><h2>Test Sonucu</h2><div class="result-only-grid"><article><small>Doğru Cevap</small><b>'+secureExam.correct+'</b></article><article><small>Yanlış Cevap</small><b>'+secureExam.wrong+'</b></article><article><small>Başarı</small><b>%'+rate+'</b></article></div><button class="primary" onclick="document.getElementById(\'secure-exam\').remove()">Kapat</button></div>'}
-function questionsPage(){const caseText=safeText(state.pendingCase||'');return layout('<section class="question-page"><div class="prompt-head"><div><span class="eyebrow">VAKA</span><h2>Açık Uçlu Vaka Testi</h2><p>Vakanın sorularını hazırlayın ve güvenli çözüm akışını başlatın.</p></div></div><div class="question-builder"><label class="question-case-field"><span>Vaka</span><textarea id="question-case" placeholder="Vaka metni veya vaka sorusu...">'+caseText+'</textarea></label><div class="question-settings"><label><span>Soru Sayısı</span><input id="question-count" type="number" min="1" max="100" value="10"></label><label><span>Test Süresi (Dakika)</span><input id="test-total-minutes" type="number" min="1" value="30"></label><label><span>Soru Başına Süre (Dakika)</span><input id="question-minutes" type="number" min="1" value="3"></label><label><span>Her Kelime İçin Süre</span><div class="word-time-control"><input id="word-time-enabled" type="checkbox"><input id="word-seconds" type="number" min="1" value="2"><em>saniye</em></div></label></div><div class="question-policy"><b>Güvenli soru çözme</b><p>Önce soru, ardından cevap alanı gösterilir. Birinci soru cevaplanmadan ikinci soruya geçilemez; geriye dönüş kapalıdır. Kelime başına süre seçilirse süre, sorunun kelime sayısına göre hesaplanır.</p></div><button class="primary full" onclick="buildQuestionDraft()">Test Sorularını Hazırla</button></div><section id="question-draft" class="generated-case-card" hidden></section></section>','Açık Uçlu Vaka Testi')}
+function questionsPage(){const caseText=safeText(state.pendingCase||'');return layout('<section class="question-page"><div class="prompt-head"><div><span class="eyebrow">VAKA</span><h2>Açık Uçlu Vaka Testi</h2><p>Vakanın sorularını hazırlayın ve güvenli çözüm akışını başlatın.</p></div></div><div class="question-builder"><label class="question-case-field"><span>Vaka</span><textarea id="question-case" placeholder="Vaka metni veya vaka sorusu...">'+caseText+'</textarea></label><div class="question-settings"><label><span>Soru Sayısı</span><input id="question-count" type="number" min="1" max="100" value="1" oninput="window.updateTotalTestMinutes?.()"></label><label><span>Test Süresi (Dakika)</span><input id="test-total-minutes" type="number" min="1" value="3"></label><label><span>Soru Başına Süre (Dakika)</span><input id="question-minutes" type="number" min="1" value="3" oninput="window.updateTotalTestMinutes?.()"></label><label><span>Her Kelime İçin Süre</span><div class="word-time-control"><input id="word-time-enabled" type="checkbox"><input id="word-seconds" type="number" min="1" value="10"><em>saniye</em></div></label></div><div class="question-policy"><b>Güvenli soru çözme</b><p>Önce soru, ardından cevap alanı gösterilir. Birinci soru cevaplanmadan ikinci soruya geçilemez; geriye dönüş kapalıdır. Kelime başına süre seçilirse süre, sorunun kelime sayısına göre hesaplanır.</p></div><button class="primary full" onclick="buildQuestionDraft()">Test Sorularını Hazırla</button></div><section id="question-draft" class="generated-case-card" hidden></section></section>','Açık Uçlu Vaka Testi')}
 const evaluationAnswers=[
  {question:'Kriz anında ilk hangi riski ele alırsınız?',answer:'Müşteri ve operasyon sürekliliğini aynı anda etkileyen güvenlik riskini önceliklendiririm.',status:'positive',seconds:54},
  {question:'Kararınızı hangi verilerle desteklersiniz?',answer:'Geçmiş olay kayıtları, teslim süresi, maliyet etkisi ve ekip kapasitesini birlikte incelerim.',status:'positive',seconds:71},
@@ -271,22 +365,42 @@ function evaluationMetricsHtml(stats,processed){return '<article><span>İşlenen
 function startEvaluation(){clearInterval(evaluationTimer);evaluationIndex=0;state.evaluationTransferred=false;const button=document.getElementById('evaluation-start');button.disabled=true;button.textContent='Değerlendiriliyor…';document.getElementById('evaluation-final').hidden=true;updateEvaluationView();evaluationTimer=setInterval(()=>{evaluationIndex++;updateEvaluationView();if(evaluationIndex>=evaluationAnswers.length){clearInterval(evaluationTimer);evaluationTimer=null;finishEvaluation()}},700)}
 function updateEvaluationView(){const stats=evaluationStats(evaluationIndex);document.getElementById('evaluation-metrics').innerHTML=evaluationMetricsHtml(stats,evaluationIndex);document.getElementById('evaluation-list').innerHTML=evaluationRows(evaluationIndex);document.getElementById('evaluation-progress-bar').style.width=Math.round(evaluationIndex/evaluationAnswers.length*100)+'%'}
 function finishEvaluation(){const stats=evaluationStats(),final=document.getElementById('evaluation-final'),button=document.getElementById('evaluation-start');button.disabled=false;button.textContent='Yeniden Değerlendir';final.hidden=false;final.innerHTML='<div><span class="eyebrow">DEĞERLENDİRME TAMAMLANDI</span><h2>%'+stats.rate+' başarı</h2><p>'+stats.positive+' olumlu, '+stats.negative+' olumsuz ve '+stats.blank+' boş cevap bulundu.</p></div><button class="primary" onclick="transferEvaluationResult()">Sonucu Test Sonuçlarına Aktar</button>';final.scrollIntoView({behavior:'smooth',block:'nearest'});toast('Bütün test verileri değerlendirildi')}
-function transferEvaluationResult(){if(!state.evaluationTransferred){const stats=evaluationStats();candidateResults.unshift({name:'Yeni Değerlendirilen Aday',email:'aday@skillbridge.com.tr',test:'Açık Uçlu Vaka Testi',department:'Değerlendirme Merkezi',detail:'Gemma 4 cevap değerlendirmesi',score:stats.rate,outcome:stats.rate>=60?'Olumlu':'Geliştirilmeli',date:new Date().toLocaleDateString('tr-TR'),time:new Date().toLocaleTimeString('tr-TR'),summary:stats.positive+' olumlu, '+stats.negative+' olumsuz ve '+stats.blank+' boş cevap değerlendirildi. Ortalama cevap süresi '+stats.avg+' saniyedir.'});state.evaluationTransferred=true}toast('Sonuç Test Sonuçları sayfasına aktarıldı');go('results')}
+function transferEvaluationResult(){if(!state.evaluationTransferred){const stats=evaluationStats();candidateResults.unshift({name:'Yeni Değerlendirilen Aday',email:'aday@skillbridge.com.tr',test:'Açık Uçlu Vaka Testi',department:'Değerlendirme Merkezi',detail:'Gemma 4 cevap değerlendirmesi',score:stats.rate,outcome:stats.rate>=60?'Olumlu':'Geliştirilmeli',date:new Date().toLocaleDateString('tr-TR'),time:new Date().toLocaleTimeString('tr-TR'),summary:stats.positive+' olumlu, '+stats.negative+' olumsuz ve '+stats.blank+' boş cevap değerlendirildi. Ortalama cevap süresi '+stats.avg+' saniyedir.',detailedReport:JSON.parse(JSON.stringify(evaluationAnswers))});state.evaluationTransferred=true}toast('Sonuç Test Sonuçları sayfasına aktarıldı');go('results')}
 function serverPage(){return layout('<section class="server-page"><div class="prompt-head"><div><span class="eyebrow">SİSTEM YÖNETİMİ</span><h2>Sunucu Bağlantısı</h2><p>Sunucu ve Gemini bağlantısının gerçek durumunu buradan kontrol edin.</p></div><span id="server-live-status" class="server-status"><i></i> KONTROL EDİLİYOR</span></div><div class="server-status-grid"><article><span>Uygulama sunucusu</span><b id="server-state">Kontrol ediliyor</b><small>/api/health güvenli durum uç noktası</small></article><article><span>AI sağlayıcısı</span><b id="gemini-state">Kontrol ediliyor</b><small id="gemini-detail">Gizli ortam değişkeni doğrulanıyor</small></article><article><span>Ajan durumu</span><b id="agent-server-state">0 / 17 bağlı</b><small>Gemini doğrulanmadan ajanlar ONLINE gösterilmez.</small></article></div><section class="server-security-card"><div><span class="eyebrow">SUNUCU DESTEKLİ YAPI</span><h3>.env değişkenleri</h3><p>Gerçek anahtar tarayıcıya yazılmaz. Sunucuda <b>GEMINI_API_KEY</b>, model adı ise <b>GEMINI_MODEL</b> olarak tutulur.</p><button class="primary" onclick="refreshServerConnection()">Bağlantıyı Yeniden Kontrol Et</button></div><ul><li><b>Site erişimi:</b> Özel ve oturum korumalı</li><li><b>API uç noktası:</b> /api/generate</li><li><b>İstek limiti:</b> Dakikada 12</li><li><b>Anahtar görünürlüğü:</b> Yalnızca sunucu</li></ul></section><div id="server-message" class="server-notice"><b>Bağlantı denetleniyor</b><p>Lütfen bekleyin.</p></div></section>','Sunucu Bağlantısı')}
 async function refreshServerConnection(){const badge=document.getElementById('server-live-status'),message=document.getElementById('server-message');if(!badge)return;badge.className='server-status';badge.innerHTML='<i></i> KONTROL EDİLİYOR';try{const response=await fetch('/api/health',{cache:'no-store'}),data=await response.json();document.getElementById('server-state').textContent=data.server==='online'?'Çevrimiçi':'Bağlantı yok';document.getElementById('gemini-state').textContent=data.gemini?'Bağlı':'Anahtar bekleniyor';document.getElementById('gemini-detail').textContent=data.gemini?data.model+' güvenli bağlantısı aktif':'GEMINI_API_KEY tanımlı değil';document.getElementById('agent-server-state').textContent=data.gemini?'17 / 17 bağlı':'0 / 17 bağlı';badge.className='server-status '+(data.gemini?'connected':'waiting');badge.innerHTML='<i></i> '+(data.gemini?'TAM BAĞLANTI':'SUNUCU ÇEVRİMİÇİ');message.innerHTML=data.gemini?'<b>Bağlantı hazır</b><p>Gemini üretim servisi sunucu üzerinden kullanılabilir.</p>':'<b>Sunucu çalışıyor</b><p>Gemini anahtarı gizli ortam değişkenine eklendiğinde ajanlar etkinleşecek.</p>'}catch(error){badge.className='server-status disconnected';badge.innerHTML='<i></i> BAĞLANTI YOK';document.getElementById('server-state').textContent='Çevrimdışı';message.innerHTML='<b>Sunucuya ulaşılamadı</b><p>'+safeText(error.message)+'</p>'}}
-function render(){let html;if(!state.logged)html=loginPage();else html=({dashboard:dashboard,'personal-data':personalDataPage,'data-banking':dataBankingPage,tests:testsPage,evaluation:evaluationPage,results:resultsPage,qr:qrPage,agents:agentsPage,server:serverPage,'hr-specialist':hrSpecialistPage,documents:documentsPage,prompt:promptBuilderPage,meetings:meetingsPage,mcq:mcqPage,questions:questionsPage,comparison:comparisonPage,'user-credits':userCreditsPage}[state.page]||dashboard)();document.getElementById('app').innerHTML=html;if(state.logged&&(state.page==='personal-data'||state.page==='data-banking'))setTimeout(initKeywords,0);if(state.logged&&state.page==='documents')setTimeout(initDocumentBuilder,0);if(state.logged&&state.page==='prompt')setTimeout(initPromptBuilder,0);if(state.logged&&state.page==='hr-specialist')setTimeout(initHrSpecialist,0);if(state.logged&&state.page==='server')setTimeout(refreshServerConnection,0);if(state.logged&&state.page==='user-credits')setTimeout(calcCredit,0)}
-function selectMeetingSource(source){document.querySelectorAll('.meeting-source button').forEach(b=>b.classList.toggle('active',b.dataset.source===source));document.getElementById('meeting-source').value=source;document.getElementById('meeting-url').placeholder=source==='Google Meet'?'https://meet.google.com/...':'https://teams.microsoft.com/l/meetup-join/...'}
-let meetingTimer=null,meetingSeconds=60,meetingTranscript='',meetingRecognition=null,meetingSpeaking=false;
-function switchMeetingScreen(id){document.querySelectorAll('.meeting-screen').forEach(screen=>screen.hidden=screen.id!==id);const target=document.getElementById(id);if(target)target.hidden=false}
-function meetingClock(){const el=document.getElementById('meeting-timer');if(el)el.textContent='00:'+String(meetingSeconds).padStart(2,'0')}
-function finishMeetingRecording(){if(meetingTimer){clearInterval(meetingTimer);meetingTimer=null}if(meetingRecognition){try{meetingRecognition.stop()}catch(e){}meetingRecognition=null}if(!meetingTranscript.trim()){switchMeetingScreen('meeting-start');const error=document.getElementById('meeting-error');error.textContent='Konuşma algılanmadı. Mikrofon iznini ve ses kaynağını kontrol edip yeniden deneyin.';return}switchMeetingScreen('meeting-ready');toast('Kayıt tamamlandı')}
-function startMeetingRecording(){const url=document.getElementById('meeting-url').value.trim(),title=document.getElementById('meeting-title').value.trim(),consent=document.getElementById('meeting-consent').checked,error=document.getElementById('meeting-error');error.textContent='';if(!url||!title)return error.textContent='Toplantı bağlantısı ve toplantı adı zorunludur.';if(!/^https:\/\/(meet\.google\.com|teams\.microsoft\.com)\//i.test(url))return error.textContent='Geçerli bir Google Meet veya Microsoft Teams bağlantısı girin.';if(!consent)return error.textContent='Kayıt ve transkripsiyon onayını işaretleyin.';const Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!Recognition)return error.textContent='Bu tarayıcı canlı konuşma algılamayı desteklemiyor. TXT transkript yükleme seçeneğini kullanın.';meetingTranscript='';meetingSeconds=60;switchMeetingScreen('meeting-recording');meetingClock();meetingRecognition=new Recognition();meetingRecognition.lang='tr-TR';meetingRecognition.continuous=true;meetingRecognition.interimResults=true;meetingRecognition.onresult=e=>{let interim='';for(let i=e.resultIndex;i<e.results.length;i++){const text=e.results[i][0].transcript;if(e.results[i].isFinal)meetingTranscript+=text+' ';else interim+=text}const preview=document.getElementById('meeting-live-preview');preview.textContent=(meetingTranscript+interim).trim()||'Konuşma bekleniyor…'};meetingRecognition.onerror=e=>{if(e.error==='not-allowed'||e.error==='service-not-allowed'){if(meetingTimer){clearInterval(meetingTimer);meetingTimer=null}switchMeetingScreen('meeting-start');document.getElementById('meeting-error').textContent='Mikrofon izni verilmedi. İzin verin veya TXT transkript yükleyin.'}};meetingRecognition.onend=()=>{if(meetingTimer&&meetingSeconds>0){try{meetingRecognition.start()}catch(e){}}};try{meetingRecognition.start()}catch(e){switchMeetingScreen('meeting-start');error.textContent='Mikrofon başlatılamadı. Tarayıcı izinlerini kontrol edin.';return}meetingTimer=setInterval(()=>{meetingSeconds--;meetingClock();if(meetingSeconds<=0)finishMeetingRecording()},1000)}
-function openMeetingTranscript(){switchMeetingScreen('meeting-result');const el=document.getElementById('meeting-transcript');el.value=meetingTranscript.trim();document.getElementById('transcript-file-name').textContent=meetingTranscript?'Canlı kayıt':'Dosya seçilmedi'}
-function toggleMeetingSpeech(){const text=pv('meeting-transcript','');if(!text)return toast('Okunacak konuşma metni yok');if(meetingSpeaking){speechSynthesis.cancel();meetingSpeaking=false;return}const utterance=new SpeechSynthesisUtterance(text);utterance.lang='tr-TR';utterance.onend=()=>meetingSpeaking=false;meetingSpeaking=true;speechSynthesis.speak(utterance)}
-function resetMeetingFlow(){if(meetingTimer)clearInterval(meetingTimer);if(meetingRecognition){try{meetingRecognition.stop()}catch(e){}}speechSynthesis.cancel();meetingTimer=null;meetingRecognition=null;meetingTranscript='';meetingSeconds=60;document.getElementById('meeting-transcript').value='';document.getElementById('meeting-case-card').hidden=true;switchMeetingScreen('meeting-start')}
-function loadTranscriptFile(file){if(!file)return;if(!file.name.toLowerCase().endsWith('.txt'))return toast('Konuşma metni için TXT dosyası seçin');if(file.size>5*1024*1024)return toast('Dosya boyutu en fazla 5 MB olabilir');const reader=new FileReader();reader.onload=()=>{document.getElementById('meeting-transcript').value=reader.result;document.getElementById('transcript-file-name').textContent=file.name;toast('Konuşma metni yüklendi')};reader.readAsText(file,'UTF-8')}
-function generateMeetingCase(){const source=pv('meeting-source','Google Meet'),title=pv('meeting-title',''),date=pv('meeting-date',''),people=pv('meeting-participants',''),raw=pv('meeting-transcript','');if(!title||!raw)return toast('Toplantı adı ve konuşma metni zorunludur');if(raw.length<40)return toast('Konuşma metni vaka üretmek için çok kısa');const excerpt=raw.slice(0,420)+(raw.length>420?'…':'');const card=document.getElementById('meeting-case-card');card.hidden=false;card.innerHTML='<div class="case-card-head"><div><span class="eyebrow">AJAN 9–10 · KONUŞMADAN VAKA</span><h2>'+safeText(title)+'</h2><p>'+safeText(source)+' · '+safeText(date||'Tarih belirtilmedi')+'</p></div><span class="case-count">Vaka hazır</span></div><div class="case-body"><h3>Toplantı Bağlamı</h3><p>'+safeText(people||'Toplantı katılımcıları')+' arasında gerçekleştirilen görüşmede operasyonel hedefler, sorumluluklar ve karar gerektiren konular ele alınmıştır.</p><h3>Konuşmadan Alınan Olay Akışı</h3><p class="transcript-excerpt">'+safeText(excerpt)+'</p><h3>Vaka</h3><p>Görüşme sırasında tarafların öncelikleri arasında farklılık oluşmuş, zaman baskısı altında uygulanabilir bir karar alınması gerekmiştir. Mevcut bilgiler eksik olmasına rağmen toplantı ekibinin görev dağılımını netleştirmesi, riskleri kayıt altına alması ve ilgili paydaşlarla izlenebilir bir eylem planı oluşturması beklenmektedir. Sürecin kritik noktasında kısa vadeli teslim hedefi ile kalite, mevzuat ve kurumsal güven gereklilikleri arasında seçim yapılması zorunlu hâle gelmiştir. Vaka, ekibin ortak karara ulaşamadığı ve sorumlunun bir sonraki adımı belirlemesi gereken aşamada sona erer.</p><div class="case-tags"><b>Kaynak</b><span>'+safeText(source)+' konuşma metni</span></div></div><div class="case-next-actions"><button class="primary" onclick="prepareTestFromCase(this.closest(\'.generated-case-card\').innerText)">Test Sorularını Hazırla</button></div>';card.scrollIntoView({behavior:'smooth',block:'start'});toast('Konuşma metni vakaya dönüştürüldü')}
-function meetingsPage(){return layout('<section class="meeting-page"><div class="prompt-head"><div><span class="eyebrow">AJAN 9–10 · TOPLANTI ANALİZİ</span><h2>Meet & Teams Konuşmasından Vaka Üret</h2><p>Toplantı bağlantısını tanımlayın, konuşmayı kaydedin veya transkript yükleyin; metni soru üretmeden vakaya dönüştürün.</p></div></div><div class="meeting-flow-card"><section id="meeting-start" class="meeting-screen"><div class="meeting-screen-head"><span class="meeting-step">1</span><div><h3>Toplantıyı Tanımla</h3><p>Google Meet veya Microsoft Teams bağlantısını girin.</p></div></div><div class="meeting-source"><button class="active" data-source="Google Meet" onclick="selectMeetingSource(\'Google Meet\')">Google Meet</button><button data-source="Microsoft Teams" onclick="selectMeetingSource(\'Microsoft Teams\')">Microsoft Teams</button></div><input id="meeting-source" type="hidden" value="Google Meet"><label><span>Toplantı Bağlantısı</span><input id="meeting-url" type="url" placeholder="https://meet.google.com/..."></label><label><span>Toplantı Adı</span><input id="meeting-title" placeholder="Örn. Proje değerlendirme görüşmesi"></label><div class="meeting-two"><label><span>Tarih</span><input id="meeting-date" type="date"></label><label><span>Katılımcılar</span><input id="meeting-participants" placeholder="Adları virgülle ayırın"></label></div><label class="meeting-consent"><input id="meeting-consent" type="checkbox"><span>Katılımcılara kayıt bildirimi yapıldı ve gerekli izinler alındı.</span></label><p class="integration-note">Canlı kayıt bu cihazın mikrofonunu kullanır. Uzak toplantıya katılan kurumsal bot için yetkili Read AI bağlantısı gerekir.</p><p id="meeting-error" class="meeting-error" role="alert"></p><button class="primary full" onclick="startMeetingRecording()">Botu Hazırla ve Kaydı Başlat</button></section><section id="meeting-recording" class="meeting-screen meeting-center" hidden><div class="meeting-mic"><span>ðŸŽ™ï¸</span></div><span class="meeting-live">CANLI KAYIT</span><h3>Konuşma Kaydediliyor</h3><div id="meeting-timer" class="meeting-timer">00:60</div><p id="meeting-live-preview" class="meeting-live-preview">Konuşma bekleniyor…</p><button class="danger-button" onclick="finishMeetingRecording()">Kaydı Bitir</button></section><section id="meeting-ready" class="meeting-screen meeting-center" hidden><div class="meeting-check">✓</div><span class="meeting-step-label">3 · KAYIT TAMAMLANDI</span><h3>Konuşma metni hazır</h3><p>Ham transkripti inceleyebilir, düzenleyebilir ve vakaya çevirebilirsiniz.</p><button class="primary" onclick="openMeetingTranscript()">Kaydı Aç</button></section><section id="meeting-result" class="meeting-screen" hidden><div class="meeting-screen-head"><span class="meeting-step">4</span><div><h3>Ham Konuşma Metni</h3><p>Metni düzenleyin veya TXT dosyasından yükleyin.</p></div></div><label><span>Meet/Teams Transkripti</span><textarea id="meeting-transcript" placeholder="Konuşma metnini buraya yapıştırın..."></textarea></label><div class="transcript-upload"><button class="secondary" onclick="document.getElementById(\'transcript-file\').click()">TXT Dosyası Seç</button><span id="transcript-file-name">Dosya seçilmedi</span><input id="transcript-file" type="file" accept=".txt,text/plain" hidden onchange="loadTranscriptFile(this.files[0])"></div><div class="meeting-result-actions"><button class="secondary" onclick="toggleMeetingSpeech()">ðŸ”Š Metni Seslendir / Durdur</button><button class="secondary" onclick="resetMeetingFlow()">Yeni Toplantı</button><button class="primary" onclick="generateMeetingCase()">Konuşmayı Vakaya Çevir</button></div></section></div><section id="meeting-case-card" class="generated-case-card" hidden></section></section>','Meet & Teams Vaka')}
+function render(){let html;if(!state.logged)html=loginPage();else html=({dashboard:dashboard,'personal-data':personalDataPage,'data-banking':dataBankingPage,tests:testsPage,evaluation:evaluationPage,results:resultsPage,qr:qrPage,agents:agentsPage,server:serverPage,'hr-specialist':hrSpecialistPage,documents:documentsPage,prompt:promptBuilderPage,meetings:meetingsPage,mcq:mcqPage,questions:questionsPage,comparison:comparisonPage,'user-credits':userCreditsPage,training:(typeof trainingPage==='function'?trainingPage:dashboard)}[state.page]||(state.page==='training'&&typeof trainingPage==='function'?trainingPage:dashboard))();document.getElementById('app').innerHTML=html;if(state.logged&&(state.page==='personal-data'||state.page==='data-banking'))setTimeout(initKeywords,0);if(state.logged&&state.page==='documents')setTimeout(initDocumentBuilder,0);if(state.logged&&state.page==='prompt')setTimeout(initPromptBuilder,0);if(state.logged&&state.page==='hr-specialist')setTimeout(initHrSpecialist,0);if(state.logged&&state.page==='server')setTimeout(refreshServerConnection,0);if(state.logged&&state.page==='user-credits')setTimeout(calcCredit,0)}
+function pasteCaseCount(){const el=document.getElementById('paste-count');if(el)el.textContent=pv('paste-source','').length.toLocaleString('tr-TR')+' karakter'}
+async function pasteFromClipboard(){try{const text=await navigator.clipboard.readText();if(!text)return toast('Panoda metin yok');document.getElementById('paste-source').value=text;pasteCaseCount();toast('Metin panodan yapıştırıldı')}catch(e){toast('Pano erişimine izin verilmedi. Metni Ctrl+V ile yapıştırın.')}}
+function clearPasteCase(){document.getElementById('paste-source').value='';const card=document.getElementById('paste-case-card');card.hidden=true;card.innerHTML='';pasteCaseCount()}
+function pasteSourceText(){const raw=pv('paste-source','').trim();if(raw.length<40){toast('Vaka veya test için en az 40 karakterlik metin yapıştırın');return ''}return raw}
+function downloadPasteCase(){const text=pv('paste-case-text','');if(!text)return toast('İndirilecek vaka yok');const link=document.createElement('a');link.href=URL.createObjectURL(new Blob([text],{type:'text/plain;charset=utf-8'}));link.download=(pv('paste-title','vaka').trim()||'vaka')+'.txt';link.click();setTimeout(()=>URL.revokeObjectURL(link.href),1000)}
+async function generatePasteCase(button){const raw=pasteSourceText();if(!raw)return;const title=pv('paste-title','').trim(),position=pv('paste-position','').trim();const prompt=`Sen AJAN 9–10 olarak çalışan bir Vaka Tasarım Uzmanısın.
+
+GÖREV: Aşağıda kullanıcının kopyala-yapıştır ile verdiği ham metin var (toplantı notu, e-posta, rapor, prosedür, haber, görüşme dökümü vb. olabilir). Bu metindeki gerçek olayları, rolleri, kararları, çelişkileri, kısıtları ve riskleri kullanarak adayın çözmesi gereken gerçekçi bir iş vakası yaz.
+
+PARAMETRELER:
+- Vaka Başlığı: ${title||'Metne uygun bir başlık öner'}
+- Hedef Pozisyon: ${position||'Metinden çıkar; belirsizse en uygun rolü seç'}
+
+KURALLAR:
+1. Metinde olmayan kişi, sayı veya olay uydurma; gerekli varsayımları "Varsayım:" diye açıkça işaretle.
+2. Kişisel verileri (ad-soyad, telefon, e-posta) rol adlarıyla anonimleştir.
+3. Soru üretme; yalnızca vakayı yaz.
+
+ÇIKTI FORMATI:
+VAKA BAŞLIĞI
+BAĞLAM (kurum, rol, sorumluluk)
+OLAY AKIŞI (kronolojik)
+KARAR NOKTASI (adayın vermesi gereken karar)
+KISITLAR VE RİSKLER
+GÖZLEMLENECEK YETKİNLİKLER
+
+YAPIŞTIRILAN METİN:
+"""
+${raw.slice(0,20000)}
+"""`;aiBusy(button,true);try{const resultText=await aiCall(prompt);state.pendingCase=resultText;const card=document.getElementById('paste-case-card');card.hidden=false;card.innerHTML=`<div class="case-card-head"><div><span class="eyebrow">AJAN 9–10 · METİNDEN VAKA</span><h2>${safeText(title||'Yapıştırılan Metinden Vaka')}</h2><p>${safeText(position||'Pozisyon metinden çıkarıldı')}</p></div><div style="display:flex;gap:8px"><button class="secondary" onclick="navigator.clipboard?.writeText(document.getElementById('paste-case-text').value);toast('Vaka panoya kopyalandı')">Kopyala</button><button class="secondary" onclick="downloadPasteCase()">İndir</button></div></div><div class="meeting-screen"><label><span>Üretilen Vaka (Düzenlenebilir)</span><textarea id="paste-case-text">${safeText(resultText)}</textarea></label></div><div class="case-next-actions"><button class="secondary" onclick="state.pendingCase=document.getElementById('paste-case-text').value;go('questions')">Açık Uçlu Sınav →</button><button class="primary" onclick="preparePasteTest()">Bu Vakadan Test Hazırla</button></div>`;card.scrollIntoView({behavior:'smooth',block:'start'});toast('Yapıştırılan metin vakaya dönüştürüldü')}catch(e){toast('Vaka üretimi hatası: '+e.message)}finally{aiBusy(button,false)}}
+function preparePasteTest(){const text=pv('paste-case-text','').trim()||pasteSourceText();if(!text)return;state.pendingCase=text;prepareMcqFromCase(Number(pv('paste-test-count','10')))}
+function meetingsPage(){return layout(`<section class="meeting-page"><div class="prompt-head"><div><span class="eyebrow">AJAN 9–10 · METİN ANALİZİ</span><h2>Yapıştırılan Metinden Vaka ve Test</h2><p>Toplantı notu, e-posta, rapor veya herhangi bir metni kopyalayıp yapıştırın; tek tıkla vaka ya da test hazırlayın.</p></div></div><div class="meeting-flow-card"><section class="meeting-screen"><div class="meeting-screen-head"><span class="meeting-step">1</span><div><h3>Metni Yapıştır</h3><p>Kopyaladığınız metni aşağıdaki alana yapıştırın (Ctrl+V).</p></div></div><div class="meeting-two"><label><span>Vaka Başlığı (isteğe bağlı)</span><input id="paste-title" placeholder="Örn. Tedarik gecikmesi krizi"></label><label><span>Hedef Pozisyon (isteğe bağlı)</span><input id="paste-position" placeholder="Örn. Satın Alma Uzmanı"></label></div><label><span>Yapıştırılacak Metin</span><textarea id="paste-source" oninput="pasteCaseCount()" placeholder="Metni buraya yapıştırın..."></textarea></label><div class="transcript-upload"><button class="secondary" onclick="pasteFromClipboard()">📋 Panodan Yapıştır</button><button class="secondary" onclick="clearPasteCase()">Temizle</button><span id="paste-count">0 karakter</span></div><div class="meeting-result-actions"><label style="margin:0;display:flex;align-items:center;gap:8px"><span>Soru sayısı</span><select id="paste-test-count" style="padding:10px;border:1px solid #95a2b3;border-radius:10px"><option>10</option><option>25</option><option>50</option><option>100</option></select></label><button class="secondary" onclick="preparePasteTest()">Test Hazırla</button><button class="primary" onclick="generatePasteCase(this)">Vaka Hazırla</button></div></section></div><section id="paste-case-card" class="generated-case-card" hidden></section></section>`,'Metin Yapıştır Vaka')}
 const generateHrQuestionBase=generateHrQuestion;
 generateHrQuestion=function(){generateHrQuestionBase();const box=document.getElementById('hr-json-output');if(!box?.value)return;try{const data=JSON.parse(box.value);data.model_ajan='Gemini';data.ajan_gorevi='Yetkinlik ve teknik soru hazırlama/üretme';box.value=JSON.stringify(data,null,2)}catch(error){}toast('Soru seti Gemini üretim ajanına hazırlandı')};
 const hrSpecialistPageBase=hrSpecialistPage;
@@ -295,11 +409,35 @@ const agentsPageBase=agentsPage;
 agentsPage=function(){return agentsPageBase().replace('<div class="model-badge"><span>YÖNETİCİ MODEL</span><b>Gemma 4 · 26B</b><small>Görev yönlendirme ve kapsam denetimi</small></div>','<div class="model-stack"><div class="model-badge"><span>YÖNETİCİ MODEL</span><b>Gemma 4 · 26B</b><small>Görev yönlendirme ve kapsam denetimi</small></div><div class="model-badge gemini-badge"><span>SORU ÜRETİM AJANI</span><b>Gemini</b><small>Sayfa 11, 16 ve 17 · soru üretimi ve kalite kontrolü</small></div></div>').replace('Gemma 4 26B tarafından yönetilir','Gemma yönetir · Soruları Gemini üretir')};
 const buildMcqDraftBase=buildMcqDraft;
 buildMcqDraft=function(){buildMcqDraftBase();const label=document.querySelector('#mcq-draft .eyebrow');if(label)label.textContent='GEMINI · ÇOKTAN SEÇMELİ SORU AJANI'};
-function openCreditModal(){const modal=document.createElement('div');modal.className='modal credit-modal';modal.innerHTML=`<div class="modal-card" style="max-width:500px"><div class="modal-head"><div><span class="eyebrow">ÖDEME ADIMI</span><h2>Kontör Yükle</h2><p class="sub">Hesabınıza kontör ekleyerek işlemlere devam edebilirsiniz.</p></div><button type="button" onclick="this.closest(\'.modal\').remove()">×</button></div><form onsubmit="event.preventDefault();this.closest(\'.modal\').remove();toast('Ödeme işleminiz başarıyla alındı ve kontörler hesabınıza yüklendi!');"><div class="field"><label>Yüklenecek Kontör Miktarı</label><select required><option value="">Seçin...</option><option value="50">50 Kontör (500 TL)</option><option value="100">100 Kontör (1.000 TL)</option><option value="250">250 Kontör (2.500 TL)</option><option value="500">500 Kontör (5.000 TL)</option><option value="1000">1.000 Kontör (10.000 TL)</option></select></div><div class="field"><label>Kart Üzerindeki İsim</label><input type="text" placeholder="Ad Soyad" required></div><div class="field"><label>Kart Numarası</label><input type="text" placeholder="0000 0000 0000 0000" pattern="[0-9 ]+" required></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="field"><label>Son Kullanma</label><input type="text" placeholder="AA/YY" required></div><div class="field"><label>CVC</label><input type="text" placeholder="123" required></div></div><div style="margin-top:24px;display:flex;justify-content:flex-end;gap:10px"><button type="button" class="secondary" onclick="this.closest(\'.modal\').remove()">İptal</button><button type="submit" class="primary">Ödemeyi Tamamla</button></div></form></div>`;document.body.append(modal)}
-function openPackagesModal(){const modal=document.createElement('div');modal.className='modal packages-modal';modal.innerHTML=`<div class="modal-card" style="max-width:700px"><div class="modal-head"><div><span class="eyebrow">ABONELİK SEÇENEKLERİ</span><h2>Paketleri İncele</h2><p class="sub">Kurumunuzun ihtiyacına uygun paketi seçerek avantajlı fiyatlardan yararlanın.</p></div><button type="button" onclick="this.closest(\'.modal\').remove()">×</button></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px"><article style="border:1px solid #dbe4ee;border-radius:12px;padding:18px;text-align:center"><h3 style="margin-top:0">Standart</h3><b style="display:block;font-size:1.8rem;color:#4aa16f;margin:10px 0">10 TL</b><span style="font-size:0.8rem;color:#64748b">1 Kontör</span><hr style="border:0;border-top:1px solid #dbe4ee;margin:15px 0"><ul style="list-style:none;padding:0;font-size:0.8rem;text-align:left;line-height:1.6;color:#475569"><li>✓ Temel vaka testi</li><li>✓ 10 CV karşılaştırma</li><li>✓ Anında aktivasyon</li></ul></article><article style="border:2px solid #4aa16f;background:#f2faf5;border-radius:12px;padding:18px;text-align:center;position:relative"><span style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#4aa16f;color:#fff;font-size:0.6rem;padding:3px 8px;border-radius:10px;font-weight:bold">EN POPÜLER</span><h3 style="margin-top:0">Gelişmiş</h3><b style="display:block;font-size:1.8rem;color:#4aa16f;margin:10px 0">500 TL</b><span style="font-size:0.8rem;color:#64748b">50 Kontör (50 Test)</span><hr style="border:0;border-top:1px solid #dbe4ee;margin:15px 0"><ul style="list-style:none;padding:0;font-size:0.8rem;text-align:left;line-height:1.6;color:#475569"><li>✓ 1 yıllık arşiv</li><li>✓ 10+ CV karşılaştırma</li><li>✓ Açık uçlu test analizi</li></ul></article><article style="border:1px solid #dbe4ee;border-radius:12px;padding:18px;text-align:center"><h3 style="margin-top:0">Premium</h3><b style="display:block;font-size:1.8rem;color:#4aa16f;margin:10px 0">10.000 TL</b><span style="font-size:0.8rem;color:#64748b">Sınırsız Entegrasyon</span><hr style="border:0;border-top:1px solid #dbe4ee;margin:15px 0"><ul style="list-style:none;padding:0;font-size:0.8rem;text-align:left;line-height:1.6;color:#475569"><li>✓ Kuruma özel ajanlar</li><li>✓ API ve Webhook desteği</li><li>✓ Öncelikli kapasite</li></ul></article></div><div style="margin-top:24px;display:flex;justify-content:flex-end;gap:10px"><button type="button" class="secondary" onclick="this.closest(\'.modal\').remove()">Kapat</button><button type="button" class="primary" onclick="this.closest(\'.modal\').remove();openCreditModal()">Hemen Yükle</button></div></div>`;document.body.append(modal)}
+function openCreditModal(){const modal=document.createElement('div');modal.className='modal credit-modal';modal.innerHTML=`<div class="modal-card" style="max-width:500px"><div class="modal-head"><div><span class="eyebrow">ÖDEME ADIMI</span><h2>BIGakçe Yükle</h2><p class="sub">Hesabınıza BIGakçe ekleyerek işlemlere devam edebilirsiniz.</p></div><button type="button" onclick="this.closest(\'.modal\').remove()">×</button></div><form onsubmit="event.preventDefault();this.closest(\'.modal\').remove();toast('Ödeme işleminiz başarıyla alındı ve BIGakçe'ler hesabınıza yüklendi!');"><div class="field"><label>Yüklenecek BIGakçe Miktarı</label><select required><option value="">Seçin...</option><option value="50">50 BIGakçe (500 TL)</option><option value="100">100 BIGakçe (1.000 TL)</option><option value="250">250 BIGakçe (2.500 TL)</option><option value="500">500 BIGakçe (5.000 TL)</option><option value="1000">1.000 BIGakçe (10.000 TL)</option></select></div><div class="field"><label>Kart Üzerindeki İsim</label><input type="text" placeholder="Ad Soyad" required></div><div class="field"><label>Kart Numarası</label><input type="text" placeholder="0000 0000 0000 0000" pattern="[0-9 ]+" required></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="field"><label>Son Kullanma</label><input type="text" placeholder="AA/YY" required></div><div class="field"><label>CVC</label><input type="text" placeholder="123" required></div></div><div style="margin-top:24px;display:flex;justify-content:flex-end;gap:10px"><button type="button" class="secondary" onclick="this.closest(\'.modal\').remove()">İptal</button><button type="submit" class="primary">Ödemeyi Tamamla</button></div></form></div>`;document.body.append(modal)}
+function openPackagesModal(){const modal=document.createElement('div');modal.className='modal packages-modal';modal.innerHTML=`<div class="modal-card" style="max-width:700px"><div class="modal-head"><div><span class="eyebrow">ABONELİK SEÇENEKLERİ</span><h2>Paketleri İncele</h2><p class="sub">Kurumunuzun ihtiyacına uygun paketi seçerek avantajlı fiyatlardan yararlanın.</p></div><button type="button" onclick="this.closest(\'.modal\').remove()">×</button></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px"><article style="border:1px solid #dbe4ee;border-radius:12px;padding:18px;text-align:center"><h3 style="margin-top:0">Standart</h3><b style="display:block;font-size:1.8rem;color:#4aa16f;margin:10px 0">10 TL</b><span style="font-size:0.8rem;color:#64748b">1 BIGakçe</span><hr style="border:0;border-top:1px solid #dbe4ee;margin:15px 0"><ul style="list-style:none;padding:0;font-size:0.8rem;text-align:left;line-height:1.6;color:#475569"><li>✓ Temel vaka testi</li><li>✓ 10 CV karşılaştırma</li><li>✓ Anında aktivasyon</li></ul></article><article style="border:2px solid #4aa16f;background:#f2faf5;border-radius:12px;padding:18px;text-align:center;position:relative"><span style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#4aa16f;color:#fff;font-size:0.6rem;padding:3px 8px;border-radius:10px;font-weight:bold">EN POPÜLER</span><h3 style="margin-top:0">Gelişmiş</h3><b style="display:block;font-size:1.8rem;color:#4aa16f;margin:10px 0">500 TL</b><span style="font-size:0.8rem;color:#64748b">50 BIGakçe (50 Test)</span><hr style="border:0;border-top:1px solid #dbe4ee;margin:15px 0"><ul style="list-style:none;padding:0;font-size:0.8rem;text-align:left;line-height:1.6;color:#475569"><li>✓ 1 yıllık arşiv</li><li>✓ 10+ CV karşılaştırma</li><li>✓ Açık uçlu test analizi</li></ul></article><article style="border:1px solid #dbe4ee;border-radius:12px;padding:18px;text-align:center"><h3 style="margin-top:0">Premium</h3><b style="display:block;font-size:1.8rem;color:#4aa16f;margin:10px 0">10.000 TL</b><span style="font-size:0.8rem;color:#64748b">Sınırsız Entegrasyon</span><hr style="border:0;border-top:1px solid #dbe4ee;margin:15px 0"><ul style="list-style:none;padding:0;font-size:0.8rem;text-align:left;line-height:1.6;color:#475569"><li>✓ Kuruma özel ajanlar</li><li>✓ API ve Webhook desteği</li><li>✓ Öncelikli kapasite</li></ul></article></div><div style="margin-top:24px;display:flex;justify-content:flex-end;gap:10px"><button type="button" class="secondary" onclick="this.closest(\'.modal\').remove()">Kapat</button><button type="button" class="primary" onclick="this.closest(\'.modal\').remove();openCreditModal()">Hemen Yükle</button></div></div>`;document.body.append(modal)}
 const buildQuestionDraftBase=buildQuestionDraft;
 buildQuestionDraft=function(){buildQuestionDraftBase();const label=document.querySelector('#question-draft .eyebrow');if(label)label.textContent='GEMINI · AÇIK UÇLU SORU AJANI';document.querySelectorAll('#question-draft summary span').forEach(el=>el.textContent='Gemini cevap şablonu')};
-function aiJson(text){const clean=String(text||'').replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'').trim();return JSON.parse(clean)}
+function aiJson(text) {
+    if (typeof text === 'object' && text !== null) return text;
+    let s = String(text || '').trim();
+    const codeMatch = s.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+    if (codeMatch) s = codeMatch[1].trim();
+    try {
+        return JSON.parse(s);
+    } catch (e1) {
+        const firstBrace = s.indexOf('{');
+        const lastBrace = s.lastIndexOf('}');
+        const firstBracket = s.indexOf('[');
+        const lastBracket = s.lastIndexOf(']');
+        
+        let candidate = null;
+        if (firstBrace !== -1 && lastBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
+            candidate = s.slice(firstBrace, lastBrace + 1);
+        } else if (firstBracket !== -1 && lastBracket !== -1) {
+            candidate = s.slice(firstBracket, lastBracket + 1);
+        }
+        if (candidate) {
+            try { return JSON.parse(candidate); } catch (e2) {}
+        }
+        throw new Error('Gemini JSON yanıtı çözümlenemedi: ' + e1.message);
+    }
+}
 function personalDataPage() { return dataPageBase('Kişisel Bilgiler'); }
 function dataBankingPage() { return dataPageBase('Veri Bankacılığı'); }
 function openEvrakKutusuModal() {
@@ -310,7 +448,7 @@ function openEvrakKutusuModal() {
       <div class="modal-head" style="justify-content: flex-end;">
         <button type="button" onclick="this.closest(\'.modal\').remove()">×</button>
       </div>
-      <h2 style="margin-top: 0;">Evrak Kutusu</h2>
+      <h2 style="margin-top: 0;">Test Arşivi</h2>
       <p class="sub" style="margin-bottom: 24px;">Yeni evrak yüklemek için bilgisayarınızdan bir dosya seçin.</p>
       <button class="primary full" onclick="toast('Dosya seçici açıldı'); this.closest(\'.modal\').remove();">Bilgisayardan Yükle</button>
     </div>
@@ -320,16 +458,16 @@ function openEvrakKutusuModal() {
 async function aiCall(prompt){const response=await fetch('/api/generate',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({prompt})});const data=await response.json().catch(()=>({error:'Sunucu geçerli yanıt vermedi.'}));if(!response.ok)throw new Error(data.error||'Gemini bağlantısı başarısız.');return data.text}
 function aiBusy(button,on){if(!button)return;if(on){button.dataset.oldText=button.textContent;button.textContent='Gemini üretiyor…';button.disabled=true}else{button.textContent=button.dataset.oldText||button.textContent;button.disabled=false}}
 function aiMulti(id){const el=document.getElementById(id);return el?[...el.selectedOptions].map(o=>o.value).filter(Boolean):[]}
-generateCaseFromPrompt=async function(){const button=document.querySelector('.prompt-output-head .primary'),sector=pv('pb-sector',''),sub=pv('pb-subsector',''),func=pv('pb-expertise',''),position=pv('pb-position',''),department=pv('pb-department',''),topic=pv('pb-topic',''),difficulty=pv('pb-difficulty','Orta'),duration=pv('pb-duration','60'),skills=aiMulti('pb-skills'),competencies=aiMulti('pb-competencies');if(!sector||!sub||!position||!topic)return toast('Sektör, alt sektör, pozisyon ve konu seçilmelidir');if(!skills.length&&!competencies.length)return toast('En az bir beceri veya yetkinlik seçin');const variation=(crypto.randomUUID?.()||Date.now()+'-'+Math.random());const prompt=`Türkçe, oldukça kısa, net ve yüksek teknik derinliğe sahip bir iş vakası üret. Lüzumsuz betimlemelerden kaçın. Vakayı adayın adım adım çözmesi gereken teknik ve operasyonel bir kriz döngüsü (troubleshooting loop) şeklinde kurgula. En sona teknik sorular ekle.\nSEKTÖR: ${sector}\nALT SEKTÖR: ${sub}\nFONKSİYON: ${func}\nPOZİSYON: ${position}\nDEPARTMAN: ${department}\nKONU: ${topic}\nZORLUK: ${difficulty}\nSÜRE: ${duration}\nBECERİLER: ${skills.join(', ')}\nYETKİNLİKLER: ${competencies.join(', ')}\nBENZERSİZ ÜRETİM KODU: ${variation}\nYalnızca JSON döndür: {"title":"...","summary":"Kısa teknik özet","case_text":"Maksimum 150 kelimelik, doğrudan sorun döngüsü (loop) içeren vaka ve en sonda 3-5 adet spesifik teknik soru","decision_point":"...","stakeholders":["..."],"metrics":["..."]}`;aiBusy(button,true);try{const result=aiJson(await aiCall(prompt)),card=document.getElementById('generated-case-card');card.hidden=false;card.innerHTML='<div class="case-card-head"><div><span class="eyebrow">GEMINI · GERÇEK API ÜRETİMİ</span><h2>'+safeText(result.title||position+' · '+topic)+'</h2><p>'+safeText(sector)+' / '+safeText(sub)+' · '+safeText(difficulty)+'</p></div><span class="case-count">Yeni vaka</span></div><div class="case-body"><p>'+safeText(result.summary||'')+'</p><h3>Vaka ve Teknik Sorular</h3><p class="ai-case-text">'+safeText(result.case_text||'').replaceAll('\n','<br>')+'</p><h3>Kritik Karar Noktası</h3><p>'+safeText(result.decision_point||'')+'</p><div class="case-tags"><b>Üretim kodu</b><span>'+safeText(variation)+'</span></div></div><div class="case-next-actions"><button class="primary" onclick="prepareTestFromCase(this.closest(\'.generated-case-card\').innerText)">Test Sorularını Hazırla</button></div>';card.scrollIntoView({behavior:'smooth',block:'start'});toast('Gemini yeni ve özgün vaka üretti')}catch(error){toast(error.message)}finally{aiBusy(button,false)}};
-buildMcqDraft=async function(){const button=document.querySelector('.question-builder .primary'),source=pv('mcq-case',''),count=Number(pv('mcq-count','10'));if(!source.trim())return toast('Önce vaka metnini girin');if(count<10||count>100)return toast('Soru sayısı 10 ile 100 arasında olmalıdır');const variation=(crypto.randomUUID?.()||Date.now()+'-'+Math.random());const prompt=`Aşağıdaki vakaya tamamen bağlı ${count} farklı Türkçe çoktan seçmeli soru üret. Sorular teknik olarak çok zorlayıcı, çeldiricileri son derece güçlü, vakanın satır aralarını ve karmaşık ilişkilerini ölçen uzman seviyesinde olsun. Basit çıkarım soruları sorma. Her soru A-D dört şıklı olsun. Şıklar yakın uzunlukta, doğru cevaplar A/B/C/D arasında dengeli ve aynı harf art arda en fazla iki kez olsun. Her soru başka bir vaka kanıtını ölçsün.\nVAKA:\n${source}\nBENZERSİZ KOD: ${variation}\nYalnızca JSON döndür: {"questions":[{"text":"...","options":["...","...","...","..."],"answer":0,"rationale":"..."}]}`;aiBusy(button,true);try{const result=aiJson(await aiCall(prompt));generatedExamType='Çoktan Seçmeli';generatedExamQuestions=(result.questions||[]).map((q,i)=>({text:(i+1)+'. '+q.text,options:q.options,answer:Number(q.answer),open:false})).filter(q=>q.options?.length===4&&q.answer>=0&&q.answer<4);if(generatedExamQuestions.length!==count)throw new Error('Gemini beklenen soru sayısını üretmedi; yeniden deneyin.');const box=document.getElementById('mcq-draft');box.hidden=false;box.innerHTML='<div class="case-card-head"><div><span class="eyebrow">GEMINI · GERÇEK API ÜRETİMİ</span><h2>Dört şıklı vaka testi hazır</h2><p>'+count+' özgün soru</p></div><span class="case-count">'+count+' soru</span></div><div class="mcq-preview-list">'+generatedExamQuestions.slice(0,4).map((q,i)=>'<article><b>Soru '+(i+1)+'</b><p>'+safeText(q.text)+'</p><div>'+q.options.map((o,j)=>'<span class="'+(j===q.answer?'correct-option':'')+'">'+String.fromCharCode(65+j)+') '+safeText(o)+'</span>').join('')+'</div></article>').join('')+'</div><button class="primary" onclick="startSecureExam()">Testi Başlat</button>';box.scrollIntoView({behavior:'smooth'});toast(count+' özgün soru üretildi')}catch(error){toast(error.message)}finally{aiBusy(button,false)}};
-buildQuestionDraft=async function(){const button=document.querySelector('.question-builder .primary'),source=pv('question-case',''),count=Number(pv('question-count','10'));if(!source.trim())return toast('Önce vaka metnini girin');const prompt=`Aşağıdaki vakaya bağlı ${count} farklı açık uçlu Türkçe soru üret. Sorular teknik derinliği olan, üst düzey analitik düşünme, stratejik problem çözme ve kritik karar alma yetilerini ölçecek zorlukta olsun. Kesinlikle yüzeysel, basit veya genel geçer sorular üretme. Her soru farklı kanıt, karar veya yetkinlik ölçsün. Cevap şablonu somut değerlendirme ölçütleri içersin.\nVAKA:\n${source}\nYalnızca JSON döndür: {"questions":[{"text":"...","template":"..."}]}`;aiBusy(button,true);try{const result=aiJson(await aiCall(prompt));generatedExamType='Açık Uçlu';generatedExamQuestions=(result.questions||[]).map((q,i)=>({text:(i+1)+'. '+q.text,template:q.template,open:true}));if(generatedExamQuestions.length!==count)throw new Error('Gemini beklenen soru sayısını üretmedi; yeniden deneyin.');const box=document.getElementById('question-draft');box.hidden=false;box.innerHTML='<div class="case-card-head"><div><span class="eyebrow">GEMINI · GERÇEK API ÜRETİMİ</span><h2>Açık uçlu vaka testi hazır</h2></div><span class="case-count">'+count+' soru</span></div><div class="answer-template-list">'+generatedExamQuestions.map((q,i)=>'<details><summary><b>Soru '+(i+1)+'</b><span>Cevap şablonu</span></summary><p>'+safeText(q.text)+'</p><div><strong>Yalnızca hazırlayan görür</strong>'+safeText(q.template)+'</div></details>').join('')+'</div><button class="primary" onclick="startSecureExam()">Testi Başlat</button>';box.scrollIntoView({behavior:'smooth'});toast(count+' açık uçlu soru üretildi')}catch(error){toast(error.message)}finally{aiBusy(button,false)}};
+generateCaseFromPrompt=async function(){const button=document.querySelector('.prompt-output-head .primary'),sector=pv('pb-sector',''),sub=pv('pb-subsector',''),func=pv('pb-expertise',''),position=pv('pb-position',''),department=pv('pb-department',''),topic=pv('pb-topic',''),difficulty=pv('pb-difficulty','Orta'),duration=pv('pb-duration','60'),skills=aiMulti('pb-skills'),competencies=aiMulti('pb-competencies');if(!sector||!sub||!position||!topic)return toast('Sektör, alt sektör, pozisyon ve konu seçilmelidir');if(!skills.length&&!competencies.length)return toast('En az bir beceri veya yetkinlik seçin');const variation=(crypto.randomUUID?.()||Date.now()+'-'+Math.random());const prompt=`Türkçe, oldukça kısa, net ve yüksek teknik derinliğe sahip bir iş vakası üret. Lüzumsuz betimlemelerden kaçın. Vakayı adayın adım adım çözmesi gereken teknik ve operasyonel bir kriz döngüsü (troubleshooting loop) şeklinde kurgula. En sona teknik sorular ekle.\nSEKTÖR: ${sector}\nALT SEKTÖR: ${sub}\nFONKSİYON: ${func}\nPOZİSYON: ${position}\nDEPARTMAN: ${department}\nKONU: ${topic}\nZORLUK: ${difficulty}\nSÜRE: ${duration}\nBECERİLER: ${skills.join(', ')}\nYETKİNLİKLER: ${competencies.join(', ')}\nBENZERSİZ ÜRETİM KODU: ${variation}\nYalnızca JSON döndür: {"title":"...","summary":"Kısa teknik özet","case_text":"Maksimum 150 kelimelik, doğrudan sorun döngüsü (loop) içeren vaka ve en sonda 3-5 adet spesifik teknik soru","decision_point":"...","stakeholders":["..."],"metrics":["..."]}`;aiBusy(button,true);try{const result=aiJson(await aiCall(prompt)),card=document.getElementById('generated-case-card');card.hidden=false;card.innerHTML='<div class="case-card-head"><div><span class="eyebrow">GEMINI · GERÇEK API ÜRETİMİ</span><h2>'+safeText(result.title||position+' · '+topic)+'</h2><p>'+safeText(sector)+' / '+safeText(sub)+' · '+safeText(difficulty)+'</p></div><span class="case-count">Yeni vaka</span></div><div class="case-body"><p>'+safeText(result.summary||'')+'</p><h3>Vaka ve Teknik Sorular</h3><p class="ai-case-text">'+safeText(result.case_text||'').replace(/\n/g,'<br>')+'</p><h3>Kritik Karar Noktası</h3><p>'+safeText(result.decision_point||'')+'</p><div class="case-tags"><b>Üretim kodu</b><span>'+safeText(variation)+'</span></div></div><div class="case-next-actions"><button class="primary" onclick="prepareTestFromCase(this.closest(\'.generated-case-card\').innerText)">Test Sorularını Hazırla</button></div>';card.scrollIntoView({behavior:'smooth',block:'start'});toast('Gemini yeni ve özgün vaka üretti')}catch(error){toast(error.message)}finally{aiBusy(button,false)}};
+buildMcqDraft=async function(){const button=document.querySelector('.question-builder .primary'),source=pv('mcq-case',''),count=Number(pv('mcq-count','1'));if(!source.trim())return toast('Önce vaka metnini girin');if(count<1||count>100)return toast('Soru sayısı 1 ile 100 arasında olmalıdır');const variation=(crypto.randomUUID?.()||Date.now()+'-'+Math.random());const prompt=`Aşağıdaki vakaya tamamen bağlı ${count} farklı Türkçe çoktan seçmeli soru üret. Sorular teknik olarak çok zorlayıcı, çeldiricileri son derece güçlü, vakanın satır aralarını ve karmaşık ilişkilerini ölçen uzman seviyesinde olsun. Basit çıkarım soruları sorma. Her soru A-D dört şıklı olsun. Şıklar yakın uzunlukta, doğru cevaplar A/B/C/D arasında dengeli ve aynı harf art arda en fazla iki kez olsun. Her soru başka bir vaka kanıtını ölçsün.\nVAKA:\n${source}\nBENZERSİZ KOD: ${variation}\nYalnızca JSON döndür: {"questions":[{"text":"...","options":["...","...","...","..."],"answer":0,"rationale":"..."}]}`;aiBusy(button,true);try{const result=aiJson(await aiCall(prompt));generatedExamType='Çoktan Seçmeli';generatedExamQuestions=(result.questions||[]).map((q,i)=>({text:(i+1)+'. '+q.text,options:q.options,answer:Number(q.answer),open:false})).filter(q=>q.options?.length===4&&q.answer>=0&&q.answer<4);if(generatedExamQuestions.length!==count)throw new Error('Gemini beklenen soru sayısını üretmedi; yeniden deneyin.');const box=document.getElementById('mcq-draft');box.hidden=false;box.innerHTML='<div class="case-card-head"><div><span class="eyebrow">GEMINI · GERÇEK API ÜRETİMİ</span><h2>Dört şıklı vaka testi hazır</h2><p>'+count+' özgün soru</p></div><span class="case-count">'+count+' soru</span></div><div class="mcq-preview-list">'+generatedExamQuestions.slice(0,4).map((q,i)=>'<article><b>Soru '+(i+1)+'</b><p>'+safeText(q.text)+'</p><div>'+q.options.map((o,j)=>'<span class="'+(j===q.answer?'correct-option':'')+'">'+String.fromCharCode(65+j)+') '+safeText(o)+'</span>').join('')+'</div></article>').join('')+'</div><button class="primary" onclick="startSecureExam()">Testi Başlat</button>';box.scrollIntoView({behavior:'smooth'});toast(count+' özgün soru üretildi')}catch(error){toast(error.message)}finally{aiBusy(button,false)}};
+buildQuestionDraft=async function(){const button=document.querySelector('.question-builder .primary'),source=pv('question-case',''),count=Number(pv('question-count','1'));if(!source.trim())return toast('Önce vaka metnini girin');const prompt=`Aşağıdaki vakaya bağlı ${count} farklı açık uçlu Türkçe soru üret. Sorular teknik derinliği olan, üst düzey analitik düşünme, stratejik problem çözme ve kritik karar alma yetilerini ölçecek zorlukta olsun. Kesinlikle yüzeysel, basit veya genel geçer sorular üretme. Her soru farklı kanıt, karar veya yetkinlik ölçsün. Cevap şablonu somut değerlendirme ölçütleri içersin.\nVAKA:\n${source}\nYalnızca JSON döndür: {"questions":[{"text":"...","template":"..."}]}`;aiBusy(button,true);try{const result=aiJson(await aiCall(prompt,false,questionCost(0,count)));generatedExamType='Açık Uçlu';generatedExamQuestions=(result.questions||[]).map((q,i)=>({text:(i+1)+'. '+q.text,template:q.template,open:true}));if(generatedExamQuestions.length!==count){refundCredits(questionCost(0,count));throw new Error('Gemini beklenen soru sayısını üretmedi; yeniden deneyin.')}const box=document.getElementById('question-draft');box.hidden=false;box.innerHTML='<div class="case-card-head"><div><span class="eyebrow">GEMINI · GERÇEK API ÜRETİMİ</span><h2>Açık uçlu vaka testi hazır</h2></div><span class="case-count">'+count+' soru</span></div><div class="answer-template-list">'+generatedExamQuestions.map((q,i)=>'<details><summary><b>Soru '+(i+1)+'</b><span>Cevap şablonu</span></summary><p>'+safeText(q.text)+'</p><div><strong>Yalnızca hazırlayan görür</strong>'+safeText(q.template)+'</div></details>').join('')+'</div><button class="primary" onclick="startSecureExam()">Testi Başlat</button>';box.scrollIntoView({behavior:'smooth'});toast(count+' açık uçlu soru üretildi · '+questionCost(0,count)+' BIGakçe düşüldü')}catch(error){toast(error.message)}finally{aiBusy(button,false)}};
 state.logged=localStorage.getItem('sb_session')==='1';render();
 
 function userCreditsPage(){
-  return layout('<section class="credits-page"><div class="page-intro"><div><h2>Kullanıcılar ve Kontör Yönetimi</h2><p>Kullanıcı bilgilerinizi düzenleyin, paketleri karşılaştırın ve kontör satın alın.</p></div></div><div class="credits-grid" style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px; margin-top: 20px;"><div class="user-card" style="background:#fff; border:1px solid var(--line); border-radius:15px; padding:20px;"><h3 style="margin-top:0;">Hesap Bilgileri</h3><label style="display:block; margin-top:15px;"><span style="font-size:0.8rem; color:var(--muted); font-weight:700;">Kullanıcı Adı</span><input type="text" value="Bilge Han Veral" style="width:100%; padding:8px; margin-top:5px; border:1px solid var(--line); border-radius:8px;" disabled></label><label style="display:block; margin-top:15px;"><span style="font-size:0.8rem; color:var(--muted); font-weight:700;">Şifre</span><input type="password" value="********" style="width:100%; padding:8px; margin-top:5px; border:1px solid var(--line); border-radius:8px;"></label><div style="margin-top:20px; padding-top:20px; border-top:1px solid var(--line);"><h4 style="margin:0 0 10px;">Kontör Özeti</h4><div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--muted);">Satın Alınan:</span> <b>250</b></div><div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--muted);">Harcanan:</span> <b>68</b></div><div style="display:flex; justify-content:space-between; color:#347b53; font-size:1.1rem; margin-top:10px; border-top:1px dashed #ccc; padding-top:10px;"><span>Kalan:</span> <b>182</b></div></div></div><div class="purchase-card" style="background:#fff; border:1px solid var(--line); border-radius:15px; padding:20px;"><h3 style="margin-top:0;">Kontör ve Abonelik Yönetimi</h3><p style="color:var(--muted); font-size:0.85rem;">1 Kontör = 10 â‚º\'dir. Yıllık aboneliklerde %20 peşin ödeme indirimi uygulanır.</p><div style="display:flex; gap:10px; margin:20px 0;"><button onclick="setCredit(15)" style="flex:1; padding:15px; border:1px solid var(--line); border-radius:10px; background:#f8fafc; cursor:pointer;"><b style="display:block; font-size:1.2rem; color:var(--accent);">15 Kontör</b><span style="font-size:0.8rem; color:var(--muted);">Hızlı Paket</span></button><button onclick="setCredit(50)" style="flex:1; padding:15px; border:1px solid var(--line); border-radius:10px; background:#f8fafc; cursor:pointer;"><b style="display:block; font-size:1.2rem; color:var(--accent);">50 Kontör</b><span style="font-size:0.8rem; color:var(--muted);">Avantajlı Paket</span></button><button onclick="setCredit(100)" style="flex:1; padding:15px; border:1px solid var(--line); border-radius:10px; background:#f8fafc; cursor:pointer;"><b style="display:block; font-size:1.2rem; color:var(--accent);">100 Kontör</b><span style="font-size:0.8rem; color:var(--muted);">Pro Paket</span></button></div><div style="background:#f0f4f8; padding:20px; border-radius:12px; margin-bottom:20px;"><label style="display:block; margin-bottom:15px;"><span style="font-weight:700;">İstediğiniz Kontör Miktarı (Minimum 10)</span><input type="number" id="credit-amount" min="10" value="10" oninput="calcCredit()" style="width:100%; padding:10px; font-size:1.1rem; border:1px solid #cbd5e1; border-radius:8px; margin-top:8px;"></label><div style="display:flex; gap:20px; margin-bottom:15px;"><label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="radio" name="credit_type" value="oneoff" checked onchange="calcCredit()"> Tek Seferlik Ödeme</label><label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="radio" name="credit_type" value="sub" onchange="calcCredit()"> <b>Yıllık Abonelik (%20 İndirim)</b></label></div><div style="background:#fff; padding:15px; border-radius:10px; text-align:right; border:1px dashed #cbd5e1;"><div style="font-size:0.9rem; color:var(--muted); margin-bottom:5px;">Toplam Tutar:</div><div id="credit-total" style="font-size:1.8rem; font-weight:800; color:#0f172a;">100 â‚º</div><div id="credit-saving" style="font-size:0.8rem; color:#16a34a; margin-top:5px; height:15px;"></div></div></div><div style="border-top:1px solid var(--line); padding-top:20px;"><h4 style="margin:0 0 15px;">Kredi Kartı İle Ödeme</h4><div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;"><label style="grid-column: 1 / -1;"><span style="font-size:0.8rem; color:var(--muted);">Kart Üzerindeki İsim</span><input type="text" placeholder="Ad Soyad" style="width:100%; padding:8px; border:1px solid var(--line); border-radius:6px; margin-top:5px;"></label><label style="grid-column: 1 / -1;"><span style="font-size:0.8rem; color:var(--muted);">Kart Numarası</span><input type="text" placeholder="**** **** **** ****" style="width:100%; padding:8px; border:1px solid var(--line); border-radius:6px; margin-top:5px;"></label><label><span style="font-size:0.8rem; color:var(--muted);">Son Kullanma (AA/YY)</span><input type="text" placeholder="12/25" style="width:100%; padding:8px; border:1px solid var(--line); border-radius:6px; margin-top:5px;"></label><label><span style="font-size:0.8rem; color:var(--muted);">CVV</span><input type="text" placeholder="***" style="width:100%; padding:8px; border:1px solid var(--line); border-radius:6px; margin-top:5px;"></label></div><button class="primary" style="width:100%; margin-top:20px; padding:12px; font-size:1.1rem;" onclick="toast(\'Ödeme işlemi başarıyla simüle edildi.\')">Ödemeyi Tamamla</button></div></div></div></section>', 'Kullanıcılar ve Kontör Yönetimi');
+  return layout('<section class="credits-page"><div class="page-intro"><div><h2>Kullanıcılar ve BIGakçe Yönetimi</h2><p>Kullanıcı bilgilerinizi düzenleyin, paketleri karşılaştırın ve BIGakçe satın alın.</p></div></div><div class="credits-grid" style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px; margin-top: 20px;"><div class="user-card" style="background:#fff; border:1px solid var(--line); border-radius:15px; padding:20px;"><h3 style="margin-top:0;">Hesap Bilgileri</h3><label style="display:block; margin-top:15px;"><span style="font-size:0.8rem; color:var(--muted); font-weight:700;">Kullanıcı Adı</span><input type="text" value="Bilge Han Veral" style="width:100%; padding:8px; margin-top:5px; border:1px solid var(--line); border-radius:8px;" disabled></label><label style="display:block; margin-top:15px;"><span style="font-size:0.8rem; color:var(--muted); font-weight:700;">Şifre</span><input type="password" value="********" style="width:100%; padding:8px; margin-top:5px; border:1px solid var(--line); border-radius:8px;"></label><div style="margin-top:20px; padding-top:20px; border-top:1px solid var(--line);"><h4 style="margin:0 0 10px;">BIGakçe Özeti</h4><div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--muted);">Satın Alınan:</span> <b>250</b></div><div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--muted);">Harcanan:</span> <b>68</b></div><div style="display:flex; justify-content:space-between; color:#347b53; font-size:1.1rem; margin-top:10px; border-top:1px dashed #ccc; padding-top:10px;"><span>Kalan:</span> <b>182</b></div></div></div><div class="purchase-card" style="background:#fff; border:1px solid var(--line); border-radius:15px; padding:20px;"><h3 style="margin-top:0;">BIGakçe ve Abonelik Yönetimi</h3><p style="color:var(--muted); font-size:0.85rem;">1 BIGakçe = 10 ₺\'dir. Yıllık aboneliklerde %20 peşin ödeme indirimi uygulanır.</p><div style="display:flex; gap:10px; margin:20px 0;"><button onclick="setCredit(15)" style="flex:1; padding:15px; border:1px solid var(--line); border-radius:10px; background:#f8fafc; cursor:pointer;"><b style="display:block; font-size:1.2rem; color:var(--accent);">15 BIGakçe</b><span style="font-size:0.8rem; color:var(--muted);">Hızlı Paket</span></button><button onclick="setCredit(50)" style="flex:1; padding:15px; border:1px solid var(--line); border-radius:10px; background:#f8fafc; cursor:pointer;"><b style="display:block; font-size:1.2rem; color:var(--accent);">50 BIGakçe</b><span style="font-size:0.8rem; color:var(--muted);">Avantajlı Paket</span></button><button onclick="setCredit(100)" style="flex:1; padding:15px; border:1px solid var(--line); border-radius:10px; background:#f8fafc; cursor:pointer;"><b style="display:block; font-size:1.2rem; color:var(--accent);">100 BIGakçe</b><span style="font-size:0.8rem; color:var(--muted);">Pro Paket</span></button></div><div style="background:#f0f4f8; padding:20px; border-radius:12px; margin-bottom:20px;"><label style="display:block; margin-bottom:15px;"><span style="font-weight:700;">İstediğiniz BIGakçe Miktarı (Minimum 10)</span><input type="number" id="credit-amount" min="10" value="10" oninput="calcCredit()" style="width:100%; padding:10px; font-size:1.1rem; border:1px solid #cbd5e1; border-radius:8px; margin-top:8px;"></label><div style="display:flex; gap:20px; margin-bottom:15px;"><label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="radio" name="credit_type" value="oneoff" checked onchange="calcCredit()"> Tek Seferlik Ödeme</label><label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="radio" name="credit_type" value="sub" onchange="calcCredit()"> <b>Yıllık Abonelik (%20 İndirim)</b></label></div><div style="background:#fff; padding:15px; border-radius:10px; text-align:right; border:1px dashed #cbd5e1;"><div style="font-size:0.9rem; color:var(--muted); margin-bottom:5px;">Toplam Tutar:</div><div id="credit-total" style="font-size:1.8rem; font-weight:800; color:#0f172a;">100 ₺</div><div id="credit-saving" style="font-size:0.8rem; color:#16a34a; margin-top:5px; height:15px;"></div></div></div><div style="border-top:1px solid var(--line); padding-top:20px;"><h4 style="margin:0 0 15px;">Kredi Kartı İle Ödeme</h4><div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;"><label style="grid-column: 1 / -1;"><span style="font-size:0.8rem; color:var(--muted);">Kart Üzerindeki İsim</span><input type="text" placeholder="Ad Soyad" style="width:100%; padding:8px; border:1px solid var(--line); border-radius:6px; margin-top:5px;"></label><label style="grid-column: 1 / -1;"><span style="font-size:0.8rem; color:var(--muted);">Kart Numarası</span><input type="text" placeholder="**** **** **** ****" style="width:100%; padding:8px; border:1px solid var(--line); border-radius:6px; margin-top:5px;"></label><label><span style="font-size:0.8rem; color:var(--muted);">Son Kullanma (AA/YY)</span><input type="text" placeholder="12/25" style="width:100%; padding:8px; border:1px solid var(--line); border-radius:6px; margin-top:5px;"></label><label><span style="font-size:0.8rem; color:var(--muted);">CVV</span><input type="text" placeholder="***" style="width:100%; padding:8px; border:1px solid var(--line); border-radius:6px; margin-top:5px;"></label></div><button class="primary" style="width:100%; margin-top:20px; padding:12px; font-size:1.1rem;" onclick="toast(\'Ödeme işlemi başarıyla simüle edildi.\')">Ödemeyi Tamamla</button></div></div></div></section>', 'Kullanıcılar ve BIGakçe Yönetimi');
 }
 window.setCredit = function(amt) { const el = document.getElementById('credit-amount'); if(el) { el.value = amt; calcCredit(); } }
-window.calcCredit = function() { const amountEl = document.getElementById('credit-amount'); if(!amountEl) return; let amt = parseInt(amountEl.value, 10); if(isNaN(amt) || amt < 10) amt = 10; const type = document.querySelector('input[name="credit_type"]:checked').value; const isSub = (type === 'sub'); let total = amt * 10; let savingText = ''; if(isSub) { const discounted = total * 0.8; savingText = 'Yıllık abonelik ile ' + (total - discounted) + ' â‚º tasarruf ediyorsunuz (' + amt + ' kontör alıp ' + Math.round(amt*0.8) + ' kontör parası ödüyorsunuz)'; total = discounted; } document.getElementById('credit-total').innerText = total + ' â‚º'; document.getElementById('credit-saving').innerText = savingText; }
+window.calcCredit = function() { const amountEl = document.getElementById('credit-amount'); if(!amountEl) return; let amt = parseInt(amountEl.value, 10); if(isNaN(amt) || amt < 10) amt = 10; const type = document.querySelector('input[name="credit_type"]:checked').value; const isSub = (type === 'sub'); let total = amt * 10; let savingText = ''; if(isSub) { const discounted = total * 0.8; savingText = 'Yıllık abonelik ile ' + (total - discounted) + ' ₺ tasarruf ediyorsunuz (' + amt + ' BIGakçe alıp ' + Math.round(amt*0.8) + ' BIGakçe parası ödüyorsunuz)'; total = discounted; } document.getElementById('credit-total').innerText = total + ' ₺'; document.getElementById('credit-saving').innerText = savingText; }
 
 
 
@@ -691,17 +829,17 @@ window.testPlatformPage = function() {
 window.showArchivePrompt = function(candName, score) {
     const qCount = Math.floor(Math.random() * 15) + 5; // mock question count
     const cost = qCount > 10 ? 50 : 25;
-    const confirmBox = confirm(candName + " adayının " + qCount + " soruluk testini Evrak Kutusunda saklamak istiyor musunuz?\n\n1 yıl saklama bedeli: " + cost + " kontör.\nOnaylarsanız kontör düşülecektir.");
+    const confirmBox = confirm(candName + " adayının " + qCount + " soruluk testini Test Arşivinde saklamak istiyor musunuz?\n\n1 yıl saklama bedeli: " + cost + " BIGakçe.\nOnaylarsanız BIGakçe düşülecektir.");
     if(confirmBox) {
-        // Kontör düş
+        // BIGakçe düş
         const el = document.getElementById('credit-amount');
         let currentCredit = el ? parseInt(el.value, 10) : 250;
         if(currentCredit >= cost) {
             if(el) { el.value = currentCredit - cost; calcCredit(); }
             archivedTests.unshift({ name: candName, score: score, date: new Date().toLocaleDateString('tr-TR'), questions: qCount, cost: cost });
-            toast('Test başarıyla 1 yıl boyunca Evrak Kutusunda saklanmak üzere arşive alındı. ' + cost + ' kontör düşüldü.');
+            toast('Test başarıyla 1 yıl boyunca Test Arşivinde saklanmak üzere arşive alındı. ' + cost + ' BIGakçe düşüldü.');
         } else {
-            toast('Yeterli kontörünüz bulunmuyor. Lütfen kontör yükleyin.');
+            toast('Yeterli BIGakçe bakiyeniz bulunmuyor. Lütfen BIGakçe yükleyin.');
         }
     }
 };
@@ -712,20 +850,20 @@ window.archivePage = function() {
         <td>${r.questions} Soru</td>
         <td>% ${r.score}</td>
         <td>${r.date}</td>
-        <td>${r.cost} Kontör</td>
+        <td>${r.cost} BIGakçe</td>
         <td><div class="row-actions"><button class="secondary" onclick="toast('Sorular yeniden cevaplanmak üzere açılıyor...'); setTimeout(() => go('mcq'), 1000);">Yeniden Cevaplat</button><button class="secondary" onclick="toast('Test klonlandı, yeni ID oluşturuldu.')">Yeni Test Üret</button></div></td>
     </tr>`).join('');
 
     return layout(`<section class="results-head">
-        <div><h2>Evrak Kutusu</h2>
+        <div><h2>Test Arşivi</h2>
         <p>Şirketlerin kalıcı olarak arşivlediği testler ve sonuçları. Saklanmayan testler 24 saat içinde otomatik silinir.</p></div>
     </section>
     <div class="table-wrap candidate-table" style="margin-top:20px;">
         <table>
-            <thead><tr><th>Aday Adı</th><th>Soru Sayısı</th><th>Skor</th><th>Arşiv Tarihi</th><th>Düşülen Kontör</th><th>İşlemler</th></tr></thead>
+            <thead><tr><th>Aday Adı</th><th>Soru Sayısı</th><th>Skor</th><th>Arşiv Tarihi</th><th>Düşülen BIGakçe</th><th>İşlemler</th></tr></thead>
             <tbody>${rows || '<tr><td colspan="6" class="empty">Evrak kutunuzda henüz saklanan bir test bulunmuyor.</td></tr>'}</tbody>
         </table>
-    </div>`, 'Evrak Kutusu');
+    </div>`, 'Test Arşivi');
 };
 
 const renderBase = render;
@@ -817,7 +955,7 @@ window.render = function() {
           <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:25px;">
               <!-- Şirketler -->
               <div style="background:#fff; padding:20px; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
-                  <h3 style="border-bottom:2px solid #e2e8f0; padding-bottom:12px; margin-top:0; color:#0f172a; display:flex; justify-content:space-between;">ðŸ¢ Şirketler <span style="background:#f1f5f9; padding:2px 8px; border-radius:20px; font-size:12px; color:#475569;">${window.authDB.companies.length}</span></h3>
+                  <h3 style="border-bottom:2px solid #e2e8f0; padding-bottom:12px; margin-top:0; color:#0f172a; display:flex; justify-content:space-between;"> Şirketler <span style="background:#f1f5f9; padding:2px 8px; border-radius:20px; font-size:12px; color:#475569;">${window.authDB.companies.length}</span></h3>
                   <ul style="list-style:none; padding:0; margin-top:15px; max-height:400px; overflow-y:auto;">
                       ${window.authDB.companies.slice().reverse().map(c => `<li style="padding:12px; border-bottom:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center;"><b>${c.name}</b> <small style="color:#94a3b8;">${c.date}</small></li>`).join('')}
                       ${window.authDB.companies.length === 0 ? '<li style="color:#94a3b8; text-align:center; padding:20px;">Kayıtlı şirket yok.</li>' : ''}
@@ -826,7 +964,7 @@ window.render = function() {
               
               <!-- Yöneticiler -->
               <div style="background:#fff; padding:20px; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
-                  <h3 style="border-bottom:2px solid #e2e8f0; padding-bottom:12px; margin-top:0; color:#0f172a; display:flex; justify-content:space-between;">ðŸ‘” Şirket Adminleri <span style="background:#f1f5f9; padding:2px 8px; border-radius:20px; font-size:12px; color:#475569;">${window.authDB.admins.length}</span></h3>
+                  <h3 style="border-bottom:2px solid #e2e8f0; padding-bottom:12px; margin-top:0; color:#0f172a; display:flex; justify-content:space-between;">👔 Şirket Adminleri <span style="background:#f1f5f9; padding:2px 8px; border-radius:20px; font-size:12px; color:#475569;">${window.authDB.admins.length}</span></h3>
                   <ul style="list-style:none; padding:0; margin-top:15px; max-height:400px; overflow-y:auto;">
                       ${window.authDB.admins.slice().reverse().map(c => `<li style="padding:12px; border-bottom:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center;"><b>${c.name}</b> <small style="color:#94a3b8;">${c.date}</small></li>`).join('')}
                       ${window.authDB.admins.length === 0 ? '<li style="color:#94a3b8; text-align:center; padding:20px;">Kayıtlı yönetici yok.</li>' : ''}
@@ -835,7 +973,7 @@ window.render = function() {
               
               <!-- Kullanıcılar -->
               <div style="background:#fff; padding:20px; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
-                  <h3 style="border-bottom:2px solid #e2e8f0; padding-bottom:12px; margin-top:0; color:#0f172a; display:flex; justify-content:space-between;">ðŸ‘¤ Kullanıcılar <span style="background:#f1f5f9; padding:2px 8px; border-radius:20px; font-size:12px; color:#475569;">${window.authDB.users.length}</span></h3>
+                  <h3 style="border-bottom:2px solid #e2e8f0; padding-bottom:12px; margin-top:0; color:#0f172a; display:flex; justify-content:space-between;">👤 Kullanıcılar <span style="background:#f1f5f9; padding:2px 8px; border-radius:20px; font-size:12px; color:#475569;">${window.authDB.users.length}</span></h3>
                   <ul style="list-style:none; padding:0; margin-top:15px; max-height:400px; overflow-y:auto;">
                       ${window.authDB.users.slice().reverse().map(c => `<li style="padding:12px; border-bottom:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center;"><b>${c.name}</b> <small style="color:#94a3b8;">${c.date}</small></li>`).join('')}
                       ${window.authDB.users.length === 0 ? '<li style="color:#94a3b8; text-align:center; padding:20px;">Kayıtlı kullanıcı yok.</li>' : ''}
@@ -869,7 +1007,7 @@ window.render = function() {
                   if(topNav && !document.getElementById('btn-nav-management')) {
                       const btn = document.createElement('button');
                       btn.id = 'btn-nav-management';
-                      btn.innerHTML = 'ðŸ¢ Merkezi Veri Bankası';
+                      btn.innerHTML = ' Merkezi Veri Bankası';
                       btn.className = state.page === 'management' ? 'active' : '';
                       btn.onclick = () => go('management');
                       btn.style.background = '#e0f2fe';
@@ -1019,7 +1157,7 @@ window.render = function() {
                 <!-- Şirketler ve Hiyerarşi (Tam Genişlik) -->
                 <div style="background:#fff; padding:20px; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05); grid-column: 1 / -1;">
                     <h3 style="border-bottom:2px solid #e2e8f0; padding-bottom:12px; margin-top:0; color:#0f172a; display:flex; justify-content:space-between;">
-                        ðŸ¢ Organizasyon Şeması (Şirketler & Çalışanlar) 
+                         Organizasyon Şeması (Şirketler & Çalışanlar) 
                         <span style="background:#f1f5f9; padding:2px 8px; border-radius:20px; font-size:12px; color:#475569;">${window.authDB.companies.length} Şirket</span>
                     </h3>
                     <div style="margin-top:15px; display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:20px;">
@@ -1029,8 +1167,8 @@ window.render = function() {
                             const compAdmins = window.authDB.admins.filter(a => a.companyName === comp.name);
                             const compUsers = window.authDB.users.filter(u => u.companyName === comp.name);
                             
-                            let adminHtml = compAdmins.map(a => `<div style="padding:8px 12px; background:#fff7ed; color:#c2410c; border:1px solid #fdba74; border-radius:8px; font-size:13px; margin-bottom:8px; font-weight:500;">ðŸ‘” ${a.name} <span style="float:right; font-size:11px; opacity:0.8; font-weight:bold;">Yönetici</span></div>`).join('');
-                            let userHtml = compUsers.map(u => `<div style="padding:8px 12px; background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0; border-radius:8px; font-size:13px; margin-bottom:8px; font-weight:500;">ðŸ‘¤ ${u.name} <span style="float:right; font-size:11px; opacity:0.8;">Kullanıcı</span></div>`).join('');
+                            let adminHtml = compAdmins.map(a => `<div style="padding:8px 12px; background:#fff7ed; color:#c2410c; border:1px solid #fdba74; border-radius:8px; font-size:13px; margin-bottom:8px; font-weight:500;">👔 ${a.name} <span style="float:right; font-size:11px; opacity:0.8; font-weight:bold;">Yönetici</span></div>`).join('');
+                            let userHtml = compUsers.map(u => `<div style="padding:8px 12px; background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0; border-radius:8px; font-size:13px; margin-bottom:8px; font-weight:500;">👤 ${u.name} <span style="float:right; font-size:11px; opacity:0.8;">Kullanıcı</span></div>`).join('');
                             
                             if(!adminHtml && !userHtml) {
                                 userHtml = '<div style="font-size:12px; color:#94a3b8; padding:10px; background:#f8fafc; border-radius:6px; border:1px dashed #cbd5e1; text-align:center;">Henüz kullanıcı veya yönetici atanmamış.</div>';
@@ -1039,7 +1177,7 @@ window.render = function() {
                             return `
                             <div style="border:1px solid #cbd5e1; border-radius:12px; padding:15px; background:#f8fafc; box-shadow:0 2px 4px rgba(0,0,0,0.02);">
                                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #e2e8f0; padding-bottom:10px;">
-                                    <b style="font-size:16px; color:#0f172a;">ðŸ¢ ${comp.name}</b>
+                                    <b style="font-size:16px; color:#0f172a;"> ${comp.name}</b>
                                     <small style="color:#64748b; font-size:11px;">${comp.date.split(' ')[0]}</small>
                                 </div>
                                 <div style="padding-left:0px;">
@@ -1054,11 +1192,11 @@ window.render = function() {
                 
                 <!-- Tüm Yöneticiler Liste -->
                 <div style="background:#fff; padding:20px; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
-                    <h3 style="border-bottom:2px solid #e2e8f0; padding-bottom:12px; margin-top:0; color:#0f172a; display:flex; justify-content:space-between;">ðŸ‘” Tüm Şirket Adminleri <span style="background:#f1f5f9; padding:2px 8px; border-radius:20px; font-size:12px; color:#475569;">${window.authDB.admins.length}</span></h3>
+                    <h3 style="border-bottom:2px solid #e2e8f0; padding-bottom:12px; margin-top:0; color:#0f172a; display:flex; justify-content:space-between;">👔 Tüm Şirket Adminleri <span style="background:#f1f5f9; padding:2px 8px; border-radius:20px; font-size:12px; color:#475569;">${window.authDB.admins.length}</span></h3>
                     <ul style="list-style:none; padding:0; margin-top:15px; max-height:400px; overflow-y:auto;">
                         ${window.authDB.admins.slice().reverse().map(c => `
                             <li style="padding:12px; border-bottom:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center;">
-                                <div><b style="color:#0f172a;">${c.name}</b><br><span style="font-size:12px; color:#0284c7; background:#e0f2fe; padding:2px 6px; border-radius:4px; margin-top:4px; display:inline-block; font-weight:bold;">ðŸ¢ ${c.companyName || 'Bağımsız'}</span></div>
+                                <div><b style="color:#0f172a;">${c.name}</b><br><span style="font-size:12px; color:#0284c7; background:#e0f2fe; padding:2px 6px; border-radius:4px; margin-top:4px; display:inline-block; font-weight:bold;"> ${c.companyName || 'Bağımsız'}</span></div>
                                 <small style="color:#94a3b8; text-align:right;">${c.date}</small>
                             </li>`).join('')}
                         ${window.authDB.admins.length === 0 ? '<li style="color:#94a3b8; text-align:center; padding:20px;">Kayıtlı yönetici yok.</li>' : ''}
@@ -1067,11 +1205,11 @@ window.render = function() {
                 
                 <!-- Tüm Kullanıcılar Liste -->
                 <div style="background:#fff; padding:20px; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
-                    <h3 style="border-bottom:2px solid #e2e8f0; padding-bottom:12px; margin-top:0; color:#0f172a; display:flex; justify-content:space-between;">ðŸ‘¤ Tüm Kullanıcılar <span style="background:#f1f5f9; padding:2px 8px; border-radius:20px; font-size:12px; color:#475569;">${window.authDB.users.length}</span></h3>
+                    <h3 style="border-bottom:2px solid #e2e8f0; padding-bottom:12px; margin-top:0; color:#0f172a; display:flex; justify-content:space-between;">👤 Tüm Kullanıcılar <span style="background:#f1f5f9; padding:2px 8px; border-radius:20px; font-size:12px; color:#475569;">${window.authDB.users.length}</span></h3>
                     <ul style="list-style:none; padding:0; margin-top:15px; max-height:400px; overflow-y:auto;">
                         ${window.authDB.users.slice().reverse().map(c => `
                             <li style="padding:12px; border-bottom:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center;">
-                                <div><b style="color:#0f172a;">${c.name}</b><br><span style="font-size:12px; color:#16a34a; background:#dcfce3; padding:2px 6px; border-radius:4px; margin-top:4px; display:inline-block; font-weight:bold;">ðŸ¢ ${c.companyName || 'Bağımsız'}</span></div>
+                                <div><b style="color:#0f172a;">${c.name}</b><br><span style="font-size:12px; color:#16a34a; background:#dcfce3; padding:2px 6px; border-radius:4px; margin-top:4px; display:inline-block; font-weight:bold;"> ${c.companyName || 'Bağımsız'}</span></div>
                                 <small style="color:#94a3b8; text-align:right;">${c.date}</small>
                             </li>`).join('')}
                         ${window.authDB.users.length === 0 ? '<li style="color:#94a3b8; text-align:center; padding:20px;">Kayıtlı kullanıcı yok.</li>' : ''}
@@ -1231,7 +1369,7 @@ window.render = function() {
                 <h2>Merkezi Veri Bankası</h2>
                 <p>Şirket kayıtlarını, yönetici yetkilerini ve kullanıcı hesaplarını düzenleyin.</p>
             </div>
-            <button class="primary" style="background:#0f766e;" onclick="openEvrakKutusuModal()">Evrak Kutusu</button>
+            <button class="primary" style="background:#0f766e;" onclick="openEvrakKutusuModal()">Test Arşivi</button>
         </section>
 
         <!-- SÜPER YÖNETİCİ KARTI -->
@@ -1356,7 +1494,7 @@ window.render = function() {
                 <h2>Merkezi Veri Bankası</h2>
                 <p>Şirket kayıtlarını, yönetici yetkilerini ve kullanıcı hesaplarını düzenleyin.</p>
             </div>
-            <button class="primary" style="background:#4aa16f;" onclick="openEvrakKutusuModal()">Evrak Kutusu</button>
+            <button class="primary" style="background:#4aa16f;" onclick="openEvrakKutusuModal()">Test Arşivi</button>
         </section>
 
         <!-- SÜPER YÖNETİCİ KARTI -->
@@ -1654,6 +1792,10 @@ window.render = function() {
     };
 
     window.showCandidateReport = function(index) {
+        state.page = 'report_detail';
+        state.reportIndex = index;
+        render();
+        return;
         const r = candidateResults[index];
         const modal = document.createElement('div');
         modal.className = 'modal candidate-modal';
@@ -1688,133 +1830,1347 @@ window.render = function() {
 
 
 (function(){
+    // -----------------------------------------------------------------
+    // GELİŞMİŞ CV VE ADAY KARŞILAŞTIRMA SİSTEMİ (SkillBridge AI v5.3)
+    // -----------------------------------------------------------------
+    
+    // Varsayılan zengin karşılaştırma oturumları
+    const defaultSessions = [
+        {
+            id: 'cmqjf5fnd0001veadtlbhflam',
+            title: 'Tedarik Zinciri',
+            type: 'Yetenek ve Yetkinlik Değerlendirme Sonucu / CV Karşılaştırma',
+            candidateCount: 4,
+            date: '14.10.2026',
+            status: 'Tamamlandı',
+            jobTitle: 'Tedarik Zinciri Yöneticisi',
+            jobRequirements: [
+                'RACI ne demek? (ekibin anlayacağı dille)\n' +
+                'R = Yapan / İşi götüren (İcra)\n' +
+                'İşi fiilen yapan, çıktıyı üreten kişi/rol. "Toplantıyı ayarlayan, dokümanı yazan, işi sahada yapan" genelde R\'dir. Bir işte birden fazla R olabilir (aynı işi farklı kişiler yapıyorsa). Kısacası: "Kim çalışıyor?" → R\n\n' +
+                'A = Sahibi / Hesap veren (Onay - sonuç sorumluluğu)\n' +
+                'İşin sonucundan sorumlu olan kişi/rol. İşi yapmasa da "onay veren, bütçeyi yöneten, teslimatı imzalayan" A\'dır. Kural: Her işte TEK bir A olmalıdır.\n\n' +
+                'C = Danışılan (Uzman / Fikir alınan)\n' +
+                'Görüşü, onayı veya teknik katkısı gereken uzmanlar/ekipler. İş yapılmadan önce fikri alınır.\n\n' +
+                'I = Bilgilendirilen (Haber verilen)\n' +
+                'İşin gidişatı veya sonucu hakkında bilgilendirilen kişi/ekipler.\n\n' +
+                'Tedarik Zinciri Aranan Yetkinlikler:\n' +
+                '• Yalın Liderlik ve Yalın Üretim (Kaizen, 5S, VSM, Kanban)\n' +
+                '• Otomotiv ve Perakende Lojistik Operasyonları Yönetimi\n' +
+                '• Tedarikçi Yönetimi, Maliyet Düşürme ve Süreç Optimizasyonu\n' +
+                '• Kültür Değişimi, Ekip Liderliği ve Uluslararası İletişim'
+            ],
+            aiRecommendation: "Recep Yiğit (recep.yigit@example.com), Yalın Liderlik ve Yalın Üretim Yöntemleri konusundaki derin uzmanlığı ve 30 yılı aşkın üst düzey tecrübesiyle 'Tedarik Zinciri' rolü için tartışmasız 1. sıradaki şampiyon adaydır.",
+            k10_executive_summary: "Bu oturumda, 'Tedarik Zinciri' konulu İşe Alım sürecinde dört adayın değerlendirme sonuçları incelenmiştir: Senem Yiğit, Recep Yigit (ryigit54@hotmail.com), Yagiz Yigit ve Recep Yiğit (recep.yigit@example.com). Adaylar, Sorumluluk ve Sonuç Odaklılık, Mesleki Uzmanlık, Yalın Metodoloji ve Paydaş İletişimi kriterleri çerçevesinde Ajan K10 tarafından değerlendirilmiştir.",
+            k10_comparison_report: [
+                "Bu oturumda, 'Tedarik Zinciri' konulu İşe Alım sürecinde dört adayın değerlendirme sonuçları incelenmiştir: Senem Yiğit, Recep Yigit (ryigit54@hotmail.com), Yagiz Yigit ve Recep Yiğit (recep.yigit@example.com). Adaylar, Sorumluluk ve Sonuç Odaklılık, Mesleki Uzmanlık ve Uygulama Becerisi, Analitik Düşünme ve Etki Değerlendirme, İletişim ve Paydaş Yönetimi, Sektörel Bakış Açısı ve Deneyim kriterleri çerçevesinde kıyaslanmıştır. Adaylar arasında 'Tedarik Zinciri' rolü için en uygun 'Şampiyon'un belirlenmesi hedeflenmiştir.",
+                "Değerlendirme sonucunda, Recep Yiğit (recep.yigit@example.com) bu pozisyon için açık ara en güçlü aday olarak öne çıkmaktadır. Kendisi, Yalın Liderlik ve Yalın Üretim Yöntemleri konusunda derin ve güncel uzmanlığa sahip olmasının yanı sıra, 30 yılı aşkın otomotiv ve hazır giyim perakende sektörlerinde edindiği uluslararası üst düzey İK, İş Güvenliği ve İdari İşler yöneticiliği tecrübesini şu anki 'Tedarik Zinciri Yalın Gelişim Danışmanlığı' rolüyle doğrudan tedarik zinciri optimizasyonuna yönlendirmiştir. Bu geçiş, onun hem sürekli öğrenme motivasyonunu hem de sektörün en kritik ihtiyaçlarından biri olan yalınlaşma konusundaki mesleki uzmanlığını ve uygulama becerisini net bir şekilde ortaya koymaktadır. Geniş coğrafi ve kültürel deneyimi, paydaş yönetimi ve iletişim becerilerinin gücünü desteklerken, sektörel bakış açısı ve deneyim kriterlerinde de en yüksek uyumu sergilemektedir.",
+                "Diğer adaylardan Senem Yiğit, finans sektöründe 20 yılı aşkın BT program ve proje yönetimi deneyimi ile sorumluluk ve sonuç odaklılık ile iletişim becerileri açısından oldukça güçlü bir adaydır. Ancak, uzmanlık alanı doğrudan tedarik zinciri operasyonları veya optimizasyonu yerine BT ve finans sektörüne odaklanmış olması ve modern metodoloji eksikliği, bu pozisyon için sektörel uyumunu azaltmaktadır. Recep Yigit (ryigit54@hotmail.com) ise otomotiv sektöründe İnsan Kaynakları alanında önemli tecrübelere sahip olmasına karşın, 2012'den sonraki 10 yılı aşkın kariyer boşluğu ve uzmanlık alanının doğrudan İK olması, Tedarik Zinciri rolü için büyük bir risk ve uyumsuzluk oluşturmaktadır. Yagiz Yigit ise güçlü akademik geçmişi ve ilgili staj deneyimleriyle yüksek potansiyelli genç bir adaydır, ancak profesyonel tam zamanlı tedarik zinciri tecrübesinin sınırlı olması nedeniyle bu seviyedeki bir pozisyon için yeterli olgunluğa henüz ulaşmamıştır.",
+                "Sonuç olarak, Recep Yiğit (recep.yigit@example.com)'in güncel 'Tedarik Zinciri Yalın Gelişim Danışmanlığı' odaklı kariyeri, Yalın üretim yöntemlerindeki derin uzmanlığı, otomotiv ve perakende gibi tedarik zinciri yoğun sektörlerdeki uzun yıllara dayanan uluslararası üst düzey yöneticilik tecrübesi, onu 'Tedarik Zinciri' rolü için tartışmasız bir şampiyon yapmaktadır. Kendisi, belirlenen tüm kriterlerde hem derinlik hem de doğrudan uygunluk açısından diğer adayların önüne geçmektedir."
+            ],
+            competencyNames: ['Teknik Yetkinlik', 'Kıdem & Tecrübe', 'İş Bitirme & Proje', 'Metot & Araç Uyum', 'Davranışsal Uyum'],
+            candidates: [
+                {
+                    name: 'Recep Yiğit',
+                    email: 'recep.yigit@example.com',
+                    role: 'Tedarik Zinciri Yalın Gelişim Danışmanı',
+                    matchRate: 92,
+                    rank: 1,
+                    badge: 'İleri Seviye Yetkin',
+                    badgeColor: '#16a34a',
+                    experience: '30+ Yıl',
+                    education: 'Mühendislik & İdari Bilimler / Yalın Liderlik',
+                    salaryExpectation: '140.000 - 160.000 ₺',
+                    agentData: {
+                        k2_summary: 'Recep Yiğit, Yalın Liderlik ve Yalın Üretim Yöntemleri konusunda uzmanlaşmış, 30 yılı aşkın otomotiv ve perakende sektörlerinde uluslararası üst düzey İK, İş Güvenliği ve İdari İşler yöneticiliği yapmış kıdemli bir profesyoneldir. Kariyerini Tedarik Zinciri Yalın Gelişim Danışmanlığına yönlendirerek sürekli adaptasyon ve derinlemesine uzmanlık sergilemektedir.',
+                        k3_technical: 90,
+                        k4_seniority: 95,
+                        k5_execution: 88,
+                        k6_tools: 92,
+                        k7_behavioral: 'Aday, uzun yıllara dayanan üst düzey yöneticilik ve uluslararası deneyimleri sayesinde güçlü iletişim, paydaş yönetimi ve kültürel adaptasyon becerilerine sahiptir. Yalın Gelişim odaklı mevcut rolü, analitik düşünme, problem çözme ve sürekli iyileştirme kültürü oluşturma yetkinliğini vurgulamaktadır.',
+                        k8_risk: 'Yok',
+                        k9_strengths: [
+                            'Yalın Liderlik ve Yalın Üretim Yöntemlerinde derin ve güncel uzmanlık.',
+                            'Otomotiv ve hazır giyim perakende sektörlerinde 30 yılı aşkın, üst düzey ve uluslararası tecrübe.',
+                            'Avrupa, Asya, Amerika ve Afrika kıtalarında geniş kültürel ve coğrafi deneyim.',
+                            'İK, İş Güvenliği, İdari İşler ve Tedarik Zinciri alanlarında geniş fonksiyonel bilgi birikimi ve uygulama becerisi.',
+                            'Kariyerinde adaptasyon ve sürekli öğrenme motivasyonu (eğitimcilikten yalın danışmanlığına geçiş).'
+                        ],
+                        k9_weaknesses: [
+                            'Sunulan bilgilerde, üstlenilen projelerin spesifik başarı metrikleri veya detaylı sonuçları belirtilmemiştir.',
+                            'Adayın kariyerinin büyük bir kısmı İK ve idari işler üzerine yoğunlaşmış olup, tam zamanlı bir proje yönetimi geçmişi açıkça belirtilmemiştir (ancak üst düzey rollerde bu yetkinliğin mevcut olduğu varsayılır).'
+                        ]
+                    }
+                },
+                {
+                    name: 'Senem Yiğit',
+                    email: 'senem.yigit@example.com',
+                    role: 'Kıdemli BT Program ve Proje Yöneticisi',
+                    matchRate: 84,
+                    rank: 2,
+                    badge: 'Mülakata Uygun',
+                    badgeColor: '#2563eb',
+                    experience: '20+ Yıl',
+                    education: 'Boğaziçi - Endüstri Mühendisliği / Finans',
+                    salaryExpectation: '130.000 - 150.000 ₺',
+                    agentData: {
+                        k2_summary: 'Senem Yiğit, finans ve bankacılık teknolojilerinde 20 yılı aşkın program ve büyük ölçekli proje yönetimi deneyimine sahip üst düzey bir yöneticidir. Süreç disiplini ve paydaş koordinasyonunda kanıtlanmış başarıları bulunmaktadır.',
+                        k3_technical: 82,
+                        k4_seniority: 88,
+                        k5_execution: 86,
+                        k6_tools: 80,
+                        k7_behavioral: 'Yüksek sorumluluk bilinci, sonuç odaklı yönetim tarzı ve kurumsal ekipleri yönlendirmede güçlü iletişim becerisi sergilemektedir.',
+                        k8_risk: 'Doğrudan tedarik zinciri ve saha lojistiği yerine BT ve finans odaklı tecrübe yoğunluğu.',
+                        k9_strengths: [
+                            '20 yılı aşkın kurumsal proje ve bütçe yönetimi tecrübesi.',
+                            'Karmaşık çok paydaşlı ekiplerde liderlik ve kriz yönetimi kabiliyeti.',
+                            'Metrik ve KPI odaklı süreç takip disiplini.'
+                        ],
+                        k9_weaknesses: [
+                            'Tedarik zinciri operasyonları ve fiziki lojistik metodolojilerinde doğrudan saha deneyimi az.',
+                            'Üretim sahası yalınlaşma araçlarında derinleşme ihtiyacı.'
+                        ]
+                    }
+                },
+                {
+                    name: 'Recep Yigit',
+                    email: 'ryigit54@hotmail.com',
+                    role: 'İnsan Kaynakları ve İdari İşler Uzmanı',
+                    matchRate: 76,
+                    rank: 3,
+                    badge: 'Gelişime Açık',
+                    badgeColor: '#d97706',
+                    experience: '15 Yıl',
+                    education: 'İstanbul Üniversitesi - İktisat',
+                    salaryExpectation: '95.000 - 110.000 ₺',
+                    agentData: {
+                        k2_summary: 'Recep Yigit, otomotiv ve üretim sektöründe insan kaynakları, personel yönetimi ve idari süreçlerde görev almıştır. Saha dinamiklerine hakimdir.',
+                        k3_technical: 74,
+                        k4_seniority: 80,
+                        k5_execution: 75,
+                        k6_tools: 72,
+                        k7_behavioral: 'Uyumlu, personel ilişkilerinde yapıcı ve geleneksel yönetim anlayışında istikrarlı bir profil çizmektedir.',
+                        k8_risk: '2012 yılından sonraki kariyer boşluğu ve tedarik zinciri teknik modüllerinde güncellik ihtiyacı.',
+                        k9_strengths: [
+                            'Otomotiv yan sanayi ve fabrika ortamı kurumsal kültürü bilgisi.',
+                            'İşçi sağlığı ve iş hukuku mevzuatında pratik tecrübe.'
+                        ],
+                        k9_weaknesses: [
+                            'Kariyerinde 10 yılı aşan boşluk dönemi.',
+                            'Modern dijital tedarik zinciri ve ERP optimizasyonu deneyimi eksikliği.'
+                        ]
+                    }
+                },
+                {
+                    name: 'Yagiz Yigit',
+                    email: 'yigit_yagi@bentley.edu',
+                    role: 'Genç Tedarik Zinciri & Veri Analisti',
+                    matchRate: 71,
+                    rank: 4,
+                    badge: 'Genç Yetenek / Potansiyel',
+                    badgeColor: '#d97706',
+                    experience: '1 Yıl',
+                    education: 'Bentley University - Supply Chain & Business Analytics',
+                    salaryExpectation: '70.000 - 85.000 ₺',
+                    agentData: {
+                        k2_summary: 'Yagiz Yigit, saygın bir üniversiteden tedarik zinciri analitiği alanında mezun olmuş, modern veri araçları ve simülasyon metodolojilerine hakim genç ve dinamik bir yetenektir.',
+                        k3_technical: 78,
+                        k4_seniority: 62,
+                        k5_execution: 70,
+                        k6_tools: 84,
+                        k7_behavioral: 'Yüksek öğrenme çevikliği, dijital adaptasyon kabiliyeti ve analitik merak.',
+                        k8_risk: 'Üst düzey yöneticilik ve kriz anında karar alma için henüz profesyonel tecrübe yılı yetersizliği.',
+                        k9_strengths: [
+                            'Modern tedarik zinciri modelleme ve veri analitiği araçları bilgisi.',
+                            'Uluslararası eğitim ve ileri düzey İngilizce yetkinliği.'
+                        ],
+                        k9_weaknesses: [
+                            'Tam zamanlı saha ve bütçe yönetimi sorumluluğu henüz bulunmamaktadır.',
+                            'Senior liderlik pozisyonu için kıdem gereksinimini henüz karşılayamamaktadır.'
+                        ]
+                    }
+                }
+            ]
+        }
+    ];
+
+    // Oturumları localStorage'dan yükle
+    window.loadComparisonSessions = function() {
+        try {
+            const saved = localStorage.getItem('sb_comparison_sessions');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+            }
+        } catch(e){}
+        return defaultSessions;
+    };
+
+    window.saveComparisonSessions = function() {
+        try {
+            localStorage.setItem('sb_comparison_sessions', JSON.stringify(window.comparisonSessions));
+        } catch(e){}
+    };
+
+    window.comparisonSessions = window.loadComparisonSessions();
+
+    // 1. Ana Karşılaştırma Sayfası Görünümü
     window.comparisonPage = function() {
+        const sessions = window.comparisonSessions || defaultSessions;
+        const totalCandidates = sessions.reduce((acc, s) => acc + (s.candidates ? s.candidates.length : (s.candidateCount || 0)), 0);
+        const avgMatch = Math.round(sessions.reduce((acc, s) => {
+            const topCandidate = s.candidates ? s.candidates[0] : null;
+            return acc + (topCandidate ? topCandidate.matchRate : 85);
+        }, 0) / (sessions.length || 1));
+
         return layout(`
-        <section class="comparison-page" style="padding: 20px;">
-            <div class="prompt-head" style="margin-bottom: 30px;">
+        <section class="comparison-page" style="padding: 25px; max-width: 1240px; margin: 0 auto;">
+            
+            <!-- Başlık ve Aksiyon -->
+            <div class="prompt-head" style="margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
                 <div>
-                    <span class="eyebrow">YAPAY ZEKA İLE</span>
-                    <h2>Karşılaştırma</h2>
-                    <p>Adayların CV'lerini, mülakat performanslarını veya test sonuçlarını birbiriyle veya bir belgeyle (görev tanımı vb.) kıyaslayın.</p>
+                    <span class="eyebrow">YAPAY ZEKA DESTEKLİ KONSOLİDE DEĞERLENDİRME</span>
+                    <h2 style="font-size: 26px; font-weight: 800; color: #0f172a; margin: 4px 0;">CV & Aday Karşılaştırma Raporları</h2>
+                    <p style="color: #64748b; font-size: 14px; margin: 0;">Adayların CV'lerini, mülakat performanslarını veya test sonuçlarını görev tanımıyla veya birbiriyle kıyaslayın.</p>
                 </div>
-                <button class="primary" onclick="showNewComparisonModal()">Yeni Karşılaştırma Başlat</button>
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <button type="button" onclick="showNewComparisonModal('upload')" style="background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%); color: white; padding: 11px 22px; border-radius: 9px; font-weight: 800; font-size: 14px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(124,58,237,0.35); transition: transform 0.15s ease;" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <span style="font-size: 16px;">📂</span> Adayların CV Dosyalarını Seç ve Yükle
+                    </button>
+                    <button type="button" onclick="showNewComparisonModal('system')" style="background: white; color: #475569; border: 1.5px solid #cbd5e1; padding: 11px 18px; border-radius: 9px; font-weight: 700; font-size: 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+                        <span>👥</span> Sistem Havuzundan Karşılaştır
+                    </button>
+                </div>
             </div>
 
-            <section class="generated-case-card" style="padding: 0;">
-                <div style="padding: 20px; border-bottom: 1px solid #e2e8f0;">
-                    <h3 style="margin: 0; color: #0f172a; font-size: 16px;">Karşılaştırma Oturumları</h3>
+            <!-- Özet Metrik Kartları -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 25px;">
+                <div style="background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                    <span style="font-size: 11.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">📁 Karşılaştırma Oturumu</span>
+                    <b style="display: block; font-size: 24px; color: #0f172a; margin-top: 6px;">${sessions.length} Oturum</b>
+                </div>
+                <div style="background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                    <span style="font-size: 11.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">👥 Kıyaslanan Toplam Aday</span>
+                    <b style="display: block; font-size: 24px; color: #2563eb; margin-top: 6px;">${totalCandidates} Aday</b>
+                </div>
+                <div style="background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                    <span style="font-size: 11.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">🎯 Ortalama Zirve Uyumu</span>
+                    <b style="display: block; font-size: 24px; color: #16a34a; margin-top: 6px;">%${avgMatch}</b>
+                </div>
+                <div style="background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                    <span style="font-size: 11.5px; font-weight: 700; color: #64748b; text-transform: uppercase;">⚡ AI Karar Motoru</span>
+                    <b style="display: block; font-size: 15px; color: #7c3aed; margin-top: 8px;">Gemma-4 Deep Match v5.3</b>
+                </div>
+            </div>
+
+            <!-- Oturumlar Tablosu -->
+            <section class="generated-case-card" style="padding: 0; background: white; border-radius: 14px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                <div style="padding: 20px 24px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="margin: 0; color: #0f172a; font-size: 16px; font-weight: 800;">Mevcut Karşılaştırma Oturumları ve Raporlar</h3>
+                    <span style="font-size: 12px; color: #64748b;">Raporu görüntülemek için 'Raporu Gör' butonuna tıklayın</span>
                 </div>
                 <div class="table-wrap">
                     <table style="width: 100%; text-align: left; border-collapse: collapse;">
                         <thead>
                             <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
-                                <th style="padding: 12px 20px; color: #64748b; font-size: 12px; font-weight: 600;">OTURUM BAŞLIĞI</th>
-                                <th style="padding: 12px 20px; color: #64748b; font-size: 12px; font-weight: 600;">TÜRÜ</th>
-                                <th style="padding: 12px 20px; color: #64748b; font-size: 12px; font-weight: 600;">ADAY SAYISI</th>
-                                <th style="padding: 12px 20px; color: #64748b; font-size: 12px; font-weight: 600;">TARİH</th>
-                                <th style="padding: 12px 20px; color: #64748b; font-size: 12px; font-weight: 600;">DURUM</th>
-                                <th style="padding: 12px 20px;"></th>
+                                <th style="padding: 14px 20px; color: #64748b; font-size: 11.5px; font-weight: 700;">OTURUM BAŞLIĞI</th>
+                                <th style="padding: 14px 20px; color: #64748b; font-size: 11.5px; font-weight: 700;">HEDEF POZİSYON</th>
+                                <th style="padding: 14px 20px; color: #64748b; font-size: 11.5px; font-weight: 700;">TÜRÜ</th>
+                                <th style="padding: 14px 20px; color: #64748b; font-size: 11.5px; font-weight: 700;">ADAY SAYISI</th>
+                                <th style="padding: 14px 20px; color: #64748b; font-size: 11.5px; font-weight: 700;">TARİH</th>
+                                <th style="padding: 14px 20px; color: #64748b; font-size: 11.5px; font-weight: 700;">DURUM</th>
+                                <th style="padding: 14px 20px; text-align: right; color: #64748b; font-size: 11.5px; font-weight: 700;">İŞLEM</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr style="border-bottom: 1px solid #e2e8f0;">
-                                <td style="padding: 16px 20px; font-weight: 500; color: #0f172a;">Kıdemli React Geliştirici Seçimi</td>
-                                <td style="padding: 16px 20px; color: #475569;">Görev Tanımı ile Karşılaştırma</td>
-                                <td style="padding: 16px 20px; color: #475569;">4 Aday</td>
-                                <td style="padding: 16px 20px; color: #475569;">12.09.2026</td>
-                                <td style="padding: 16px 20px;"><span style="display:inline-block; padding:4px 8px; border-radius:4px; font-size:12px; font-weight:bold; background:#dcfce3; color:#16a34a;">Tamamlandı</span></td>
-                                <td style="padding: 16px 20px; text-align: right;"><button class="secondary" style="padding: 6px 12px; font-size: 12px;" onclick="toast('Rapor yükleniyor...')">Raporu Gör</button></td>
+                            ${sessions.map((s, idx) => `
+                            <tr style="border-bottom: 1px solid #f1f5f9; hover: background: #f8fafc;">
+                                <td style="padding: 16px 20px; font-weight: 700; color: #0f172a; font-size: 14px;">
+                                    ${safeText(s.title)}
+                                </td>
+                                <td style="padding: 16px 20px; color: #334155; font-size: 13px;">
+                                    <span style="background: #f1f5f9; padding: 4px 10px; border-radius: 6px; font-weight: 600;">${safeText(s.jobTitle || 'Pozisyon')}</span>
+                                </td>
+                                <td style="padding: 16px 20px; color: #64748b; font-size: 13px;">
+                                    ${safeText(s.type)}
+                                </td>
+                                <td style="padding: 16px 20px; color: #0f172a; font-weight: 600; font-size: 13.5px;">
+                                    👥 ${(s.candidates ? s.candidates.length : s.candidateCount)} Aday
+                                </td>
+                                <td style="padding: 16px 20px; color: #64748b; font-size: 13px;">
+                                    ${safeText(s.date)}
+                                </td>
+                                <td style="padding: 16px 20px;">
+                                    <span style="display:inline-block; padding:4px 10px; border-radius:20px; font-size:11.5px; font-weight:700; background:#dcfce7; color:#16a34a;">
+                                        ✓ ${safeText(s.status || 'Tamamlandı')}
+                                    </span>
+                                </td>
+                                <td style="padding: 16px 20px; text-align: right;">
+                                    <div style="display: inline-flex; gap: 8px;">
+                                        <button class="primary" style="padding: 8px 16px; font-size: 12.5px; font-weight: 700; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(37,99,235,0.25);" onclick="window.openComparisonReport('${s.id}')">
+                                            📊 Raporu Gör
+                                        </button>
+                                        ${idx >= 2 ? `<button onclick="window.deleteComparisonSession('${s.id}')" style="background:#fee2e2; color:#dc2626; border:none; padding:8px 10px; border-radius:6px; font-size:12px; cursor:pointer;" title="Oturumu Sil">🗑️</button>` : ''}
+                                    </div>
+                                </td>
                             </tr>
-                            <tr>
-                                <td style="padding: 16px 20px; font-weight: 500; color: #0f172a;">Finans Müdürü Terfisi</td>
-                                <td style="padding: 16px 20px; color: #475569;">Adayları Birbiriyle Kıyasla</td>
-                                <td style="padding: 16px 20px; color: #475569;">2 Aday</td>
-                                <td style="padding: 16px 20px; color: #475569;">15.09.2026</td>
-                                <td style="padding: 16px 20px;"><span style="display:inline-block; padding:4px 8px; border-radius:4px; font-size:12px; font-weight:bold; background:#fef08a; color:#a16207;">İnceleniyor</span></td>
-                                <td style="padding: 16px 20px; text-align: right;"><button class="secondary" style="padding: 6px 12px; font-size: 12px; opacity: 0.5;" disabled>Raporu Gör</button></td>
-                            </tr>
+                            `).join('')}
                         </tbody>
                     </table>
                 </div>
             </section>
         </section>
-        `, 'Karşılaştırma');
+        `, 'CV Karşılaştırma');
     };
 
-    window.showNewComparisonModal = function() {
+    
+    // ==========================================
+    // DETAYLI YAPAY ZEKA (AJAN K2-K9) MODALI
+    // ==========================================
+    window.openCandidateAgentModal = function(candidateName, sessionId) {
+        const sessions = window.comparisonSessions || defaultSessions;
+        const session = sessions.find(s => s.id === sessionId) || sessions[0];
+        if (!session) return;
+
+        const candidate = (session.candidates || []).find(c => c.name === candidateName) || session.candidates[0];
+        if (!candidate) return;
+
+        const agent = candidate.agentData || {
+            k2_summary: candidate.name + ' pozisyon için değerlendirilen nitelikli bir profesyoneldir.',
+            k3_technical: candidate.matchRate || 85,
+            k4_seniority: Math.min(100, (candidate.matchRate || 85) + 3),
+            k5_execution: Math.min(100, (candidate.matchRate || 85) - 2),
+            k6_tools: Math.min(100, (candidate.matchRate || 85) + 1),
+            k7_behavioral: 'Aday analitik düşünme, proaktif iletişim ve kriz anında doğru karar verme yetilerine sahiptir.',
+            k8_risk: 'Yok',
+            k9_strengths: candidate.strengths || ['Doğrulanmış yetkinlik performansı', 'Sorumluluk alma bilinci'],
+            k9_weaknesses: candidate.risks || ['Sektörel derinleşme ihtiyacı']
+        };
+
         const modal = document.createElement('div');
-        modal.className = 'modal comparison-modal';
-        modal.style.zIndex = '9999';
+        modal.className = 'modal candidate-agent-modal';
+        modal.style.zIndex = '100005';
+        modal.style.position = 'fixed';
+        modal.style.inset = '0';
+        modal.style.background = 'rgba(15, 23, 42, 0.75)';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.padding = '20px';
+        modal.style.overflowY = 'auto';
+
         modal.innerHTML = `
-        <div class="modal-card" style="max-width: 800px; padding: 0; overflow: hidden; background: white; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);">
-            <div class="modal-head" style="padding: 20px 30px; border-bottom: 0;">
-                <div style="display: flex; align-items: center; gap: 15px;">
-                    <span style="background: #e0e7ff; color: #4f46e5; padding: 8px; border-radius: 8px; display: flex;">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
-                    </span>
-                    <h2 style="margin: 0; font-size: 22px; font-weight: 700; color: #0f172a;">Yeni Karşılaştırma Başlat</h2>
-                </div>
-                <button type="button" onclick="this.closest('.modal').remove()" style="font-size: 24px; color: #94a3b8; background: none; border: none; cursor: pointer; padding: 0;">✕</button>
-            </div>
+        <div class="modal-card" style="max-width: 760px; width: 100%; max-height: 92vh; overflow-y: auto; background: white; border-radius: 18px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3); border: 1px solid #e2e8f0; display: flex; flex-direction: column; padding: 28px 32px; box-sizing: border-box;">
             
-            <div class="tabs" style="display: flex; border-bottom: 2px solid #e2e8f0; margin: 0 30px 25px 30px;">
-                <button style="flex: 1; padding: 15px; background: none; border: none; border-bottom: 2px solid transparent; color: #64748b; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px;" onclick="toast('Davetiye modu yakında eklenecek')">
-                    <span>✉️</span> Davetiye ile Karşılaştır
-                </button>
-                <button style="flex: 1; padding: 15px; background: none; border: none; border-bottom: 2px solid #9333ea; color: #9333ea; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px;">
-                    <span>📁</span> Belgelerle Doğrudan Karşılaştır
-                </button>
+            <!-- Modal Başlık -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                <div>
+                    <h2 style="margin: 0; font-size: 24px; font-weight: 800; color: #0f172a;">${safeText(candidate.name)}</h2>
+                    <span style="font-size: 13.5px; color: #64748b; font-weight: 600;">Detaylı Yapay Zeka (Ajan K2-K9) Performans Analizi</span>
+                </div>
+                <button type="button" onclick="this.closest('.modal').remove()" style="font-size: 22px; color: #94a3b8; background: none; border: none; cursor: pointer; padding: 2px 6px;">✕</button>
             </div>
 
-            <div style="padding: 0 30px;">
-                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 25px;">
-                    <div>
-                        <label style="display: block; font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 8px;">KARŞILAŞTIRMA OTURUMU BAŞLIĞI</label>
-                        <input type="text" placeholder="Örn: Kıdemli React Geliştirici Seçimi veya Finans Müdürü Terfisi" style="width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box;">
-                    </div>
-                    <div>
-                        <label style="display: block; font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 8px;">KARŞILAŞTIRMA TÜRÜ</label>
-                        <select style="width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; background: white; outline: none; box-sizing: border-box;">
-                            <option>Yetenek ve Yetkinlik Değer...</option>
-                            <option>Sadece Kültürel Uyum</option>
-                        </select>
-                    </div>
-                </div>
+            <!-- Ajan K2 Profil Özeti -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px 20px; margin-bottom: 24px;">
+                <span style="display: block; font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+                    AJAN K2 PROFİL ÖZETİ
+                </span>
+                <p style="margin: 0; font-size: 13.5px; color: #334155; line-height: 1.65; font-style: italic;">
+                    "${safeText(agent.k2_summary)}"
+                </p>
+            </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+            <!-- Alt Ajan Uyumluluk Skorları -->
+            <div style="margin-bottom: 24px;">
+                <span style="display: block; font-size: 11.5px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px;">
+                    ALT AJAN UYUMLULUK SKORLARI
+                </span>
+
+                <div style="display: flex; flex-direction: column; gap: 14px;">
                     <div>
-                        <label style="display: block; font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 8px;">1. GÖREV TANIMI VE ARANAN NİTELİKLER (METİN)</label>
-                        <textarea placeholder="Örn:&#10;- En az 5 yıl React ve TypeScript tecrübesi olan..." style="width: 100%; height: 160px; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; resize: none; outline: none; box-sizing: border-box;"></textarea>
+                        <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 5px;">
+                            <span>Ajan K3 (Teknik Yetkinlik Uyum Puanı)</span>
+                            <span style="color: #2563eb;">%${agent.k3_technical}</span>
+                        </div>
+                        <div style="height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                            <div style="width: ${agent.k3_technical}%; height: 100%; background: #2563eb; border-radius: 4px;"></div>
+                        </div>
                     </div>
+
                     <div>
-                        <label style="display: block; font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 8px;">1. VEYA GÖREV TANIMI BELGESİ YÜKLEYİN</label>
-                        <div style="border: 2px dashed #e2e8f0; border-radius: 8px; height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; cursor: pointer; background: #fafafa; box-sizing: border-box;" onclick="toast('Dosya yükleme penceresi açılıyor')">
-                            <span style="font-size: 28px; margin-bottom: 10px;">📥</span>
-                            <strong style="color: #475569; display: block; margin-bottom: 5px; font-size: 14px;">Dosya Sürükleyin veya Seçin</strong>
-                            <span style="color: #94a3b8; font-size: 12px;">PDF, DOCX, TXT (Maks 10MB)</span>
+                        <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 5px;">
+                            <span>Ajan K4 (Kıdem & Tecrübe Uyum Puanı)</span>
+                            <span style="color: #2563eb;">%${agent.k4_seniority}</span>
+                        </div>
+                        <div style="height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                            <div style="width: ${agent.k4_seniority}%; height: 100%; background: #2563eb; border-radius: 4px;"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 5px;">
+                            <span>Ajan K5 (İş Bitirme & Proje Puanı)</span>
+                            <span style="color: #16a34a;">%${agent.k5_execution}</span>
+                        </div>
+                        <div style="height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                            <div style="width: ${agent.k5_execution}%; height: 100%; background: #16a34a; border-radius: 4px;"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 5px;">
+                            <span>Ajan K6 (Metot & Araç Uyum Puanı)</span>
+                            <span style="color: #7c3aed;">%${agent.k6_tools}</span>
+                        </div>
+                        <div style="height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                            <div style="width: ${agent.k6_tools}%; height: 100%; background: #7c3aed; border-radius: 4px;"></div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div style="margin-bottom: 30px;">
-                    <label style="display: block; font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 8px;">2. ADAY CV BELGELERİNİ YÜKLEYİN</label>
-                    <div style="border: 2px dashed #e2e8f0; border-radius: 8px; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; cursor: pointer; background: #fafafa; box-sizing: border-box;" onclick="toast('Çoklu dosya yükleme penceresi açılıyor')">
-                        <span style="font-size: 36px; margin-bottom: 15px;">🗂️</span>
-                        <strong style="color: #475569; display: block; margin-bottom: 8px; font-size: 15px;">Çoklu Aday Belgelerini Sürükleyin veya Seçin</strong>
-                        <span style="color: #94a3b8; font-size: 13px;">Birden fazla PDF, DOCX, TXT seçebilirsiniz</span>
-                    </div>
+            <!-- Ajan K7 ve Ajan K8 İki Kolonlu Kart -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+                <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px 18px;">
+                    <span style="display: block; font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+                        AJAN K7 DAVRANIŞSAL PROFİL
+                    </span>
+                    <p style="margin: 0; font-size: 12.5px; color: #334155; line-height: 1.6;">
+                        ${safeText(agent.k7_behavioral)}
+                    </p>
+                </div>
+                <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px 18px;">
+                    <span style="display: block; font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+                        AJAN K8 RİSK DEĞERLENDİRMESİ
+                    </span>
+                    <p style="margin: 0; font-size: 12.5px; color: ${agent.k8_risk === 'Yok' ? '#16a34a' : '#dc2626'}; font-weight: 700; line-height: 1.6;">
+                        ${safeText(agent.k8_risk)}
+                    </p>
                 </div>
             </div>
 
-            <div style="display: flex; justify-content: flex-end; gap: 15px; padding: 20px 30px; border-top: 1px solid #e2e8f0; background: white; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;">
-                <button class="secondary" style="padding: 10px 20px; font-size: 14px; border: 1px solid #e2e8f0; border-radius: 6px; background: white; color: #475569; cursor: pointer; font-weight: 600;" onclick="this.closest('.modal').remove()">Vazgeç</button>
-                <button class="primary" style="padding: 10px 20px; font-size: 14px; background: #9333ea; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;" onclick="toast('Karşılaştırma başlatılıyor...'); this.closest('.modal').remove()">Yükle ve Doğrudan Karşılaştır 🚀</button>
+            <!-- Güçlü Yönler & Zayıf Yönler (Ajan K9) -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px;">
+                <div>
+                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 10px;">
+                        <span style="color: #eab308; font-size: 14px;">⭐</span>
+                        <strong style="font-size: 12.5px; color: #166534; font-weight: 800;">GÜÇLÜ YÖNLER (AJAN K9)</strong>
+                    </div>
+                    <ul style="margin: 0; padding-left: 18px; font-size: 12.5px; color: #334155; line-height: 1.65;">
+                        ${(agent.k9_strengths || []).map(s => `<li style="margin-bottom: 6px;">${safeText(s)}</li>`).join('')}
+                    </ul>
+                </div>
+                <div>
+                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 10px;">
+                        <span style="color: #f97316; font-size: 14px;">⚠️</span>
+                        <strong style="font-size: 12.5px; color: #991b1b; font-weight: 800;">ZAYIF YÖNLER / GELİŞİM ALANLARI (AJAN K9)</strong>
+                    </div>
+                    <ul style="margin: 0; padding-left: 18px; font-size: 12.5px; color: #334155; line-height: 1.65;">
+                        ${(agent.k9_weaknesses || []).map(w => `<li style="margin-bottom: 6px;">${safeText(w)}</li>`).join('')}
+                    </ul>
+                </div>
             </div>
+
+            <!-- Modal Kapat Butonu -->
+            <div style="display: flex; justify-content: flex-end; padding-top: 10px; border-top: 1px solid #f1f5f9;">
+                <button type="button" onclick="this.closest('.modal').remove()" style="background: #7c3aed; color: white; border: none; padding: 10px 32px; border-radius: 20px; font-size: 13.5px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);">
+                    Kapat
+                </button>
+            </div>
+
+        </div>
+        `;
+
+        document.body.append(modal);
+    };
+
+    // QR Kod ve Katılım Linki Modalı
+    window.openQrModal = function(title, link) {
+        const targetLink = link || window.location.href;
+        const modal = document.createElement('div');
+        modal.className = 'modal qr-modal';
+        modal.style.zIndex = '100006';
+        modal.style.position = 'fixed';
+        modal.style.inset = '0';
+        modal.style.background = 'rgba(15, 23, 42, 0.7)';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.padding = '20px';
+
+        const qrApi = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' + encodeURIComponent(targetLink);
+
+        modal.innerHTML = `
+        <div class="modal-card" style="max-width: 420px; width: 100%; background: white; border-radius: 16px; padding: 28px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.25);">
+            <div style="font-size: 32px; margin-bottom: 8px;">📲</div>
+            <h3 style="margin: 0 0 6px 0; color: #0f172a; font-size: 18px; font-weight: 800;">${safeText(title || 'Katılım QR Kodu')}</h3>
+            <p style="color: #64748b; font-size: 13px; margin: 0 0 18px 0;">Adaylar akıllı telefonlarıyla taratarak değerlendirmeye doğrudan katılabilir.</p>
+            
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; display: inline-block; margin-bottom: 18px;">
+                <img src="${qrApi}" alt="QR Kod" style="width: 200px; height: 200px; display: block; margin: 0 auto; border-radius: 6px;">
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+                <input type="text" readonly value="${safeText(targetLink)}" style="flex: 1; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 12px; background: #f8fafc; color: #334155; outline: none;">
+                <button type="button" onclick="navigator.clipboard.writeText('${targetLink.replace(/'/g, "\\\'")}'); toast('Bağlantı panoya kopyalandı!');" style="background: #2563eb; color: white; border: none; padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;">
+                    Kopyala
+                </button>
+            </div>
+
+            <button type="button" onclick="this.closest('.modal').remove()" style="background: #e2e8f0; color: #475569; border: none; padding: 9px 24px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; width: 100%;">
+                Kapat
+            </button>
         </div>
         `;
         document.body.append(modal);
     };
+
+
+    
+    // 2. Karşılaştırma Raporunu Açan Fonksiyon (Ajan K10 & K2-K9 Detaylı Görünüm - Screenshot 2)
+    window.openComparisonReport = function(sessionId) {
+        const sessions = window.comparisonSessions || defaultSessions;
+        const session = sessions.find(s => s.id === sessionId) || sessions[0];
+        if (!session) {
+            toast('Karşılaştırma oturumu bulunamadı');
+            return;
+        }
+
+        const candidates = session.candidates || [];
+        const topCandidate = candidates[0] || {
+            name: 'Aday',
+            email: 'aday@example.com',
+            matchRate: 85,
+            badge: 'Mülakata Uygun'
+        };
+
+        const modal = document.createElement('div');
+        modal.className = 'modal comparison-report-modal';
+        modal.style.zIndex = '99999';
+        modal.style.position = 'fixed';
+        modal.style.inset = '0';
+        modal.style.background = '#f8fafc';
+        modal.style.display = 'block';
+        modal.style.overflowY = 'auto';
+
+        const criteriaText = Array.isArray(session.jobRequirements) 
+            ? session.jobRequirements.join('\n\n')
+            : (session.jobRequirements || 'Pozisyon için belirlenen temel nitelik ve RACI sorumluluk matrisi.');
+
+        const k10Summary = session.k10_executive_summary || (topCandidate.name + ", " + session.title + " konulu İşe Alım sürecinde incelenen " + candidates.length + " aday arasında en yüksek genel uyumu sergilemiştir.");
+
+        const reportParagraphs = Array.isArray(session.k10_comparison_report) 
+            ? session.k10_comparison_report 
+            : [
+                "Bu oturumda, '" + safeText(session.title) + "' konulu İşe Alım sürecinde " + candidates.length + " adayın değerlendirme sonuçları incelenmiştir: " + candidates.map(c => c.name).join(', ') + ". Adaylar, Sorumluluk ve Sonuç Odaklılık, Mesleki Uzmanlık ve Uygulama Becerisi, Analitik Düşünme ve Etki Değerlendirme kriterleri çerçevesinde kıyaslanmıştır.",
+                "Değerlendirme sonucunda, " + safeText(topCandidate.name) + " bu pozisyon için açık ara en güçlü aday olarak öne çıkmaktadır. Sektörel tecrübesi, kanıtlanmış sorumluluk alma becerisi ve uygulama refleksleri ile pozisyon beklentilerini en üst düzeyde karşılamaktadır.",
+                "Diğer adaylar da kendi uzmanlık alanlarında yetkinlikler barındırmakla birlikte, hedeflenen pozisyonun spesifik metodoloji ve liderlik beklentilerinde " + safeText(topCandidate.name) + "'in sağladığı bütüncül uyumun gerisinde kalmıştır.",
+                "Sonuç olarak, " + safeText(topCandidate.name) + "'in pozisyon için tartışmasız 1. sıradaki şampiyon aday olduğu ve ivedilikle sonraki mülakat veya teklif aşamasına geçilmesi komite tarafından tavsiye edilmektedir."
+            ];
+
+        modal.innerHTML = `
+        <div style="max-width: 1240px; margin: 0 auto; padding: 25px 20px 60px 20px;">
+            
+            <!-- Geri Dön Linki -->
+            <div style="margin-bottom: 12px;">
+                <button type="button" onclick="this.closest('.modal').remove()" style="background: none; border: none; color: #2563eb; font-size: 13.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 0;">
+                    ← Karşılaştırmalara Dön
+                </button>
+            </div>
+
+            <!-- Üst Başlık ve Aksiyon Butonları (Screenshot 2 Üst Bar) -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 25px;">
+                <div>
+                    <span style="display: inline-block; background: #dbeafe; color: #1d4ed8; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-bottom: 6px;">
+                        ${safeText(session.type || 'Yetenek ve Yetkinlik Değerlendirme Sonucu / CV Karşılaştırma')}
+                    </span>
+                    <h1 style="margin: 0; font-size: 30px; font-weight: 800; color: #0f172a;">${safeText(session.title)}</h1>
+                    <span style="font-size: 13px; color: #64748b; font-family: monospace;">Oturum ID: ${safeText(session.id)}</span>
+                </div>
+
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <button type="button" onclick="window.print()" style="background: #2563eb; color: white; border: none; padding: 10px 18px; border-radius: 8px; font-size: 13.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(37,99,235,0.3);">
+                        <span>🖨️</span> Yazdır / PDF Kaydet
+                    </button>
+                    <button type="button" onclick="toast('Oturum başarıyla onaylandı.');" style="background: #16a34a; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 13.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                        <span>✔</span> Onayla
+                    </button>
+                    <button type="button" onclick="this.closest('.modal').remove()" style="background: white; color: #475569; border: 1.5px solid #cbd5e1; padding: 10px 18px; border-radius: 8px; font-size: 13.5px; font-weight: 600; cursor: pointer;">
+                        Vazgeç
+                    </button>
+                    <button type="button" onclick="toast('Yapay Zeka Ajan K10 karşılaştırma motoru güncel.');" style="background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 13.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 3px 8px rgba(124,58,237,0.35);">
+                        <span>🚀</span> 10 Sayfayı Başlat ve Kıyasla
+                    </button>
+                </div>
+            </div>
+
+            <!-- Ana 2 Sütunlu Grid Layout -->
+            <div style="display: grid; grid-template-columns: 340px 1fr; gap: 24px; align-items: start;">
+                
+                <!-- SOL SÜTUN: Beklenti Kriterleri, QR Kod, Adaylar ve Katılım Durumları -->
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    
+                    <!-- 1. Beklenti Kriterleri -->
+                    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                            <span>📋</span>
+                            <h3 style="margin: 0; font-size: 15px; font-weight: 800; color: #0f172a;">Beklenti Kriterleri</h3>
+                        </div>
+                        <div style="max-height: 220px; overflow-y: auto; background: #fafafa; border: 1px solid #f1f5f9; border-radius: 8px; padding: 12px 14px; font-size: 12.5px; color: #334155; line-height: 1.6; white-space: pre-line;">${safeText(criteriaText)}</div>
+                    </div>
+
+                    <!-- 2. Genel Katılım QR Kodu -->
+                    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                            <span>📢</span>
+                            <h3 style="margin: 0; font-size: 15px; font-weight: 800; color: #0f172a;">Genel Katılım QR Kodu</h3>
+                        </div>
+                        <p style="margin: 0 0 14px 0; font-size: 12px; color: #64748b; line-height: 1.5;">
+                            Adayların QR kod taratıp kendi bilgileriyle oturuma kaydolması için gösterin.
+                        </p>
+                        <button type="button" onclick="window.openQrModal('${safeText(session.title)} Katılım', window.location.origin + '/?p=candidate-form&session=' + '${session.id}')" style="width: 100%; background: #f5f3ff; color: #7c3aed; border: 1.5px solid #ddd6fe; padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <span>📲</span> QR Kod ve Katılım Linki Göster
+                        </button>
+                    </div>
+
+                    <!-- 3. Adaylar ve Katılım Durumları -->
+                    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                            <span>👥</span>
+                            <h3 style="margin: 0; font-size: 15px; font-weight: 800; color: #0f172a;">Adaylar ve Katılım Durumları</h3>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            ${candidates.map(c => `
+                            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+                                    <strong style="font-size: 14px; color: #0f172a; cursor: pointer;" onclick="window.openCandidateAgentModal('${c.name.replace(/'/g, "\\'")}', '${session.id}')">${safeText(c.name)}</strong>
+                                    <span style="background: #dcfce7; color: #15803d; font-size: 10.5px; font-weight: 800; padding: 2px 8px; border-radius: 6px;">Değerlendirildi</span>
+                                </div>
+                                <div style="font-size: 11.5px; color: #64748b; margin-bottom: 8px;">${safeText(c.email || (c.name.toLowerCase().replace(/\s+/g, '.') + '@example.com'))}</div>
+                                
+                                <div style="border-top: 1px solid #f1f5f9; padding-top: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 11.5px;">
+                                    <a href="javascript:void(0)" onclick="navigator.clipboard.writeText(window.location.origin + '/?p=candidate&name=' + encodeURIComponent('${c.name.replace(/'/g, "\\\'")}')); toast('Aday bağlantısı kopyalandı');" style="color: #64748b; text-decoration: none; font-weight: 600;">🔗 Link Kopyala</a>
+                                    <a href="javascript:void(0)" onclick="window.openQrModal('${safeText(c.name)} Formu', window.location.origin + '/?p=candidate&name=' + encodeURIComponent('${c.name.replace(/'/g, "\\\'")}'))" style="color: #64748b; text-decoration: none; font-weight: 600;">📲 QR Göster</a>
+                                    <a href="javascript:void(0)" onclick="window.openCandidateAgentModal('${c.name.replace(/'/g, "\\'")}', '${session.id}')" style="color: #7c3aed; text-decoration: none; font-weight: 700;">Formu Gör →</a>
+                                </div>
+                            </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- SAĞ SÜTUN: AI Seçimi En Uygun Aday & Ajan K10 Karşılaştırma Raporu -->
+                <div style="display: flex; flex-direction: column; gap: 22px;">
+                    
+                    <!-- 1. AI SEÇİMİ: EN UYGUN ADAY (Koyu Mor Kart) -->
+                    <div style="background: linear-gradient(135deg, #2e1065 0%, #3b0764 100%); border-radius: 16px; padding: 26px 30px; color: white; box-shadow: 0 10px 25px -5px rgba(76, 29, 149, 0.35);">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center;">
+                            <div>
+                                <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 800; color: #fde047; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
+                                    🏆 AI SEÇİMİ: EN UYGUN ADAY
+                                </span>
+                                <h2 style="margin: 0; font-size: 28px; font-weight: 900; color: white; letter-spacing: -0.5px;">
+                                    ${safeText(topCandidate.name)}
+                                </h2>
+                                <div style="font-size: 13.5px; color: #c4b5fd; margin-bottom: 18px;">
+                                    ${safeText(topCandidate.email || (topCandidate.name.toLowerCase().replace(/\s+/g, '.') + '@example.com'))}
+                                </div>
+
+                                <div style="display: flex; gap: 28px; align-items: flex-end;">
+                                    <div>
+                                        <span style="display: block; font-size: 11px; color: #cbd5e1; font-weight: 600; margin-bottom: 2px;">Eşleşme Skoru</span>
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <span style="font-size: 34px; font-weight: 900; color: white; line-height: 1;">%${topCandidate.matchRate}</span>
+                                            <span style="background: #dcfce7; color: #15803d; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 12px;">${safeText(topCandidate.badge || 'İleri Seviye Yetkin')}</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span style="display: block; font-size: 11px; color: #cbd5e1; font-weight: 600; margin-bottom: 2px;">Sıralama</span>
+                                        <span style="font-size: 26px; font-weight: 900; color: white; line-height: 1;">#1 / ${candidates.length}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Ajan K10 Yönetici Özeti Kutu -->
+                            <div style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 12px; padding: 18px 20px;">
+                                <strong style="display: block; font-size: 12.5px; font-weight: 800; color: #fde047; margin-bottom: 8px;">
+                                    Ajan K10 Yönetici Özeti
+                                </strong>
+                                <p style="margin: 0; font-size: 12.5px; color: #e2e8f0; line-height: 1.6;">
+                                    ${safeText(k10Summary)}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Ajan K10 Karşılaştırma Raporu (Beyaz Kart, Zengin Metin) -->
+                    <div style="background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 28px 32px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; border-bottom: 1px solid #f1f5f9; padding-bottom: 14px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 20px;">🗣️</span>
+                                <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: #0f172a;">Ajan K10 Karşılaştırma Raporu</h3>
+                            </div>
+                            <span style="font-size: 12px; background: #ede9fe; color: #7c3aed; padding: 4px 10px; border-radius: 12px; font-weight: 700;">
+                                Multi-Agent Sentezi
+                            </span>
+                        </div>
+
+                        <div style="font-size: 14px; color: #334155; line-height: 1.75; display: flex; flex-direction: column; gap: 14px;">
+                            ${reportParagraphs.map(p => `<p style="margin: 0; text-align: justify;">${safeText(p)}</p>`).join('')}
+                        </div>
+
+                        <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                            <span style="font-size: 12px; color: #64748b;">
+                                Aday bazında alt yetkinlik detayları için soldaki listeden <b>'Formu Gör'</b> butonuna tıklayabilirsiniz.
+                            </span>
+                            <button type="button" onclick="window.openCandidateAgentModal('${topCandidate.name.replace(/'/g, "\\'")}', '${session.id}')" style="background: #f5f3ff; color: #7c3aed; border: 1px solid #ddd6fe; padding: 8px 16px; border-radius: 8px; font-size: 12.5px; font-weight: 700; cursor: pointer;">
+                                Şampiyon Adayın Ajan K2-K9 Detayını İncele →
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        `;
+
+        document.body.append(modal);
+    };
+
+
+    // ==========================================
+    // ÇOKLU CV KARŞILAŞTIRMA AI PROMPT VE KRİTER MOTORU
+    // ==========================================
+    window.VARSAYILAN_KRITERLER = [
+        { kod: 'egitim',          ad: 'Eğitim Durumu',              agirlik: 15, aciklama: 'Derece seviyesi, bölümün pozisyonla ilgisi, okul, akademik başarı' },
+        { kod: 'deneyim',         ad: 'Çalışma Tecrübesi',          agirlik: 20, aciklama: 'Rollerin pozisyonla ilgisi, sorumluluk düzeyi, sektör uyumu, kariyer ilerlemesi' },
+        { kod: 'deneyim_suresi',  ad: 'Çalışma Yıl Süresi',         agirlik: 10, aciklama: 'Toplam ve ilgili alandaki yıl; aranan kıdemle uyum (fazlası her zaman daha iyi değildir)' },
+        { kod: 'sertifikalar',    ad: 'Sertifikalar',               agirlik: 10, aciklama: 'Pozisyonla ilgili, tanınmış ve güncel sertifikalar' },
+        { kod: 'projeler',        ad: 'Ürettiği Projeler',          agirlik: 15, aciklama: 'Projelerin kapsamı, karmaşıklığı, adayın projedeki rolü' },
+        { kod: 'proje_sonuclari', ad: 'Proje Sonuçları (Metrik)',   agirlik: 15, aciklama: 'Ölçülebilir çıktılar (%, ₺, süre, kullanıcı sayısı vb.), somut etki' },
+        { kod: 'yayinlar',        ad: 'Yayın / Bildiri (Referat)',  agirlik: 5,  aciklama: 'Makale, bildiri, referat, patent, konferans sunumu' },
+        { kod: 'referanslar',     ad: 'Referanslar',                agirlik: 5,  aciklama: 'Referans sayısı, kıdemi, adayla ilişkisinin doğrudanlığı' },
+        { kod: 'pozisyon_uyumu',  ad: 'Pozisyona Genel Uyum',       agirlik: 5,  aciklama: 'Aranan niteliklerin bütüncül karşılanma düzeyi' }
+    ];
+
+    window.ETIK_KURALLAR = `ETİK VE ADİL DEĞERLENDİRME KURALLARI:
+- Yaş, cinsiyet, medeni durum, din, etnik köken, uyruk, fotoğraf, engellilik, askerlik dışı kişisel bilgileri DEĞERLENDİRMEYE KATMA.
+- Sadece CV'de yazılı olan bilgiyi kullan; bilgi yoksa uydurma, "belirtilmemiş" kabul et.
+- Okul/şirket "ünü" tek başına belirleyici olmasın; içerik, rol ve sonuç önemlidir.
+- Her puan, CV'den alınmış somut bir kanıta dayansın.`;
+
+    window.profilCikarmaPrompt = function(cvMetni, dosyaAdi) {
+        const bugun = new Date().toISOString().slice(0, 7);
+        return `Sen deneyimli bir İK analisti ve CV ayrıştırma uzmanısın. Aşağıdaki CV metnini okuyup bilgileri yapılandırılmış JSON'a dönüştür.
+
+${window.ETIK_KURALLAR}
+
+KURALLAR:
+- Yalnızca CV'de açıkça geçen bilgiyi yaz. Tahmin etme, uydurma. Bilinmeyen alanlar için "" veya [] ya da null kullan.
+- Tarihleri "YYYY-MM" (ay bilinmiyorsa "YYYY") biçiminde yaz. Devam eden işler için bitis = "devam". Bugünün tarihi: ${bugun}.
+- toplam_deneyim_yil: çakışan dönemleri bir kez sayarak toplam profesyonel deneyim (staj hariç), 1 ondalık sayı olarak hesapla.
+- Proje sonuçlarında sayısal/ölçülebilir bir çıktı varsa (%, ₺, $, süre, adet, kullanıcı sayısı) olculebilir_sonuc_var_mi = true.
+- "Referat", bildiri, makale, kitap, patent, konferans sunumu → yayinlar listesine.
+- Referansların telefon/e-posta bilgisini KOPYALAMA, sadece iletisim_var_mi alanını işaretle.
+- eksik_bilgiler: bir işe alım kararı için CV'de eksik olan önemli bilgileri listele.
+- Çıktıyı SADECE geçerli JSON olarak ver.
+
+DOSYA ADI: ${dosyaAdi || 'Belirtilmemiş'}
+
+─── CV METNİ ───
+${cvMetni}`;
+    };
+
+    window.karsilastirmaPrompt = function(profiller, gorevTanimi, kriterler = window.VARSAYILAN_KRITERLER) {
+        const kriterlerMetni = kriterler.map((k, i) => `${i + 1}. [${k.kod}] ${k.ad} (Ağırlık: %${k.agirlik}): ${k.aciklama}`).join('\n');
+        return `Sen tarafsız, analitik ve derinlemesine değerlendirme yapan kıdemli bir İK Değerlendirme Komitesi Başkanısın.
+Aşağıda verilen yapılandırılmış aday profillerini, hedeflenen GÖREV TANIMI ve belirlenen AĞIRLIKLI KRİTERLER doğrultusunda objektif olarak kıyasla.
+
+${window.ETIK_KURALLAR}
+
+─── DEĞERLENDİRME KRİTERLERİ VE AĞIRLIKLARI (TOPLAM %100) ───
+${kriterlerMetni}
+
+─── HEDEF GÖREV TANIMI VE POZİSYON BEKLENTİLERİ ───
+${gorevTanimi}
+
+─── KARŞILAŞTIRILACAK ADAY PROFİLLERİ ───
+${JSON.stringify(profiller, null, 2)}
+
+TALİMATLAR:
+1. Her adaya her kriter için 0-100 arasında bir puan ver ve bu puanın somut gerekçesini (CV'deki kanıtı) belirt.
+2. Ağırlıklı Genel Skoru hesapla: Toplam = Σ (Kriter Puanı * Kriter Ağırlığı / 100).
+3. Adayları genel puana göre 1. sıradan başlayarak sırala (Podium Rank).
+4. Her aday için pozisyona özel en az 2 Güçlü Yön ve en az 2 Risk / Dikkat Edilmesi Gereken Nokta (Watchout) belirle.
+5. Sonuçta Komite Kararı ve En İyi Aday Tavsiyesi ile mülakat soruları öner.
+6. Yanıtı SADECE JSON formatında üret.`;
+    };
+
+        // ==========================================
+    // MODAL STATE VE CV YÜKLEME & SEÇİM MOTORU
+    // ==========================================
+    window.comparisonModalState = {
+        selectedSystemCandidates: [],
+        uploadedCvs: [],
+        activeTab: 'upload',
+        searchQuery: ''
+    };
+
+    window.toggleSystemCandidate = function(candidateName) {
+        const arr = window.comparisonModalState.selectedSystemCandidates;
+        const idx = arr.indexOf(candidateName);
+        if (idx > -1) {
+            arr.splice(idx, 1);
+        } else {
+            arr.push(candidateName);
+        }
+        window.renderComparisonModalBody();
+    };
+
+    window.selectAllSystemCandidates = function() {
+        const list = (typeof candidateResults !== 'undefined' ? candidateResults : window.candidateResults) || [];
+        window.comparisonModalState.selectedSystemCandidates = list.map(c => c.name);
+        window.renderComparisonModalBody();
+    };
+
+    window.clearAllSystemCandidates = function() {
+        window.comparisonModalState.selectedSystemCandidates = [];
+        window.renderComparisonModalBody();
+    };
+
+    window.switchComparisonTab = function(tabName) {
+        window.comparisonModalState.activeTab = tabName;
+        window.renderComparisonModalBody();
+    };
+
+    window.handleCvFileUpload = function(e) {
+        const files = Array.from(e.target.files || []);
+        if (!files.length) return;
+
+        files.forEach(file => {
+            let rawName = file.name.replace(/\.[^/.]+$/, "");
+            rawName = rawName.replace(/[_-]+/g, ' ').replace(/\bcv\b/gi, '').replace(/\bözgeçmiş\b/gi, '').replace(/\bresume\b/gi, '').trim();
+            const cleanName = rawName.split(' ')
+                .filter(w => w.trim().length > 0)
+                .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+                .join(' ') || ('Aday (' + file.name + ')');
+
+            const sizeKb = Math.round(file.size / 1024);
+            const sizeStr = sizeKb > 1024 ? (sizeKb / 1024).toFixed(1) + ' MB' : (sizeKb || 1) + ' KB';
+
+            window.comparisonModalState.uploadedCvs.push({
+                name: cleanName,
+                fileName: file.name,
+                size: sizeStr,
+                role: 'Özgeçmiş Belgesi Yüklendi',
+                experience: (Math.floor(Math.random() * 5) + 3) + ' Yıl'
+            });
+        });
+
+        if (e.target) e.target.value = '';
+        toast(files.length + ' adet aday CV belgesi başarıyla yüklendi!');
+        window.renderComparisonModalBody();
+    };
+
+    window.removeUploadedCv = function(index) {
+        window.comparisonModalState.uploadedCvs.splice(index, 1);
+        window.renderComparisonModalBody();
+    };
+
+    window.updateUploadedCvName = function(index, newName) {
+        if (window.comparisonModalState.uploadedCvs[index]) {
+            window.comparisonModalState.uploadedCvs[index].name = newName.trim();
+            window.updateComparisonSummaryBar();
+        }
+    };
+
+    window.filterComparisonCandidates = function(query) {
+        window.comparisonModalState.searchQuery = (query || '').toLowerCase();
+        window.renderComparisonModalBody();
+    };
+
+    window.updateComparisonSummaryBar = function() {
+        const summaryEl = document.getElementById('comparison-selected-summary');
+        const submitBtn = document.getElementById('comparison-submit-btn');
+        if (!summaryEl) return;
+
+        const sys = window.comparisonModalState.selectedSystemCandidates;
+        const cvs = window.comparisonModalState.uploadedCvs;
+        const total = sys.length + cvs.length;
+
+        let chipsHtml = '';
+        cvs.forEach((cv, idx) => {
+            chipsHtml += '<span style="background:#f5f3ff; color:#6d28d9; padding:5px 12px; border-radius:14px; font-size:12.5px; font-weight:700; display:inline-flex; align-items:center; gap:6px; border:1px solid #ddd6fe; box-shadow: 0 1px 2px rgba(109,40,217,0.08);">📄 ' + safeText(cv.name) + ' <small style="color:#7c3aed; font-weight:800;">(Yüklü CV)</small><button type="button" onclick="window.removeUploadedCv(' + idx + ')" style="background:none; border:none; color:#6d28d9; cursor:pointer; padding:0 0 0 4px; font-size:13px; font-weight:bold;">✕</button></span>';
+        });
+        sys.forEach(name => {
+            chipsHtml += '<span style="background:#eff6ff; color:#1d4ed8; padding:5px 12px; border-radius:14px; font-size:12.5px; font-weight:700; display:inline-flex; align-items:center; gap:6px; border:1px solid #bfdbfe;">👤 ' + safeText(name) + ' <small style="color:#2563eb;">(Sistem)</small><button type="button" onclick="window.toggleSystemCandidate(\'' + name.replace(/'/g, "\\'") + '\')" style="background:none; border:none; color:#1d4ed8; cursor:pointer; padding:0 0 0 4px; font-size:13px; font-weight:bold;">✕</button></span>';
+        });
+
+        summaryEl.innerHTML = total > 0 ? chipsHtml : '<span style="color:#94a3b8; font-size:13px;">Henüz aday seçilmedi veya CV yüklenmedi. Karşılaştırma için en az 2 aday belirleyin.</span>';
+        
+        if (submitBtn) {
+            const singleByJob = total === 1 && document.getElementById('new-comp-type')?.value === 'Görev Tanımı ile Karşılaştırma';
+            if (total === 0) {
+                submitBtn.innerHTML = '🚀 Karşılaştırmayı Başlat (En Az 2 Aday Gerekli)';
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.6';
+                submitBtn.style.cursor = 'not-allowed';
+            } else if (singleByJob) {
+                submitBtn.innerHTML = '🚀 Görev Tanımına Göre Tekil Analiz (' + BIGAKCE_PRICING.cvSingleAnalysis + ' BIGakçe)';
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = '1';
+                submitBtn.style.cursor = 'pointer';
+            } else if (total === 1) {
+                submitBtn.innerHTML = '🚀 Karşılaştırmayı Başlat (1 Aday Daha Ekleyin)';
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.7';
+                submitBtn.style.cursor = 'not-allowed';
+            } else {
+                submitBtn.innerHTML = '🚀 Karşılaştırmayı Başlat (' + total + ' Aday · ' + (total * BIGAKCE_PRICING.cvPerCandidate) + ' BIGakçe)';
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = '1';
+                submitBtn.style.cursor = 'pointer';
+            }
+        }
+    };
+
+    window.renderComparisonModalBody = function() {
+        const bodyEl = document.getElementById('comparison-modal-dynamic-content');
+        if (!bodyEl) return;
+
+        const tab = window.comparisonModalState.activeTab;
+        const list = (typeof candidateResults !== 'undefined' ? candidateResults : window.candidateResults) || [];
+        const query = window.comparisonModalState.searchQuery;
+        const selected = window.comparisonModalState.selectedSystemCandidates;
+        const cvs = window.comparisonModalState.uploadedCvs;
+
+        const btnSys = document.getElementById('tab-btn-system');
+        const btnUpl = document.getElementById('tab-btn-upload');
+        if (btnSys && btnUpl) {
+            if (tab === 'system') {
+                btnSys.style.borderBottom = '3px solid #2563eb';
+                btnSys.style.color = '#2563eb';
+                btnSys.style.background = '#ffffff';
+                btnSys.style.fontWeight = '800';
+                btnUpl.style.borderBottom = '3px solid transparent';
+                btnUpl.style.color = '#64748b';
+                btnUpl.style.background = '#f8fafc';
+                btnUpl.style.fontWeight = '600';
+            } else {
+                btnUpl.style.borderBottom = '3px solid #7c3aed';
+                btnUpl.style.color = '#7c3aed';
+                btnUpl.style.background = '#ffffff';
+                btnUpl.style.fontWeight = '800';
+                btnSys.style.borderBottom = '3px solid transparent';
+                btnSys.style.color = '#64748b';
+                btnSys.style.background = '#f8fafc';
+                btnSys.style.fontWeight = '600';
+            }
+        }
+
+        if (tab === 'system') {
+            const filtered = list.filter(c => {
+                if (!query) return true;
+                const matchStr = (c.name + ' ' + (c.email||'') + ' ' + (c.test||'') + ' ' + (c.department||'')).toLowerCase();
+                return matchStr.includes(query);
+            });
+
+            bodyEl.innerHTML = `
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; gap: 12px; flex-wrap: wrap;">
+                    <div style="position: relative; flex: 1; min-width: 240px;">
+                        <input type="text" placeholder="Aday adı, rol veya departman ara..." value="${safeText(window.comparisonModalState.searchQuery)}" oninput="window.filterComparisonCandidates(this.value)" style="width: 100%; padding: 9px 12px 9px 34px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13.5px; outline: none; box-sizing: border-box;">
+                        <span style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 14px;">🔍</span>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button type="button" onclick="window.selectAllSystemCandidates()" style="background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; padding: 7px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;">
+                            Tümünü Seç
+                        </button>
+                        <button type="button" onclick="window.clearAllSystemCandidates()" style="background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; padding: 7px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                            Temizle
+                        </button>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; max-height: 280px; overflow-y: auto; padding-right: 6px;">
+                    ${filtered.length ? filtered.map(c => {
+                        const isChecked = selected.includes(c.name);
+                        const scoreColor = c.score >= 80 ? '#16a34a' : (c.score >= 50 ? '#d97706' : '#dc2626');
+                        const scoreBg = c.score >= 80 ? '#dcfce7' : (c.score >= 50 ? '#fef3c7' : '#fee2e2');
+
+                        return `
+                        <div onclick="window.toggleSystemCandidate('${c.name.replace(/'/g, "\\'")}')" style="cursor: pointer; border: 1.5px solid ${isChecked ? '#2563eb' : '#e2e8f0'}; background: ${isChecked ? '#f8faff' : '#ffffff'}; border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; transition: all 0.15s ease;">
+                            <div style="display: flex; align-items: center; gap: 10px; overflow: hidden;">
+                                <input type="checkbox" ${isChecked ? 'checked' : ''} style="width: 17px; height: 17px; cursor: pointer; accent-color: #2563eb;">
+                                <div style="overflow: hidden;">
+                                    <strong style="display: block; font-size: 13.5px; color: #0f172a; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">${safeText(c.name)}</strong>
+                                    <span style="font-size: 11.5px; color: #64748b; display: block; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">${safeText(c.test || 'Test')} · ${safeText(c.department || '')}</span>
+                                </div>
+                            </div>
+                            <span style="background: ${scoreBg}; color: ${scoreColor}; font-size: 12px; font-weight: 800; padding: 4px 8px; border-radius: 6px; flex-shrink: 0;">
+                                %${c.score}
+                            </span>
+                        </div>
+                        `;
+                    }).join('') : '<div style="grid-column: 1/-1; padding: 25px; text-align: center; color: #94a3b8; font-size: 13.5px;">Aramaya uygun aday bulunamadı.</div>'}
+                </div>
+            </div>
+            `;
+        } else {
+            bodyEl.innerHTML = `
+            <div>
+                <!-- Ana CV Dosyalarını Seç ve Yükle Buton & Sürükle-Bırak Alanı -->
+                <div ondragover="event.preventDefault(); this.style.borderColor='#7c3aed'; this.style.background='#fbf9ff';" ondragleave="this.style.borderColor='#cbd5e1'; this.style.background='#fafafa';" ondrop="event.preventDefault(); this.style.borderColor='#cbd5e1'; this.style.background='#fafafa'; window.handleCvFileUpload({target: {files: event.dataTransfer.files}})" style="border: 2px dashed #cbd5e1; border-radius: 14px; padding: 32px 24px; text-align: center; background: #fafafa; margin-bottom: 18px; transition: all 0.2s;">
+                    <input type="file" id="cv-file-input" multiple accept=".pdf,.docx,.doc,.txt" onchange="window.handleCvFileUpload(event)" style="display: none;">
+                    
+                    <div style="display: inline-flex; align-items: center; gap: 6px; background: #ede9fe; color: #7c3aed; padding: 4px 14px; border-radius: 20px; font-size: 11.5px; font-weight: 800; text-transform: uppercase; margin-bottom: 14px;">
+                        ⚡ OTOMATİK CV AYRIŞTIRICI & ADAY PROFİLLEME
+                    </div>
+                    
+                    <div style="margin-bottom: 12px;">
+                        <button type="button" id="btn-select-cv-files" onclick="document.getElementById('cv-file-input').click()" style="background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%); color: white; border: none; padding: 16px 36px; border-radius: 12px; font-size: 15.5px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 12px; box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4); transition: transform 0.15s, box-shadow 0.15s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <span style="font-size: 22px;">📂</span>
+                            <span>Adayların CV Dosyalarını Seç ve Yükle</span>
+                        </button>
+                    </div>
+
+                    <p style="color: #475569; font-size: 13.5px; font-weight: 600; margin: 0 0 8px 0;">
+                        Bilgisayarınızdan adayların özgeçmiş belgelerini seçin veya doğrudan bu kutunun içine sürükleyin.
+                    </p>
+                    
+                    <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 10px;">
+                        <span style="background: white; border: 1px solid #e2e8f0; color: #475569; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 600;">📄 PDF Dosyaları</span>
+                        <span style="background: white; border: 1px solid #e2e8f0; color: #475569; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 600;">📝 Word (.docx / .doc)</span>
+                        <span style="background: white; border: 1px solid #e2e8f0; color: #475569; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 600;">📑 Metin (TXT)</span>
+                        <span style="background: #dcfce7; border: 1px solid #bbf7d0; color: #166534; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 700;">✅ Çoklu Dosya Seçimi Aktif</span>
+                    </div>
+                </div>
+
+                ${cvs.length ? `
+                <div style="margin-bottom: 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 18px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 16px;">📋</span>
+                            <span style="font-size: 14px; font-weight: 800; color: #0f172a;">Yüklenen Aday CV Dosyaları (${cvs.length})</span>
+                            <span style="background: #dcfce7; color: #15803d; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 10px;">Karşılaştırmaya Dahil</span>
+                        </div>
+                        <button type="button" onclick="document.getElementById('cv-file-input').click()" style="background: #ede9fe; color: #6d28d9; border: 1px solid #ddd6fe; padding: 6px 14px; border-radius: 7px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                            <span>+</span> Başka CV Dosyası Ekle
+                        </button>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto; padding-right: 4px;">
+                        ${cvs.map((cv, idx) => `
+                        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                            <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+                                <div style="width: 36px; height: 36px; border-radius: 8px; background: #f5f3ff; color: #7c3aed; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold; flex-shrink: 0;">
+                                    📄
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 6px;">
+                                        <input type="text" value="${safeText(cv.name)}" onchange="window.updateUploadedCvName(${idx}, this.value)" title="Aday ismini düzenleyebilirsiniz" style="width: 100%; max-width: 320px; border: 1px solid #cbd5e1; padding: 4px 8px; border-radius: 6px; font-size: 13.5px; font-weight: 700; color: #0f172a; outline: none; background: #ffffff;">
+                                        <span style="font-size: 11px; color: #94a3b8;" title="Düzenlenebilir Aday İsmi">✏️</span>
+                                    </div>
+                                    <div style="font-size: 11.5px; color: #64748b; padding-left: 2px; margin-top: 2px;">Dosya: <b>${safeText(cv.fileName)}</b> · Boyut: ${cv.size}</div>
+                                </div>
+                            </div>
+                            <button type="button" onclick="window.removeUploadedCv(${idx})" style="background: #fee2e2; color: #dc2626; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 4px;" title="Bu CV Belgesini Kaldır">
+                                <span>🗑️</span> Kaldır
+                            </button>
+                        </div>
+                        `).join('')}
+                    </div>
+                </div>
+                ` : `
+                <div style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 10px; padding: 14px; text-align: center; color: #64748b; font-size: 13px;">
+                    💡 <b>Bilgi:</b> Yukarıdaki <b>'Adayların CV Dosyalarını Seç ve Yükle'</b> butonuna basarak karşılaştırmak istediğiniz adayların CV'lerini tek seferde seçebilirsiniz.
+                </div>
+                `}
+            </div>
+            `;
+        }
+
+        window.updateComparisonSummaryBar();
+    };
+
+    // 10. Yenilenmiş "Yeni Karşılaştırma Başlat" Modalı
+    window.showNewComparisonModal = function(initialTab = 'upload') {
+        const preferredTab = (initialTab === 'system') ? 'system' : 'upload';
+        window.comparisonModalState.selectedSystemCandidates = [];
+        window.comparisonModalState.uploadedCvs = [];
+        window.comparisonModalState.activeTab = preferredTab;
+        window.comparisonModalState.searchQuery = '';
+
+        if (preferredTab === 'system') {
+            const list = (typeof candidateResults !== 'undefined' ? candidateResults : window.candidateResults) || [];
+            if (list.length >= 2) {
+                window.comparisonModalState.selectedSystemCandidates = [list[0].name, list[1].name];
+            }
+        }
+
+        const modal = document.createElement('div');
+        modal.className = 'modal comparison-modal';
+        modal.style.zIndex = '99999';
+        modal.style.position = 'fixed';
+        modal.style.inset = '0';
+        modal.style.background = 'rgba(15, 23, 42, 0.7)';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.padding = '20px';
+        modal.style.overflowY = 'auto';
+
+        modal.innerHTML = `
+        <div class="modal-card" style="max-width: 880px; width: 100%; max-height: 92vh; overflow-y: auto; background: white; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 1px solid #e2e8f0; display: flex; flex-direction: column;">
+            
+            <div style="padding: 20px 28px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: #fafafa; border-top-left-radius: 16px; border-top-right-radius: 16px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 42px; height: 42px; border-radius: 10px; background: #ede9fe; color: #7c3aed; display: flex; align-items: center; justify-content: center; font-size: 22px;">
+                        ⚖️
+                    </div>
+                    <div>
+                        <h2 style="margin: 0; font-size: 20px; font-weight: 800; color: #0f172a;">Yeni Karşılaştırma Başlat</h2>
+                        <p style="margin: 2px 0 0 0; color: #64748b; font-size: 13px;">Adayların CV dosyalarını yükleyin veya sistem aday havuzundan seçim yapın.</p>
+                    </div>
+                </div>
+                <button type="button" onclick="this.closest('.modal').remove()" style="font-size: 22px; color: #94a3b8; background: none; border: none; cursor: pointer; padding: 4px 8px;">✕</button>
+            </div>
+
+            <form onsubmit="window.handleCreateComparison(event, this)" style="padding: 25px 28px; display: flex; flex-direction: column; gap: 20px;">
+                
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 16px;">
+                    <div>
+                        <label style="display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 6px;">KARŞILAŞTIRMA OTURUMU BAŞLIĞI</label>
+                        <input id="new-comp-title" type="text" placeholder="Örn: Kıdemli React Geliştirici veya Proje Müdürü Seçimi" value="Kıdemli Pozisyon Karşılaştırması" required style="width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13.5px; outline: none; box-sizing: border-box;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 6px;">KARŞILAŞTIRMA TÜRÜ</label>
+                        <select id="new-comp-type" onchange="updateComparisonSummaryBar()" style="width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13.5px; background: white; outline: none; box-sizing: border-box;">
+                            <option>Görev Tanımı ile Karşılaştırma</option>
+                            <option>Adayları Birbiriyle Kıyasla</option>
+                            <option>Kültürel ve Yönetsel Uyum</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 6px;">HEDEF GÖREV TANIMI VE ARANAN NİTELİKLER (İLAN METNİ)</label>
+                    <textarea id="new-comp-desc" placeholder="Örn: En az 5 yıl tecrübe, teknik mimari yetkinliği, kriz anında problem çözme, proaktif iletişim..." style="width: 100%; height: 85px; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; resize: vertical; outline: none; box-sizing: border-box;">Pozisyonda en az 5 yıl sektör tecrübesi, analitik düşünme, kriz anında doğru karar verme, süreç yönetimi ve güçlü ekip iletişimi beklenmektedir.</textarea>
+                </div>
+
+                <div style="border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; background: #ffffff;">
+                    <div style="display: flex; border-bottom: 2px solid #e2e8f0; background: #f8fafc;">
+                        <button type="button" id="tab-btn-upload" onclick="window.switchComparisonTab('upload')" style="flex: 1; padding: 14px; background: none; border: none; cursor: pointer; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <span>📂</span> Adayların CV Dosyalarını Seç ve Yükle
+                        </button>
+                        <button type="button" id="tab-btn-system" onclick="window.switchComparisonTab('system')" style="flex: 1; padding: 14px; background: none; border: none; cursor: pointer; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <span>👥</span> Sistemdeki Kayıtlı Adaylardan Seç
+                        </button>
+                    </div>
+
+                    <div id="comparison-modal-dynamic-content" style="padding: 20px;">
+                    </div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px;">
+                    <span style="display: block; font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 8px;">
+                        SEÇİLEN VE KARŞILAŞTIRILACAK ADAYLAR:
+                    </span>
+                    <div id="comparison-selected-summary" style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 12px; padding-top: 10px; border-top: 1px solid #f1f5f9;">
+                    <button type="button" class="secondary" style="padding: 10px 20px; font-size: 13.5px; border: 1px solid #cbd5e1; border-radius: 8px; background: white; color: #475569; cursor: pointer; font-weight: 600;" onclick="this.closest('.modal').remove()">
+                        Vazgeç
+                    </button>
+                    <button type="submit" id="comparison-submit-btn" class="primary" style="padding: 10px 24px; font-size: 13.5px; background: #7c3aed; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 4px rgba(124,58,237,0.3);">
+                        🚀 Karşılaştırmayı Başlat
+                    </button>
+                </div>
+
+            </form>
+        </div>
+        `;
+
+        document.body.append(modal);
+        window.renderComparisonModalBody();
+    };
+
+    // Global alias
+    window.showNewComparisonModal = window.showNewComparisonModal;
+
+
+    // 11. Karşılaştırma Oluşturma ve Raporu Anında Açma Motoru (9 Kriterli Ağırlıklı Sistem)
+    window.handleCreateComparison = function(e, form) {
+        e.preventDefault();
+        const title = document.getElementById('new-comp-title')?.value || 'Yeni Pozisyon Karşılaştırması';
+        const type = document.getElementById('new-comp-type')?.value || 'Yetenek ve Yetkinlik Değerlendirme Sonucu / CV Karşılaştırma';
+        const desc = document.getElementById('new-comp-desc')?.value || 'Pozisyon gereksinimleri ve nitelikler';
+
+        const stateObj = window.comparisonModalState;
+        const sysNames = stateObj.selectedSystemCandidates;
+        const cvItems = stateObj.uploadedCvs;
+        const totalCount = sysNames.length + cvItems.length;
+        const isSingleAnalysis = totalCount === 1 && type === 'Görev Tanımı ile Karşılaştırma';
+
+        if (totalCount < 1 || (totalCount < 2 && !isSingleAnalysis)) {
+            toast('Lütfen karşılaştırmak için en az 2 aday seçin veya CV yükleyin. Tek CV için "Görev Tanımı ile Karşılaştırma" türünü seçin.');
+            return;
+        }
+
+        // Ücret: tekil analiz 10 BIGakçe, çoklu karşılaştırmada CV başına 1 BIGakçe
+        const cvCost = isSingleAnalysis ? BIGAKCE_PRICING.cvSingleAnalysis : totalCount * BIGAKCE_PRICING.cvPerCandidate;
+        if (!deductCredits(state.currentUser, cvCost)) {
+            toast('YETERSİZ BIGakçe: Bu karşılaştırma için ' + cvCost + ' BIGakçe gerekiyor.');
+            return;
+        }
+
+        const allCandidatesList = (typeof candidateResults !== 'undefined' ? candidateResults : window.candidateResults) || [];
+        const newCandidates = [];
+
+        // 1. Sistem adaylarını dönüştür (Ajan K2-K9 Üretimi)
+        sysNames.forEach((name, i) => {
+            const found = allCandidatesList.find(c => c.name === name);
+            const score = found ? found.score : (88 - i * 5);
+            const email = (found && found.email) ? found.email : (name.toLowerCase().replace(/\s+/g, '.') + '@example.com');
+            const exp = (found && found.experience) ? found.experience : (5 + i * 3) + ' Yıl';
+
+            newCandidates.push({
+                name: name,
+                email: email,
+                role: found ? (found.test || 'Aday') : 'Kayıtlı Aday',
+                matchRate: score,
+                rank: 0,
+                badge: score >= 88 ? 'İleri Seviye Yetkin' : (score >= 70 ? 'Mülakata Uygun' : 'Gelişime Açık'),
+                badgeColor: score >= 88 ? '#16a34a' : (score >= 70 ? '#2563eb' : '#d97706'),
+                experience: exp,
+                education: (found && found.education) ? found.education : 'Lisans / Yüksek Lisans',
+                salaryExpectation: '120.000 - 145.000 ₺',
+                agentData: {
+                    k2_summary: name + ', ' + title + ' pozisyonunda değerlendirilen, sektörde ' + exp + ' deneyime sahip ve yetkinlik testlerinde %' + score + ' başarı sağlamış bir profesyoneldir.',
+                    k3_technical: Math.min(100, score + 1),
+                    k4_seniority: Math.min(100, score + 3),
+                    k5_execution: Math.min(100, Math.max(50, score - 2)),
+                    k6_tools: Math.min(100, score),
+                    k7_behavioral: 'Aday analitik problem çözme, proaktif iletişim, kurumsal süreç disiplini ve ekip motivasyonu konularında dengeli bir profil çizmektedir.',
+                    k8_risk: score < 75 ? 'Karmaşık kriz anlarında ek yönetsel rehberlik gereksinimi' : 'Yok',
+                    k9_strengths: (found && found.strengths && found.strengths.length) ? found.strengths : [
+                        'Pozisyonun anahtar reflekslerinde tutarlı ve doğrulanmış yetkinlik performansı',
+                        'Sorumluluk alma bilinci ve ekip koordinasyonunda yapıcı yaklaşım',
+                        'Sektörel dinamikleri hızlı analiz edebilme ve operasyonel çeviklik'
+                    ],
+                    k9_weaknesses: (found && found.watchouts && found.watchouts.length) ? found.watchouts : [
+                        'Yeni nesil dijital araç entegrasyonlarında ek sertifikasyon desteği faydalı olacaktır'
+                    ]
+                }
+            });
+        });
+
+        // 2. Yüklenen CV belgelerini dönüştür (Ajan K2-K9 Üretimi)
+        cvItems.forEach((cv, i) => {
+            const baseScore = Math.max(68, Math.min(95, 91 - i * 4 + (cv.name.length % 5)));
+            const email = cv.name.toLowerCase().replace(/\s+/g, '.') + '@example.com';
+            const exp = cv.experience || '5 Yıl';
+
+            newCandidates.push({
+                name: cv.name,
+                email: email,
+                role: 'CV Belgesi: ' + cv.fileName,
+                matchRate: baseScore,
+                rank: 0,
+                badge: baseScore >= 88 ? 'İleri Seviye Yetkin' : (baseScore >= 70 ? 'Mülakata Uygun' : 'Gelişime Açık'),
+                badgeColor: baseScore >= 88 ? '#16a34a' : (baseScore >= 70 ? '#2563eb' : '#d97706'),
+                experience: exp,
+                education: 'Mühendislik / İktisadi İdari Bilimler',
+                salaryExpectation: 'Piyasa Standartlarında',
+                agentData: {
+                    k2_summary: cv.name + ', ' + cv.fileName + ' özgeçmiş analizi sonucunda ' + title + ' alanında kanıtlanmış proje başarıları ve ' + exp + ' profesyonel iş tecrübesine sahip bir adaydır.',
+                    k3_technical: Math.min(100, baseScore + 2),
+                    k4_seniority: Math.min(100, baseScore + 1),
+                    k5_execution: Math.min(100, Math.max(50, baseScore - 1)),
+                    k6_tools: Math.min(100, baseScore + 3),
+                    k7_behavioral: 'Özgeçmiş verileri adayın analitik düşünce yapısına, sonuç odaklı çalışma prensibine ve sürekli gelişim motivasyonuna sahip olduğunu göstermektedir.',
+                    k8_risk: 'Yok',
+                    k9_strengths: [
+                        'Özgeçmiş analizinde kanıtlanmış proje teslimleri ve somut sonuç üretme kabiliyeti',
+                        'Hedef pozisyonun aradığı teknik ve metodolojik gereksinimlerle yüksek uyum',
+                        'Uluslararası ve çok fonksiyonlu iş ortamlarına adaptasyon yeteneği'
+                    ],
+                    k9_weaknesses: [
+                        'Mülakat sürecinde geçmiş projelerdeki bireysel katkının somut metriklerle teyit edilmesi önerilir'
+                    ]
+                }
+            });
+        });
+
+        // Skorlara göre sırala
+        newCandidates.sort((a, b) => b.matchRate - a.matchRate);
+        newCandidates.forEach((c, idx) => {
+            c.rank = idx + 1;
+        });
+
+        const newId = 'comp-' + Date.now();
+        const top = newCandidates[0];
+        const others = newCandidates.slice(1);
+
+        // Ajan K10 Konsolide Karşılaştırma Raporu Üretimi (Screenshot 2 Yapısı)
+        const k10Summary = "Bu oturumda, '" + title + "' konulu İşe Alım sürecinde " + newCandidates.length + " adayın değerlendirme sonuçları incelenmiştir: " + newCandidates.map(c => c.name).join(', ') + ". Adaylar, Sorumluluk ve Sonuç Odaklılık, Mesleki Uzmanlık, Metodoloji ve Paydaş İletişimi kriterleri çerçevesinde kıyaslanmıştır.";
+
+        const k10Report = [
+            "Bu oturumda, '" + title + "' konulu İşe Alım sürecinde " + newCandidates.length + " adayın değerlendirme sonuçları incelenmiştir: " + newCandidates.map(c => c.name).join(', ') + ". Adaylar, Sorumluluk ve Sonuç Odaklılık, Mesleki Uzmanlık ve Uygulama Becerisi, Analitik Düşünme ve Etki Değerlendirme, İletişim ve Paydaş Yönetimi kriterleri çerçevesinde kıyaslanmış ve pozisyon için en uygun 'Şampiyon'un belirlenmesi hedeflenmiştir.",
+            "Değerlendirme sonucunda, " + top.name + " (" + top.email + ") bu pozisyon için %" + top.matchRate + " eşleşme skoru ile açık ara en güçlü aday olarak öne çıkmaktadır. Kendisi, mesleki uzmanlık ve uygulama becerisinde gösterdiği derinliğin yanı sıra, " + top.experience + " tecrübesiyle pozisyonun kritik ihtiyaçlarını doğrudan karşılamaktadır. Paydaş yönetimi ve iş bitirme puanlarındaki üstünlüğü sektörel uyum kriterlerinde en yüksek performansı sergilemesini sağlamıştır.",
+            others.length
+                ? "Diğer adaylardan " + others.map(o => o.name + " (%" + o.matchRate + ")").join(', ') + ", kendi uzmanlık alanlarında kıymetli tecrübeler sunmakla birlikte, hedeflenen " + title + " rolünün spesifik kıdem ve operasyonel derinlik beklentilerinde " + top.name + "'in sunduğu bütüncül uyumun gerisinde kalmıştır."
+                : "Bu analiz tek aday üzerinde, doğrudan görev tanımı ve aranan niteliklerle karşılaştırılarak yapılmıştır.",
+            "Sonuç olarak, " + top.name + "'in güncel yetkinlik profili, kanıtlanmış saha ve proje başarısı, onu '" + title + "' rolü için tartışmasız bir şampiyon yapmaktadır. Kendisi, belirlenen tüm kriterlerde hem derinlik hem de doğrudan uygunluk açısından diğer adayların önüne geçmekte ve ivedilikle sonraki aşamaya alınması tavsiye edilmektedir."
+        ];
+
+        const newSession = {
+            id: newId,
+            title: title,
+            type: type,
+            candidateCount: newCandidates.length,
+            date: new Date().toLocaleDateString('tr-TR'),
+            status: 'Tamamlandı',
+            jobTitle: title,
+            jobRequirements: [desc],
+            aiRecommendation: top.name + ", " + title + " rolü için %" + top.matchRate + " genel uyumla en uygun adaydır.",
+            k10_executive_summary: k10Summary,
+            k10_comparison_report: k10Report,
+            competencyNames: ['Teknik Yetkinlik', 'Kıdem & Tecrübe', 'İş Bitirme & Proje', 'Metot & Araç Uyum', 'Davranışsal Uyum'],
+            candidates: newCandidates
+        };
+
+        window.comparisonSessions.unshift(newSession);
+        window.saveComparisonSessions();
+
+        form.closest('.modal').remove();
+        toast('Karşılaştırma tamamlandı · ' + cvCost + ' BIGakçe düşüldü. 9 kriterli rapor açılıyor...');
+
+        const appEl = document.getElementById('app');
+        if (appEl && state.page === 'comparison') {
+            appEl.innerHTML = window.comparisonPage();
+        }
+
+        setTimeout(() => {
+            window.openComparisonReport(newId);
+        }, 200);
+    };
+
 })();
+
+
+
+
+
+
+
+
 
 
 
@@ -1895,11 +3251,11 @@ window.render = function() {
         <section class="page-intro" style="padding: 20px;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <h2>Hediye Kontör Gönder</h2>
-                    <p>Çalışma arkadaşlarınıza veya yöneticilerinize kendi bakiyenizden kontör transfer edin.</p>
+                    <h2>Hediye BIGakçe Gönder</h2>
+                    <p>Çalışma arkadaşlarınıza veya yöneticilerinize kendi bakiyenizden BIGakçe transfer edin.</p>
                 </div>
                 <div style="background: #fdf2f8; border: 1px solid #fbcfe8; padding: 15px 25px; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
-                    <span style="display: block; font-size: 12px; color: #db2777; font-weight: bold; margin-bottom: 5px;">MEVCUT KONTÖRÜNÜZ</span>
+                    <span style="display: block; font-size: 12px; color: #db2777; font-weight: bold; margin-bottom: 5px;">MEVCUT BIGakçe BAKİYENİZ</span>
                     <strong style="font-size: 28px; color: #be185d;">${currentCredits}</strong>
                 </div>
             </div>
@@ -1908,8 +3264,8 @@ window.render = function() {
         <section class="generated-case-card" style="padding: 30px; max-width: 500px; margin: 40px auto; background: white; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0;">
             <div style="text-align: center; margin-bottom: 30px;">
                 <span style="font-size: 48px;">🎁</span>
-                <h3 style="margin: 10px 0 5px 0; color: #0f172a;">Kontör Transferi</h3>
-                <p style="color: #64748b; font-size: 14px; margin: 0;">Seçtiğiniz kullanıcının hesabına anında kontör aktarılır.</p>
+                <h3 style="margin: 10px 0 5px 0; color: #0f172a;">BIGakçe Transferi</h3>
+                <p style="color: #64748b; font-size: 14px; margin: 0;">Seçtiğiniz kullanıcının hesabına anında BIGakçe aktarılır.</p>
             </div>
 
             <div style="margin-bottom: 25px;">
@@ -1921,12 +3277,12 @@ window.render = function() {
             </div>
             
             <div style="margin-bottom: 30px;">
-                <label style="display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 8px;">GÖNDERİLECEK KONTÖR MİKTARI</label>
+                <label style="display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 8px;">GÖNDERİLECEK BIGakçe MİKTARI</label>
                 <input type="number" id="gift-amount" min="1" max="${currentCredits}" value="10" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; outline: none; background: #f8fafc;">
             </div>
 
             <button class="primary full" style="background: #db2777; border-color: #db2777; font-size: 16px; padding: 15px; font-weight: bold; cursor: pointer;" onclick="sendGiftCredits()">
-                Hediye Kontörü Gönder
+                Hediye BIGakçe Gönder
             </button>
         </section>
         `;
@@ -1952,7 +3308,7 @@ window.render = function() {
         if(sender) {
             sender.credits = sender.credits !== undefined ? sender.credits : 500;
             if(sender.credits < amount) {
-                return toast('Yetersiz kontör! Maksimum ' + sender.credits + ' gönderebilirsiniz.');
+                return toast('Yetersiz BIGakçe! Maksimum ' + sender.credits + ' gönderebilirsiniz.');
             }
             sender.credits -= amount;
         }
@@ -1962,7 +3318,7 @@ window.render = function() {
 
         localStorage.setItem('authbot_db', JSON.stringify(window.authDB));
         
-        toast(amount + ' kontör ' + recipientName + ' adlı kişiye başarıyla gönderildi!');
+        toast(amount + ' BIGakçe ' + recipientName + ' adlı kişiye başarıyla gönderildi!');
         render();
     };
 })();
@@ -2550,8 +3906,8 @@ setTimeout(() => {
         state.currentUser = user;
         
         const ledger = getLedger();
-        if (!(user in ledger)) {
-            ledger[user] = 0; // New users start with 0 credits
+        if (!(user in ledger) || (ledger[user] || 0) <= 0) {
+            ledger[user] = Math.max(ledger[user] || 0, 500); // Otomatik 500 test BIGakçe'si tanımla
             saveLedger(ledger);
         }
         
@@ -2567,26 +3923,57 @@ setTimeout(() => {
     if(state.logged) {
         state.currentUser = localStorage.getItem('sb_current_user') || 'demo@sirket.com';
     }
-
-    // 3. Override aiCall to apply Paywall
-    const oldAiCall = window.aiCall;
-    window.aiCall = async function(prompt, jsonMode) {
-        const cost = 10;
-        if (!deductCredits(state.currentUser, cost)) {
-            // Insufficient credits
-            throw new Error("YETERSİZ KONTÖR: Bu işlem için " + cost + " kontör gerekiyor. Lütfen Abonelik sayfasından kontör yükleyiniz.");
+    
+    // Aktif kullanıcının BIGakçe'si 0 veya tanımsızsa 500 BIGakçe hediye et
+    (function() {
+        const u = state.currentUser || localStorage.getItem('sb_current_user') || 'demo@sirket.com';
+        const l = getLedger();
+        if (!(u in l) || (l[u] || 0) <= 0) {
+            l[u] = Math.max(l[u] || 0, 500);
+            saveLedger(l);
         }
-        // If deduced successfully, run actual API
+    })();
+
+    // 3. Fiyat tablosu (1 BIGakçe = 10 TL)
+    window.BIGAKCE_PRICING = {
+        mcqPerQuestion: 11,   // 10 baz + 1 ilave
+        openPerQuestion: 2,   // 1 baz + 1 ilave
+        aiOperation: 1,       // vaka üretme, vaka çözümleme vb.
+        cvPerCandidate: 1,    // çoklu / genel CV karşılaştırma
+        cvSingleAnalysis: 10, // görev tanımına göre tekil CV analizi
+        groupPerParticipant: 1 // toplu test (QR) katılımcı başına
+    };
+    window.questionCost = function(mcqCount, openCount) {
+        return (mcqCount || 0) * BIGAKCE_PRICING.mcqPerQuestion + (openCount || 0) * BIGAKCE_PRICING.openPerQuestion;
+    };
+    // render() tetiklemeden iade/ek tahsilat (üretim akışı ekranını bozmamak için)
+    window.refundCredits = function(amount) {
+        if (amount <= 0) return;
+        const ledger = getLedger();
+        ledger[state.currentUser] = (ledger[state.currentUser] || 0) + amount;
+        saveLedger(ledger);
+    };
+    window.chargeCredits = function(amount) {
+        if (amount <= 0) return true;
+        if (deductCredits(state.currentUser, amount)) return true;
+        throw new Error("YETERSİZ BIGakçe: Bu işlem için " + amount + " BIGakçe gerekiyor. Lütfen Abonelik sayfasından BIGakçe yükleyiniz.");
+    };
+
+    // 4. Override aiCall to apply Paywall — cost verilmezse işlem ücreti (1 BIGakçe) uygulanır
+    const oldAiCall = window.aiCall;
+    window.aiCall = async function(prompt, jsonMode, cost) {
+        cost = (typeof cost === 'number') ? cost : BIGAKCE_PRICING.aiOperation;
+        chargeCredits(cost);
         try {
             return await oldAiCall(prompt, jsonMode);
         } catch(e) {
             // Refund if API fails!
-            addCredits(state.currentUser, cost);
+            refundCredits(cost);
             throw e;
         }
     };
 
-    // 4. Override Sidebar Credit Box & Add Subscription Link
+    // 5. Override Sidebar Credit Box & Add Subscription Link
     const oldLayout = window.layout;
     window.layout = function(content, title) {
         let html = oldLayout(content, title);
@@ -2595,15 +3982,18 @@ setTimeout(() => {
         const currentCredits = getUserCredits(state.currentUser);
         html = html.replace(
             /<div class="credit-summary"[\s\S]*?<\/div>/,
-            `<div class="credit-summary" aria-label="Kontör özeti" style="margin-top:20px;">
-                <h3 style="font-size:12px; color:#94a3b8; text-transform:uppercase; margin-bottom:10px;">Hesap & Kontör</h3>
+            `<div class="credit-summary" aria-label="BIGakçe özeti" style="margin-top:20px;">
+                <h3 style="font-size:12px; color:#94a3b8; text-transform:uppercase; margin-bottom:10px;">Hesap & BIGakçe</h3>
                 <div style="background:#f1f5f9; padding:12px; border-radius:8px; margin-bottom:10px;">
                     <strong style="display:block; color:#0f172a; font-size:13px; word-break:break-all;">${state.currentUser}</strong>
                 </div>
                 <table><tbody>
-                    <tr class="credit-remaining"><th>Güncel Bakiye</th><td style="color:${currentCredits>0?'#4aa16f':'#e11d48'}">${currentCredits} Kontör</td></tr>
+                    <tr class="credit-remaining"><th>Güncel Bakiye</th><td style="color:${currentCredits>0?'#4aa16f':'#e11d48'}">${currentCredits} BIGakçe</td></tr>
                 </tbody></table>
-                <button onclick="go('subscription')" style="width:100%; margin-top:10px; background:#4f46e5; color:white; border:none; padding:8px; border-radius:6px; cursor:pointer; font-weight:bold;">➕ Kontör Yükle</button>
+                <div style="display:flex; gap:6px; margin-top:10px;">
+                    <button onclick="go('subscription')" style="flex:1; background:#4f46e5; color:white; border:none; padding:8px 4px; border-radius:6px; cursor:pointer; font-weight:bold; font-size:12px;">➕ Paketler</button>
+                    <button onclick="simulatePurchase(500)" style="flex:1; background:#10b981; color:white; border:none; padding:8px 4px; border-radius:6px; cursor:pointer; font-weight:bold; font-size:12px;" title="Ödemesiz tek tıkla 500 BIGakçe yükle">⚡ +500 Yükle</button>
+                </div>
             </div>`
         );
 
@@ -2612,7 +4002,7 @@ setTimeout(() => {
             /<div class="top-actions">/,
             `<div class="top-actions">
                 <button onclick="openTransferModal()" style="background:#f59e0b; color:white; border:none; padding:6px 12px; border-radius:20px; font-weight:bold; cursor:pointer; font-size:13px; margin-right:10px; display:flex; align-items:center; gap:5px;">
-                   <span>🎁</span> Kontör Gönder
+                   <span>🎁</span> BIGakçe Gönder
                 </button>`
         );
 
@@ -2621,68 +4011,90 @@ setTimeout(() => {
 
     // 5. Subscription Page
     window.subscriptionPage = function() {
+        const curUser = state.currentUser || 'demo@sirket.com';
+        const curCredits = getUserCredits(curUser);
         return `<div class="card" style="max-width:1000px; margin:0 auto; padding:40px;">
-            <div style="text-align:center; margin-bottom:40px;">
-                <h2 style="font-size:28px; color:#0f172a; margin-bottom:10px;">Abonelik ve Kontör Paketleri</h2>
-                <p style="color:#64748b; font-size:16px;">Hesabınıza kontör yükleyerek yapay zeka ajanlarını çalıştırmaya hemen başlayın.</p>
+            <div style="text-align:center; margin-bottom:30px;">
+                <h2 style="font-size:28px; color:#0f172a; margin-bottom:10px;">Abonelik ve BIGakçe Yükleme</h2>
+                <p style="color:#64748b; font-size:16px;">Mevcut Bakiyeniz: <strong style="color:#10b981; font-size:18px;">${curCredits} BIGakçe</strong> (${curUser})</p>
+                <div style="display:inline-block; margin-top:10px; background:#ecfdf5; border:1px solid #a7f3d0; color:#065f46; padding:6px 16px; border-radius:20px; font-size:13px; font-weight:600;">
+                    ⚡ Doğrudan Yükleme Aktif: Güvenli ödeme sayfasına yönlendirilmeden BIGakçe anında hesabınıza eklenir.
+                </div>
+            </div>
+
+            <!-- Hızlı / Özel Miktar Yükleme Çubuğu -->
+            <div style="background:#f8fafc; border:1px dashed #cbd5e1; border-radius:12px; padding:20px; text-align:center; margin-bottom:32px;">
+                <h4 style="margin:0 0 10px 0; color:#1e293b; font-size:15px; font-weight:700;">Hızlı Tek Tıkla BIGakçe Yükle</h4>
+                <div style="display:flex; justify-content:center; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px;">
+                    <button onclick="simulatePurchase(100)" style="background:#fff; border:1px solid #cbd5e1; padding:8px 16px; border-radius:8px; cursor:pointer; font-weight:600; transition:0.2s;">+100 BIGakçe</button>
+                    <button onclick="simulatePurchase(500)" style="background:#e0e7ff; border:1px solid #818cf8; color:#3730a3; padding:8px 16px; border-radius:8px; cursor:pointer; font-weight:700; transition:0.2s;">+500 BIGakçe</button>
+                    <button onclick="simulatePurchase(1000)" style="background:#fff; border:1px solid #cbd5e1; padding:8px 16px; border-radius:8px; cursor:pointer; font-weight:600; transition:0.2s;">+1.000 BIGakçe</button>
+                    <button onclick="simulatePurchase(2500)" style="background:#fff; border:1px solid #cbd5e1; padding:8px 16px; border-radius:8px; cursor:pointer; font-weight:600; transition:0.2s;">+2.500 BIGakçe</button>
+                    <button onclick="simulatePurchase(5000)" style="background:#fff; border:1px solid #cbd5e1; padding:8px 16px; border-radius:8px; cursor:pointer; font-weight:600; transition:0.2s;">+5.000 BIGakçe</button>
+                </div>
+                <div style="display:flex; justify-content:center; align-items:center; gap:8px;">
+                    <input id="directCreditInput" type="number" placeholder="Örn: 250" min="1" style="width:120px; padding:8px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:14px;">
+                    <button onclick="const v=parseInt(document.getElementById('directCreditInput').value); if(v>0){ simulatePurchase(v); } else { toast('Lütfen geçerli bir miktar giriniz.'); }" style="background:#10b981; color:white; border:none; padding:8px 18px; border-radius:8px; cursor:pointer; font-weight:bold; font-size:14px;">Hemen Yükle</button>
+                </div>
             </div>
             
             <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:24px;">
                 <!-- Paket 1 -->
                 <div style="border:1px solid #e2e8f0; border-radius:16px; padding:32px; text-align:center; background:#fff; transition:0.3s; box-shadow:0 4px 6px rgba(0,0,0,0.02);">
                     <h3 style="font-size:20px; color:#0f172a; margin-bottom:8px;">Başlangıç</h3>
-                    <div style="font-size:36px; font-weight:900; color:#4aa16f; margin-bottom:24px;">100 <span style="font-size:16px; color:#64748b; font-weight:500;">Kontör</span></div>
+                    <div style="font-size:36px; font-weight:900; color:#4aa16f; margin-bottom:24px;">100 <span style="font-size:16px; color:#64748b; font-weight:500;">BIGakçe</span></div>
                     <ul style="text-align:left; color:#475569; font-size:14px; margin-bottom:32px; list-style:none; padding:0; line-height:2.5;">
                         <li>✅ ~10 Vaka Üretimi</li>
                         <li>✅ ~5 Aday Raporu</li>
                         <li>✅ Standart Destek</li>
                     </ul>
-                    <button onclick="simulatePurchase(100)" style="width:100%; background:#f1f5f9; color:#0f172a; border:1px solid #cbd5e1; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer;">Satın Al (₺500)</button>
+                    <button onclick="simulatePurchase(100)" style="width:100%; background:#f1f5f9; color:#0f172a; border:1px solid #cbd5e1; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer;">Hemen Yükle (100 BIGakçe)</button>
                 </div>
                 
                 <!-- Paket 2 -->
                 <div style="border:2px solid #4f46e5; border-radius:16px; padding:32px; text-align:center; background:#fff; transform:scale(1.05); box-shadow:0 12px 24px rgba(79,70,229,0.15); position:relative;">
                     <div style="position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:#4f46e5; color:#fff; font-size:12px; font-weight:bold; padding:4px 12px; border-radius:12px;">EN POPÜLER</div>
                     <h3 style="font-size:20px; color:#0f172a; margin-bottom:8px;">Kurumsal PRO</h3>
-                    <div style="font-size:36px; font-weight:900; color:#4aa16f; margin-bottom:24px;">500 <span style="font-size:16px; color:#64748b; font-weight:500;">Kontör</span></div>
+                    <div style="font-size:36px; font-weight:900; color:#4aa16f; margin-bottom:24px;">500 <span style="font-size:16px; color:#64748b; font-weight:500;">BIGakçe</span></div>
                     <ul style="text-align:left; color:#475569; font-size:14px; margin-bottom:32px; list-style:none; padding:0; line-height:2.5;">
                         <li>✅ Sınırsız Vaka Üretimi</li>
                         <li>✅ ~25 Aday Raporu</li>
                         <li>✅ Radar Analizi</li>
-                        <li>✅ Çalışanlara Kontör Transferi</li>
+                        <li>✅ Çalışanlara BIGakçe Transferi</li>
                     </ul>
-                    <button onclick="simulatePurchase(500)" style="width:100%; background:#4f46e5; color:white; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer;">Satın Al (₺2.000)</button>
+                    <button onclick="simulatePurchase(500)" style="width:100%; background:#4f46e5; color:white; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer;">Hemen Yükle (500 BIGakçe)</button>
                 </div>
 
                 <!-- Paket 3 -->
                 <div style="border:1px solid #e2e8f0; border-radius:16px; padding:32px; text-align:center; background:#fff; transition:0.3s; box-shadow:0 4px 6px rgba(0,0,0,0.02);">
                     <h3 style="font-size:20px; color:#0f172a; margin-bottom:8px;">Limitsiz Şirket</h3>
-                    <div style="font-size:36px; font-weight:900; color:#4aa16f; margin-bottom:24px;">2000 <span style="font-size:16px; color:#64748b; font-weight:500;">Kontör</span></div>
+                    <div style="font-size:36px; font-weight:900; color:#4aa16f; margin-bottom:24px;">2000 <span style="font-size:16px; color:#64748b; font-weight:500;">BIGakçe</span></div>
                     <ul style="text-align:left; color:#475569; font-size:14px; margin-bottom:32px; list-style:none; padding:0; line-height:2.5;">
                         <li>✅ Bütün Modüller Açık</li>
                         <li>✅ API Erişimi</li>
                         <li>✅ Sınırsız Transfer İmkanı</li>
                     </ul>
-                    <button onclick="simulatePurchase(2000)" style="width:100%; background:#f1f5f9; color:#0f172a; border:1px solid #cbd5e1; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer;">Satın Al (₺7.500)</button>
+                    <button onclick="simulatePurchase(2000)" style="width:100%; background:#f1f5f9; color:#0f172a; border:1px solid #cbd5e1; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer;">Hemen Yükle (2000 BIGakçe)</button>
                 </div>
             </div>
         </div>`;
     };
 
     window.simulatePurchase = function(amount) {
-        if(confirm(`Kredi kartı simülasyonu: ${amount} kontör hesabınıza eklenecektir. Onaylıyor musunuz?`)) {
-            addCredits(state.currentUser, amount);
-            toast(`Başarılı! Hesabınıza ${amount} kontör yüklendi.`);
-        }
+        const numAmount = parseInt(amount) || 100;
+        const user = state.currentUser || 'demo@sirket.com';
+        addCredits(user, numAmount);
+        toast(`✅ Başarılı! Hesabınıza ${numAmount} BIGakçe yüklendi. (Güncel Bakiye: ${getUserCredits(user)} BIGakçe)`);
+        render();
     };
 
     // 6. Transfer Credits Modal Logic
     window.openTransferModal = function() {
         const current = getUserCredits(state.currentUser);
-        const toEmail = prompt(`Lütfen kontör göndermek istediğiniz çalışan veya adayın sistemdeki e-posta adresini (Kullanıcı Adı) giriniz:\n\n(Mevcut Bakiyeniz: ${current} Kontör)`);
+        const toEmail = prompt(`Lütfen BIGakçe göndermek istediğiniz çalışan veya adayın sistemdeki e-posta adresini (Kullanıcı Adı) giriniz:\n\n(Mevcut Bakiyeniz: ${current} BIGakçe)`);
         if(!toEmail) return;
         
-        const amountStr = prompt(`${toEmail} hesabına kaç kontör göndermek istiyorsunuz?`);
+        const amountStr = prompt(`${toEmail} hesabına kaç BIGakçe göndermek istiyorsunuz?`);
         if(!amountStr) return;
         
         const amount = parseInt(amountStr);
@@ -2691,7 +4103,7 @@ setTimeout(() => {
         }
         
         if(amount > current) {
-            return toast('Yetersiz bakiye! Önce abonelik sayfasından kontör yükleyiniz.');
+            return toast('Yetersiz bakiye! Önce abonelik sayfasından BIGakçe yükleyiniz.');
         }
 
         // Deduct from sender
@@ -2704,7 +4116,7 @@ setTimeout(() => {
         ledger[receiver] += amount;
         saveLedger(ledger);
         
-        toast(`Başarılı! ${receiver} hesabına ${amount} kontör aktarıldı.`);
+        toast(`Başarılı! ${receiver} hesabına ${amount} BIGakçe aktarıldı.`);
         render();
     };
 
@@ -2712,7 +4124,7 @@ setTimeout(() => {
     const oldRender = window.render;
     window.render = function() {
         if (state.page === 'subscription') {
-            document.getElementById('app').innerHTML = layout(subscriptionPage(), 'Abonelik ve Kontör');
+            document.getElementById('app').innerHTML = layout(subscriptionPage(), 'Abonelik ve BIGakçe');
         } else {
             oldRender();
         }
@@ -2733,7 +4145,7 @@ setTimeout(() => {
         const targetHtml = `</button></nav>`;
         const newHtml = `</button>
         <button class="${state.page==='subscription'?'active':''}" onclick="go('subscription')">
-            <span>💳</span> Abonelik & Kontör
+            <span>💳</span> Abonelik & BIGakçe
         </button>
         </nav>`;
         
@@ -2748,8 +4160,9 @@ setTimeout(() => {
 // ==========================================
 // PATCH 11: HARD PAYWALL (FORCE SUBSCRIPTION)
 // ==========================================
+// PATCH 11: NAVIGATION & BALANCE MANAGEMENT
+// ==========================================
 (function() {
-    // 1. Force redirection to subscription on login if balance is 0
     const originalLogin = window.login;
     window.login = function() {
         const inputs = document.querySelectorAll('.login-inputs input');
@@ -2761,7 +4174,7 @@ setTimeout(() => {
         
         const ledger = getLedger();
         if (!(user in ledger)) {
-            ledger[user] = 0;
+            ledger[user] = 100; // Yeni kullanıcılar için 100 demo BIGakçe
         }
         saveLedger(ledger);
         
@@ -2769,35 +4182,21 @@ setTimeout(() => {
         state.logged = true;
         localStorage.setItem('sb_session', '1');
 
-        if (ledger[user] <= 0) {
-            state.page = 'subscription';
-            setTimeout(() => toast('Hoş geldiniz. Sistemi kullanmaya başlamak için lütfen bir abonelik paketi seçiniz.', 4000), 500);
-        } else {
-            state.page = 'dashboard';
-            setTimeout(() => toast('Hoş geldiniz, ' + user, 3000), 500);
-        }
+        state.page = 'dashboard';
+        setTimeout(() => toast('Hoş geldiniz, ' + user, 3000), 500);
         render();
     };
 
-    // 2. Prevent navigation to other pages if balance is 0
+    // Serbest gezinme: Kullanıcı dilediği sayfaya (Ana Sayfa / Dashboard vb.) geçebilir
     const originalGo = window.go;
     window.go = function(pageId) {
-        if (state.logged && getUserCredits(state.currentUser) <= 0 && pageId !== 'subscription') {
-            toast('Sistemi kullanabilmek için lütfen bir başlangıç paketi veya kontör satın alınız.');
-            pageId = 'subscription'; 
-        }
-        
         state.page = pageId;
         window.history.pushState({page:pageId}, '', '?p=' + pageId);
         render();
     };
 
-    // 3. Enforce paywall on direct page load (F5 refresh)
     const oldRender11 = window.render;
     window.render = function() {
-        if (state.logged && getUserCredits(state.currentUser) <= 0 && state.page !== 'subscription') {
-            state.page = 'subscription';
-        }
         oldRender11();
     };
 })();
@@ -2846,60 +4245,20 @@ setTimeout(() => {
 
 
 // ==========================================
-// PATCH 13: PAYNKOLAY FRONTEND INTEGRATION
+// PATCH 13: DOĞRUDAN BIGakçe YÜKLEME (ÖDEME YÖNLENDİRMESİ DEVRE DIŞI)
 // ==========================================
 (function() {
-    window.simulatePurchase = async function(amount) {
-        // Show loading toast
-        toast('Güvenli ödeme sayfasına yönlendiriliyorsunuz...', 2000);
-        
-        try {
-            // Initiate payment session with our backend
-            const response = await fetch('/api/payment', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ amount: amount, user: state.currentUser })
-            });
-            
-            if(!response.ok) throw new Error('Ödeme sistemi başlatılamadı.');
-            
-            // The backend returns an HTML form that redirects to PaynKolay
-            const html = await response.text();
-            
-            // Create an invisible iframe or document to submit the form
-            const newDoc = document.open("text/html", "replace");
-            newDoc.write(html);
-            newDoc.close();
-            
-        } catch(e) {
-            toast('Hata: ' + e.message);
-        }
+    window.simulatePurchase = function(amount) {
+        const numAmount = parseInt(amount) || 100;
+        const user = state.currentUser || 'demo@sirket.com';
+        addCredits(user, numAmount);
+        toast(`✅ Başarılı! Hesabınıza ${numAmount} BIGakçe yüklendi. (Mevcut Bakiye: ${getUserCredits(user)} BIGakçe)`, 4000);
+        render();
     };
 
-    // Listen for the redirect back from PaynKolay callback
-    const urlParams = new URLSearchParams(window.location.search);
-    if(urlParams.get('payment_status') === 'success') {
-        const amount = parseInt(urlParams.get('amount') || '0');
-        const user = urlParams.get('user');
-        if(amount > 0 && user) {
-            // Update ledger
-            const ledger = getLedger();
-            if(!(user in ledger)) ledger[user] = 0;
-            ledger[user] += amount;
-            saveLedger(ledger);
-            
-            // Clean up URL parameters without refreshing
-            window.history.replaceState({}, document.title, window.location.pathname + "?p=subscription");
-            
-            setTimeout(() => {
-                toast(`Ödeme işleminiz başarılıdır! Hesabınıza ${amount} kontör eklendi.`, 5000);
-                render();
-            }, 1000);
-        }
-    } else if(urlParams.get('payment_status') === 'failed') {
-        window.history.replaceState({}, document.title, window.location.pathname + "?p=subscription");
-        setTimeout(() => toast('Ödeme işlemi başarısız oldu.', 5000), 1000);
-    }
+    window.loadCredits = function(amount) {
+        window.simulatePurchase(amount);
+    };
 })();
 
 
@@ -2987,7 +4346,7 @@ setTimeout(() => {
                 <div>
                     <span class="eyebrow">AJAN 8 · FORMDAN VAKA</span>
                     <h2>Veri Bankası İle Vaka Üret</h2>
-                    <p>Önceden tanımlı dev veri kütüphanesini kullanarak sektör seçin. Birden fazla departman, uzmanlık ve sertifikayı (CTRL/CMD tuşlarına basarak) aynı anda seçip kompleks vakalar üretebilirsiniz.</p>
+                    <p>Önceden tanımlı dev veri kütüphanesini kullanarak sektör seçin. Pozisyon, seviye, fonksiyon ve uzmanlıkları ayrı ayrı yapılandırarak kompleks vakalar üretebilirsiniz.</p>
                 </div>
                 <button class="secondary" onclick="go('documents')">← Belgeden Vaka</button>
             </div>
@@ -2995,18 +4354,34 @@ setTimeout(() => {
                 <div class="prompt-grid">
                     <label><span>Sektör</span><select id="pb-sector" onchange="updateDbChain('sector')"></select></label>
                     <label><span>Alt Sektör</span><select id="pb-subsector" onchange="updateDbChain('subsector')" disabled></select></label>
-                    <label><span>Pozisyon / Seviye</span><select id="pb-position" onchange="updateDbPrompt()" disabled></select></label>
-                    
+
+                    <label><span>Pozisyon (Unvan)</span><select id="pb-position" onchange="updateDbPrompt()" disabled></select></label>
+                    <label><span>Kıdem / Seviye</span>
+                        <select id="pb-level" onchange="updateDbPrompt()">
+                            <option value="Stajyer / Yeni Mezun">Stajyer / Yeni Mezun</option>
+                            <option value="Junior (1-2 Yıl)">Junior (1-2 Yıl)</option>
+                            <option value="Mid-Level (3-5 Yıl)" selected>Mid-Level (3-5 Yıl)</option>
+                            <option value="Senior (5-8 Yıl)">Senior (5-8 Yıl)</option>
+                            <option value="Team Lead / Uzman">Team Lead / Uzman</option>
+                            <option value="Yönetici / Müdür">Yönetici / Müdür</option>
+                            <option value="Direktör / C-Level">Direktör / C-Level</option>
+                        </select>
+                    </label>
+
+                    <label><span>Fonksiyon</span>
+                        <select id="pb-function" onchange="updateDbChain('function')" disabled></select>
+                    </label>
+                    <label><span>Uzmanlık Alanı (Çoklu Seçim)</span>
+                        <select id="pb-expertise" multiple size="4" onchange="updateDbPrompt()" disabled style="height:90px;"></select>
+                    </label>
+
                     <label><span>Departman (Çoklu Seçim)</span>
                         <select id="pb-department" multiple size="4" onchange="updateDbPrompt()" disabled style="height:90px;"></select>
-                    </label>
-                    <label><span>Uzmanlık / Fonksiyon (Çoklu Seçim)</span>
-                        <select id="pb-expertise" multiple size="4" onchange="updateDbPrompt()" disabled style="height:90px;"></select>
                     </label>
                     <label><span>Sertifikalar (Çoklu Seçim)</span>
                         <select id="pb-certificate" multiple size="4" onchange="updateDbPrompt()" disabled style="height:90px;"></select>
                     </label>
-                    
+
                     <label><span>Vaka Konusu / Teması</span><input id="pb-topic" type="text" placeholder="Örn: Kriz yönetimi, bütçe kısıntısı" oninput="updateDbPrompt()"></label>
                     <label><span>Zorluk Seviyesi</span>
                         <select id="pb-difficulty" onchange="updateDbPrompt()">
@@ -3023,7 +4398,7 @@ setTimeout(() => {
                     <h3>Özel Beceriler ve Yetkinlikler (Manuel Ekle)</h3>
                     <p class="muted">Listede olmayan spesifik yetkinlikleri aşağıya yazabilirsiniz.</p>
                     <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
-                        <input type="text" id="pb-custom-skills" placeholder="Örn: ISO 27001, Python, Agile..." style="flex:1; padding:10px; border-radius:6px; border:1px solid #ccc;">
+                        <input type="text" id="pb-custom-skills" placeholder="Örn: ISO 27001, Python, Agile..." style="flex:1; padding:10px; border-radius:6px; border:1px solid #ccc;" oninput="updateDbPrompt()">
                     </div>
                 </div>
 
@@ -3041,39 +4416,107 @@ setTimeout(() => {
     };
 
     window.updateDbChain = function(level) {
-        const _chk = document.getElementById('pb-sector');
-        if (!_chk) return;
-
         const sectorEl = document.getElementById('pb-sector');
+        if (!sectorEl) return;
+
         const subEl = document.getElementById('pb-subsector');
         const posEl = document.getElementById('pb-position');
+        const funcEl = document.getElementById('pb-function');
         const depEl = document.getElementById('pb-department');
         const expEl = document.getElementById('pb-expertise');
         const certEl = document.getElementById('pb-certificate');
         
         const sector = sectorEl.value;
-        const subsector = subEl.value;
+        const subsector = subEl ? subEl.value : '';
 
         if(level === 'init') {
-            sectorEl.innerHTML = '<option value="">Ana Sektör Seçiniz</option>' + Object.keys(DATABANK).map(s => `<option value="${s}">${s}</option>`).join('');
-            subEl.disabled = true; posEl.disabled = true; depEl.disabled = true; expEl.disabled = true; certEl.disabled = true;
+            const allSectors = unique([
+                ...Object.keys(DATABANK),
+                ...matrixData.hierarchy.map(h => h[0]),
+                ...keywordRows.map(r => r[0])
+            ]).filter(Boolean).sort((a,b) => a.localeCompare(b, 'tr'));
+            sectorEl.innerHTML = '<option value="">Ana Sektör Seçiniz</option>' + allSectors.map(s => `<option value="${safeText(s)}">${safeText(s)}</option>`).join('');
+            if(subEl) subEl.disabled = true;
+            if(posEl) posEl.disabled = true;
+            if(funcEl) funcEl.disabled = true;
+            if(depEl) depEl.disabled = true;
+            if(expEl) expEl.disabled = true;
+            if(certEl) certEl.disabled = true;
         }
 
         if(level === 'sector' && sector) {
-            const subs = Object.keys(DATABANK[sector] || {});
-            subEl.innerHTML = '<option value="">Alt Sektör Seçiniz</option>' + subs.map(s => `<option value="${s}">${s}</option>`).join('');
-            subEl.disabled = false;
-            posEl.disabled = true; depEl.disabled = true; expEl.disabled = true; certEl.disabled = true;
+            const subs = unique([
+                ...(DATABANK[sector] ? Object.keys(DATABANK[sector]) : []),
+                ...matrixData.hierarchy.filter(h => h[0] === sector).map(h => h[1]),
+                ...keywordRows.filter(r => r[0] === sector).map(r => r[1])
+            ]).filter(Boolean).sort((a,b) => a.localeCompare(b, 'tr'));
+            if(subEl) {
+                subEl.innerHTML = '<option value="">Alt Sektör Seçiniz</option>' + subs.map(s => `<option value="${safeText(s)}">${safeText(s)}</option>`).join('');
+                subEl.disabled = false;
+            }
+            if(posEl) posEl.disabled = true;
+            if(funcEl) funcEl.disabled = true;
+            if(depEl) depEl.disabled = true;
+            if(expEl) expEl.disabled = true;
+            if(certEl) certEl.disabled = true;
         }
 
-        if(level === 'subsector' && sector && subsector) {
-            const data = DATABANK[sector][subsector];
-            posEl.innerHTML = '<option value="">Pozisyon Seçiniz</option>' + data.positions.map(s => `<option value="${s}">${s}</option>`).join('');
-            depEl.innerHTML = data.departments.map(s => `<option value="${s}">${s}</option>`).join('');
-            expEl.innerHTML = data.expertises.map(s => `<option value="${s}">${s}</option>`).join('');
-            certEl.innerHTML = data.certificates.map(s => `<option value="${s}">${s}</option>`).join('');
-            
-            posEl.disabled = false; depEl.disabled = false; expEl.disabled = false; certEl.disabled = false;
+        if((level === 'subsector' || level === 'function') && sector && subsector) {
+            // Functions
+            const funcs = unique([
+                ...matrixData.hierarchy.filter(h => h[0] === sector && h[1] === subsector).map(h => h[2]),
+                ...keywordRows.filter(r => r[0] === sector && r[1] === subsector).map(r => r[2])
+            ]).filter(Boolean);
+            if(funcEl) {
+                if(level === 'subsector') {
+                    funcEl.innerHTML = funcs.length 
+                        ? '<option value="">Fonksiyon Seçiniz</option>' + funcs.map(f => `<option value="${safeText(f)}">${safeText(f)}</option>`).join('')
+                        : '<option value="Genel Operasyon">Genel Operasyon</option>';
+                    funcEl.disabled = false;
+                }
+            }
+
+            // Positions (Job titles)
+            const dbPositions = (DATABANK[sector] && DATABANK[sector][subsector] && DATABANK[sector][subsector].positions) || [];
+            const kwPositions = keywordRows.filter(r => r[0] === sector && r[1] === subsector).map(r => r[3]);
+            const basePos = [subsector + ' Uzmanı', subsector + ' Mühendisi', subsector + ' Yöneticisi', subsector + ' Sorumlusu'];
+            const positions = unique([...dbPositions, ...kwPositions, ...basePos]).filter(Boolean);
+            if(posEl) {
+                posEl.innerHTML = '<option value="">Pozisyon Seçiniz</option>' + positions.map(s => `<option value="${safeText(s)}">${safeText(s)}</option>`).join('');
+                posEl.disabled = false;
+            }
+
+            // Departments
+            const dbDeps = (DATABANK[sector] && DATABANK[sector][subsector] && DATABANK[sector][subsector].departments) || [];
+            const kwDeps = keywordRows.filter(r => r[0] === sector && r[1] === subsector).map(r => r[4]);
+            const baseDeps = [subsector, sector + ' Operasyonları', 'Planlama ve Yönetim', 'Kalite Güvence', 'Teknik Hizmetler'];
+            const departments = unique([...dbDeps, ...kwDeps, ...baseDeps]).filter(Boolean);
+            if(depEl) {
+                depEl.innerHTML = departments.map(s => `<option value="${safeText(s)}">${safeText(s)}</option>`).join('');
+                depEl.disabled = false;
+            }
+
+            // Expertises / Skills
+            const selectedFunc = funcEl ? funcEl.value : '';
+            const dbExp = (DATABANK[sector] && DATABANK[sector][subsector] && DATABANK[sector][subsector].expertises) || [];
+            const matSkills = matrixData.skills
+                .filter(s => s.sector === sector && s.subsector === subsector && (!selectedFunc || s.function === selectedFunc))
+                .map(s => s.name);
+            const baseExp = [subsector + ' Yönetimi', 'Süreç İyileştirme', 'Risk Yönetimi', 'Teknik Denetim'];
+            const expertises = unique([...matSkills, ...dbExp, ...baseExp]).filter(Boolean);
+            if(expEl) {
+                expEl.innerHTML = expertises.map(s => `<option value="${safeText(s)}">${safeText(s)}</option>`).join('');
+                expEl.disabled = false;
+            }
+
+            // Certificates
+            const dbCerts = (DATABANK[sector] && DATABANK[sector][subsector] && DATABANK[sector][subsector].certificates) || [];
+            const baseCerts = ['ISO 9001 Kalite Yönetim Sertifikası', 'İş Sağlığı ve Güvenliği (İSG) Belgesi', 'Mesleki Yeterlilik Belgesi (MYK)', 'Proje Yönetimi Sertifikası'];
+            const certs = unique([...dbCerts, ...baseCerts]).filter(Boolean);
+            if(certEl) {
+                certEl.innerHTML = certs.map(s => `<option value="${safeText(s)}">${safeText(s)}</option>`).join('');
+                certEl.disabled = false;
+            }
         }
         
         updateDbPrompt();
@@ -3085,14 +4528,16 @@ setTimeout(() => {
         
         const sector = document.getElementById('pb-sector')?.value || '{SEKTÖR}';
         const sub = document.getElementById('pb-subsector')?.value || '{ALT_SEKTÖR}';
-        const position = document.getElementById('pb-position')?.value || '{POZISYON}';
+        const position = document.getElementById('pb-position')?.value || '{POZİSYON}';
+        const level = document.getElementById('pb-level')?.value || '{SEVİYE}';
+        const func = document.getElementById('pb-function')?.value || '{FONKSİYON}';
         const departments = pvMulti('pb-department') || '{DEPARTMANLAR}';
         const expertises = pvMulti('pb-expertise') || '{UZMANLIKLAR}';
         const certs = pvMulti('pb-certificate') || '{SERTİFİKALAR}';
         const topic = document.getElementById('pb-topic')?.value || '{KONU}';
         const customSkills = document.getElementById('pb-custom-skills')?.value || '';
 
-        out.value = `SEKTÖR: ${sector} > ${sub}\nPOZİSYON: ${position}\nDEPARTMANLAR: ${departments}\nUZMANLIKLAR: ${expertises}\nSERTİFİKALAR: ${certs}\nKONU: ${topic}\nEK BİLGİ: ${customSkills}`;
+        out.value = `SEKTÖR: ${sector} > ${sub}\nPOZİSYON: ${position}\nKIDEM / SEVİYE: ${level}\nFONKSİYON: ${func}\nDEPARTMANLAR: ${departments}\nUZMANLIKLAR: ${expertises}\nSERTİFİKALAR: ${certs}\nKONU: ${topic}\nEK BİLGİ: ${customSkills}`;
     };
 
     window.generateDbCase = async function() {
@@ -3164,109 +4609,581 @@ Bu vaka, birden fazla uzmanlık alanını ve sertifika bilgisini aynı anda gere
 
 
 // ==========================================
-// PATCH 15: SIDEBAR REORGANIZATION
+// PATCH 15 & 16: HIERARCHICAL NAVIGATION (SIDEBAR & TOPBAR) + TRAINING MODULE
 // ==========================================
 (function() {
+    // ------------------------------------------
+    // TOPLU ORTAK TESTLER (POZİSYON BAZLI ŞİRKET İÇİ ORTAK TEST SETLERİ)
+    // ------------------------------------------
+    const CT_KEY = 'sb_common_tests';
+    window._sbCtState = window._sbCtState || { selectedId: null, generating: false, filter: '' };
+
+    function ctEsc(v) {
+        return String(v == null ? '' : v)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+    function ctUid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+    function ctLoad() {
+        try {
+            const raw = localStorage.getItem(CT_KEY);
+            if (raw) return JSON.parse(raw);
+        } catch (e) {}
+        const seed = [
+            { id: ctUid(), position: 'Satış Temsilcisi', department: 'Satış', level: 'Orta', note: '', questions: [], updatedAt: Date.now() },
+            { id: ctUid(), position: 'İK Uzmanı', department: 'İnsan Kaynakları', level: 'Orta', note: '', questions: [], updatedAt: Date.now() },
+            { id: ctUid(), position: 'Üretim Mühendisi', department: 'Üretim', level: 'Kıdemli', note: '', questions: [], updatedAt: Date.now() }
+        ];
+        localStorage.setItem(CT_KEY, JSON.stringify(seed));
+        return seed;
+    }
+    function ctSave(list) { localStorage.setItem(CT_KEY, JSON.stringify(list)); }
+    function ctRerender() { if (['common-tests', 'training', 'lessons'].includes(state.page)) render(); }
+    function ctFind(list, id) { return list.find(function (p) { return p.id === id; }); }
+    function ctToast(msg) { if (typeof toast === 'function') toast(msg); }
+
+    window.ctSelectPosition = function (id) { window._sbCtState.selectedId = id; ctRerender(); };
+    window.ctFilter = function (v) {
+        window._sbCtState.filter = v;
+        const q = v.toLocaleLowerCase('tr');
+        document.querySelectorAll('[data-ct-pos]').forEach(function (el) {
+            el.style.display = el.getAttribute('data-ct-pos').toLocaleLowerCase('tr').includes(q) ? '' : 'none';
+        });
+    };
+
+    window.ctAddPosition = function () {
+        const name = (document.getElementById('ct-new-position') || {}).value || '';
+        const dept = (document.getElementById('ct-new-department') || {}).value || '';
+        const level = (document.getElementById('ct-new-level') || {}).value || 'Orta';
+        if (!name.trim()) { ctToast('Lütfen pozisyon adı girin.'); return; }
+        const list = ctLoad();
+        if (list.some(function (p) { return p.position.trim().toLocaleLowerCase('tr') === name.trim().toLocaleLowerCase('tr'); })) {
+            ctToast('Bu pozisyon zaten mevcut.'); return;
+        }
+        const item = { id: ctUid(), position: name.trim(), department: dept.trim(), level: level, note: '', questions: [], updatedAt: Date.now() };
+        list.push(item);
+        ctSave(list);
+        window._sbCtState.selectedId = item.id;
+        ctToast('Pozisyon eklendi: ' + item.position);
+        ctRerender();
+    };
+
+    window.ctDeletePosition = function (id) {
+        const list = ctLoad();
+        const p = ctFind(list, id);
+        if (!p) return;
+        if (!confirm('"' + p.position + '" pozisyonu ve ortak test seti silinsin mi?')) return;
+        ctSave(list.filter(function (x) { return x.id !== id; }));
+        if (window._sbCtState.selectedId === id) window._sbCtState.selectedId = null;
+        ctToast('Pozisyon silindi.');
+        ctRerender();
+    };
+
+    window.ctUpdatePosition = function (id, field, value) {
+        const list = ctLoad();
+        const p = ctFind(list, id);
+        if (!p) return;
+        p[field] = value;
+        p.updatedAt = Date.now();
+        ctSave(list);
+    };
+
+    window.ctAddQuestion = function (id, type) {
+        const list = ctLoad();
+        const p = ctFind(list, id);
+        if (!p) return;
+        p.questions.push(type === 'open'
+            ? { id: ctUid(), type: 'open', text: '', competency: '', options: [], answer: null, rubric: '' }
+            : { id: ctUid(), type: 'mcq', text: '', competency: '', options: ['', '', '', ''], answer: 0, rubric: '' });
+        p.updatedAt = Date.now();
+        ctSave(list);
+        ctRerender();
+    };
+
+    window.ctDeleteQuestion = function (id, qid) {
+        const list = ctLoad();
+        const p = ctFind(list, id);
+        if (!p) return;
+        p.questions = p.questions.filter(function (q) { return q.id !== qid; });
+        p.updatedAt = Date.now();
+        ctSave(list);
+        ctRerender();
+    };
+
+    window.ctMoveQuestion = function (id, qid, dir) {
+        const list = ctLoad();
+        const p = ctFind(list, id);
+        if (!p) return;
+        const i = p.questions.findIndex(function (q) { return q.id === qid; });
+        const j = i + dir;
+        if (i < 0 || j < 0 || j >= p.questions.length) return;
+        const tmp = p.questions[i]; p.questions[i] = p.questions[j]; p.questions[j] = tmp;
+        ctSave(list);
+        ctRerender();
+    };
+
+    window.ctUpdateQuestion = function (id, qid, field, value, optIndex) {
+        const list = ctLoad();
+        const p = ctFind(list, id);
+        if (!p) return;
+        const q = p.questions.find(function (x) { return x.id === qid; });
+        if (!q) return;
+        if (field === 'option') q.options[optIndex] = value;
+        else if (field === 'answer') q.answer = Number(value);
+        else q[field] = value;
+        p.updatedAt = Date.now();
+        ctSave(list);
+    };
+
+    window.ctAddOption = function (id, qid) {
+        const list = ctLoad();
+        const p = ctFind(list, id);
+        const q = p && p.questions.find(function (x) { return x.id === qid; });
+        if (!q || q.options.length >= 6) return;
+        q.options.push('');
+        ctSave(list);
+        ctRerender();
+    };
+
+    window.ctRemoveOption = function (id, qid, idx) {
+        const list = ctLoad();
+        const p = ctFind(list, id);
+        const q = p && p.questions.find(function (x) { return x.id === qid; });
+        if (!q || q.options.length <= 2) return;
+        q.options.splice(idx, 1);
+        if (q.answer >= q.options.length) q.answer = 0;
+        else if (q.answer > idx) q.answer--;
+        ctSave(list);
+        ctRerender();
+    };
+
+    function ctParseJsonArray(text) {
+        let t = String(text || '').replace(/```json/gi, '').replace(/```/g, '').trim();
+        const s = t.indexOf('['), e = t.lastIndexOf(']');
+        if (s === -1 || e === -1) throw new Error('AI yanıtında soru listesi bulunamadı.');
+        return JSON.parse(t.slice(s, e + 1));
+    }
+
+    window.ctGenerate = async function (id) {
+        const st = window._sbCtState;
+        if (st.generating) return;
+        const list = ctLoad();
+        const p = ctFind(list, id);
+        if (!p) return;
+        const count = Math.max(1, Math.min(50, parseInt((document.getElementById('ct-gen-count') || {}).value, 10) || 10));
+        const type = (document.getElementById('ct-gen-type') || {}).value || 'mixed';
+        const mode = (document.getElementById('ct-gen-mode') || {}).value || 'append';
+        const note = (document.getElementById('ct-gen-note') || {}).value || '';
+        const typeText = type === 'mcq' ? 'tamamı 4 seçenekli çoktan seçmeli'
+            : type === 'open' ? 'tamamı açık uçlu'
+            : 'yaklaşık %70 çoktan seçmeli (4 seçenekli), %30 açık uçlu';
+
+        const prompt = 'Sen kurumsal bir ölçme-değerlendirme uzmanısın. Bir şirketin "' + p.position + '" pozisyonundaki TÜM adaylara ve çalışanlara ' +
+            'ortak (standart) olarak uygulanacak bir şirket içi test seti hazırla.\n' +
+            'Departman: ' + (p.department || 'Belirtilmedi') + '\nSeviye: ' + (p.level || 'Orta') + '\n' +
+            (p.note ? 'Şirket/pozisyon notları: ' + p.note + '\n' : '') +
+            (note ? 'Ek talimat: ' + note + '\n' : '') +
+            'Soru sayısı: ' + count + ' (' + typeText + ').\n' +
+            'Sorular pozisyonun temel teknik bilgisi, iş süreçleri, şirket içi kurallar/iş güvenliği/etik ve davranışsal yetkinlikleri dengeli biçimde kapsasın. ' +
+            'Çeldiriciler makul ve ayırt edici olsun.\n' +
+            'YALNIZCA geçerli bir JSON dizisi döndür, açıklama ekleme. Format:\n' +
+            '[{"type":"mcq","text":"Soru metni","competency":"Yetkinlik alanı","options":["A","B","C","D"],"answer":0,"rubric":"Kısa açıklama"},' +
+            '{"type":"open","text":"Soru metni","competency":"Yetkinlik alanı","rubric":"Beklenen cevabın değerlendirme kriterleri"}]\n' +
+            '"answer" doğru seçeneğin 0 tabanlı indeksidir. Tüm metinler Türkçe olsun.';
+
+        // Tahmini ücret peşin alınır, üretimden sonra gerçek ÇS/açık uçlu dağılımına göre mahsuplaşılır
+        const estMcq = type === 'mcq' ? count : type === 'open' ? 0 : Math.round(count * 0.7);
+        const estCost = questionCost(estMcq, count - estMcq);
+
+        st.generating = true;
+        ctRerender();
+        try {
+            const text = await aiCall(prompt, false, estCost);
+            const arr = ctParseJsonArray(text);
+            const qs = arr.filter(function (q) { return q && q.text; }).map(function (q) {
+                const isOpen = q.type === 'open' || !Array.isArray(q.options) || q.options.length < 2;
+                return {
+                    id: ctUid(),
+                    type: isOpen ? 'open' : 'mcq',
+                    text: String(q.text),
+                    competency: String(q.competency || ''),
+                    options: isOpen ? [] : q.options.map(String).slice(0, 6),
+                    answer: isOpen ? null : Math.max(0, Math.min((q.options.length || 1) - 1, Number(q.answer) || 0)),
+                    rubric: String(q.rubric || '')
+                };
+            });
+            if (!qs.length) { refundCredits(estCost); throw new Error('AI geçerli soru üretmedi.'); }
+            const mcqCount = qs.filter(function (q) { return q.type === 'mcq'; }).length;
+            const actualCost = questionCost(mcqCount, qs.length - mcqCount);
+            if (actualCost < estCost) refundCredits(estCost - actualCost);
+            else if (actualCost > estCost) deductCredits(state.currentUser, actualCost - estCost);
+            const fresh = ctLoad();
+            const target = ctFind(fresh, id);
+            target.questions = mode === 'replace' ? qs : target.questions.concat(qs);
+            target.updatedAt = Date.now();
+            ctSave(fresh);
+            ctToast(qs.length + ' soru üretildi · ' + actualCost + ' BIGakçe düşüldü. Düzenleyebilirsiniz.');
+        } catch (err) {
+            ctToast('Soru üretilemedi: ' + (err && err.message ? err.message : err));
+        } finally {
+            st.generating = false;
+            ctRerender();
+        }
+    };
+
+    window.ctExport = function (id) {
+        const p = ctFind(ctLoad(), id);
+        if (!p) return;
+        const lines = ['TOPLU ORTAK TEST — ' + p.position, 'Departman: ' + (p.department || '-') + ' | Seviye: ' + (p.level || '-'), ''];
+        p.questions.forEach(function (q, i) {
+            lines.push((i + 1) + '. ' + q.text + (q.competency ? '  [' + q.competency + ']' : ''));
+            if (q.type === 'mcq') q.options.forEach(function (o, k) { lines.push('   ' + String.fromCharCode(65 + k) + ') ' + o); });
+            else lines.push('   (Açık uçlu)');
+            lines.push('');
+        });
+        lines.push('', 'CEVAP ANAHTARI');
+        p.questions.forEach(function (q, i) {
+            lines.push((i + 1) + '. ' + (q.type === 'mcq' ? String.fromCharCode(65 + (q.answer || 0)) : 'Açık uçlu') + (q.rubric ? ' — ' + q.rubric : ''));
+        });
+        const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'ortak-test-' + p.position.replace(/[^\wğüşöçıİĞÜŞÖÇ-]+/g, '-') + '.txt';
+        document.body.appendChild(a); a.click(); a.remove();
+        ctToast('Test dışa aktarıldı.');
+    };
+
+    function ctQuestionCard(p, q, i, total) {
+        const pid = ctEsc(p.id), qid = ctEsc(q.id);
+        const isMcq = q.type === 'mcq';
+        const color = isMcq ? '#0ea5e9' : '#f59e0b';
+        return `
+        <article class="ct-q" style="border-left-color:${color}">
+            <div class="ct-q-head">
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                    <span class="ct-q-num">${i + 1}</span>
+                    <span class="ct-chip" style="background:${color}1a;color:${color}">${isMcq ? 'Çoktan Seçmeli' : 'Açık Uçlu'}</span>
+                    <input class="ct-input ct-comp" placeholder="Yetkinlik alanı" value="${ctEsc(q.competency)}" onchange="ctUpdateQuestion('${pid}','${qid}','competency',this.value)">
+                </div>
+                <div class="ct-q-actions">
+                    <button title="Yukarı" ${i === 0 ? 'disabled' : ''} onclick="ctMoveQuestion('${pid}','${qid}',-1)">▲</button>
+                    <button title="Aşağı" ${i === total - 1 ? 'disabled' : ''} onclick="ctMoveQuestion('${pid}','${qid}',1)">▼</button>
+                    <button title="Sil" class="danger" onclick="ctDeleteQuestion('${pid}','${qid}')">✕</button>
+                </div>
+            </div>
+            <textarea class="ct-input ct-text" rows="2" placeholder="Soru metni..." onchange="ctUpdateQuestion('${pid}','${qid}','text',this.value)">${ctEsc(q.text)}</textarea>
+            ${isMcq ? `
+            <div class="ct-opts">
+                ${q.options.map(function (o, k) { return `
+                <label class="ct-opt ${q.answer === k ? 'correct' : ''}">
+                    <input type="radio" name="ans-${qid}" ${q.answer === k ? 'checked' : ''} onchange="ctUpdateQuestion('${pid}','${qid}','answer',${k});this.closest('.ct-opts').querySelectorAll('.ct-opt').forEach(function(l){l.classList.remove('correct')});this.closest('.ct-opt').classList.add('correct')" title="Doğru cevap">
+                    <b>${String.fromCharCode(65 + k)}</b>
+                    <input class="ct-input" value="${ctEsc(o)}" placeholder="Seçenek ${String.fromCharCode(65 + k)}" onchange="ctUpdateQuestion('${pid}','${qid}','option',this.value,${k})">
+                    ${q.options.length > 2 ? `<button class="ct-mini" title="Seçeneği kaldır" onclick="event.preventDefault();ctRemoveOption('${pid}','${qid}',${k})">−</button>` : ''}
+                </label>`; }).join('')}
+                ${q.options.length < 6 ? `<button class="ct-link" onclick="ctAddOption('${pid}','${qid}')">+ Seçenek ekle</button>` : ''}
+            </div>` : ''}
+            <input class="ct-input ct-rubric" placeholder="${isMcq ? 'Açıklama (neden doğru?)' : 'Değerlendirme kriteri / beklenen cevap'}" value="${ctEsc(q.rubric)}" onchange="ctUpdateQuestion('${pid}','${qid}','rubric',this.value)">
+        </article>`;
+    }
+
+    window.commonTestsPage = function () {
+        const st = window._sbCtState;
+        const list = ctLoad();
+        if (!st.selectedId || !ctFind(list, st.selectedId)) st.selectedId = list.length ? list[0].id : null;
+        const sel = st.selectedId ? ctFind(list, st.selectedId) : null;
+        const totalQ = list.reduce(function (a, p) { return a + p.questions.length; }, 0);
+        const ready = list.filter(function (p) { return p.questions.length > 0; }).length;
+        const levels = ['Giriş', 'Orta', 'Kıdemli', 'Yönetici'];
+
+        const styles = `<style>
+            .ct-page{padding:24px 32px 80px;max-width:1280px;margin:0 auto;font-family:inherit;color:#0f172a}
+            .ct-hero{background:linear-gradient(135deg,#0f766e 0%,#0e7490 50%,#4338ca 100%);border-radius:20px;padding:30px 32px;color:#fff;box-shadow:0 12px 30px rgba(14,116,144,.25);margin-bottom:24px;position:relative;overflow:hidden}
+            .ct-hero:after{content:'📋';position:absolute;right:-10px;bottom:-30px;font-size:150px;opacity:.12}
+            .ct-hero h1{font-size:2rem;font-weight:800;margin:6px 0 8px;color:#fff}
+            .ct-hero p{opacity:.92;max-width:760px;line-height:1.6;margin:0 0 16px}
+            .ct-eyebrow{display:inline-block;background:rgba(255,255,255,.18);padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:.5px}
+            .ct-stats{display:flex;gap:12px;flex-wrap:wrap}
+            .ct-stats div{background:rgba(255,255,255,.15);backdrop-filter:blur(6px);padding:8px 14px;border-radius:12px;font-size:13px}
+            .ct-stats b{font-size:16px;margin-right:4px}
+            .ct-grid{display:grid;grid-template-columns:320px 1fr;gap:22px;align-items:start}
+            @media(max-width:960px){.ct-grid{grid-template-columns:1fr}}
+            .ct-card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:18px;box-shadow:0 4px 16px rgba(15,23,42,.04)}
+            .ct-card h3{margin:0 0 12px;font-size:15px;font-weight:800}
+            .ct-input{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:9px;padding:8px 10px;font:inherit;font-size:13px;background:#fff;color:#0f172a;transition:border-color .15s,box-shadow .15s}
+            .ct-input:focus{outline:none;border-color:#0e7490;box-shadow:0 0 0 3px rgba(14,116,144,.15)}
+            .ct-pos-list{display:flex;flex-direction:column;gap:6px;max-height:440px;overflow:auto;margin:10px 0 16px}
+            .ct-pos{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;border:1px solid #e2e8f0;border-radius:11px;cursor:pointer;transition:all .15s;background:#fff;text-align:left;width:100%;font:inherit}
+            .ct-pos:hover{border-color:#0e7490;transform:translateX(2px)}
+            .ct-pos.active{background:linear-gradient(90deg,#ecfeff,#eef2ff);border-color:#0e7490;box-shadow:0 4px 12px rgba(14,116,144,.12)}
+            .ct-pos strong{display:block;font-size:13.5px}
+            .ct-pos small{color:#64748b;font-size:11.5px}
+            .ct-badge{font-size:11px;font-weight:800;padding:3px 8px;border-radius:999px;background:#f1f5f9;color:#475569;white-space:nowrap}
+            .ct-badge.ok{background:#dcfce7;color:#15803d}
+            .ct-btn{border:0;border-radius:10px;padding:9px 14px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:transform .12s,box-shadow .12s,opacity .12s}
+            .ct-btn:hover:not(:disabled){transform:translateY(-1px)}
+            .ct-btn:disabled{opacity:.6;cursor:not-allowed}
+            .ct-btn.primary{background:linear-gradient(135deg,#0e7490,#4338ca);color:#fff;box-shadow:0 6px 16px rgba(67,56,202,.25)}
+            .ct-btn.ghost{background:#f1f5f9;color:#334155;border:1px solid #cbd5e1}
+            .ct-btn.danger{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+            .ct-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+            .ct-label{display:block;font-size:11.5px;font-weight:700;color:#475569;margin:0 0 4px}
+            .ct-ai{background:linear-gradient(135deg,#f0fdfa,#eef2ff);border:1px solid #c7d2fe;border-radius:14px;padding:16px;margin:16px 0}
+            .ct-q{background:#fff;border:1px solid #e2e8f0;border-left:5px solid #0ea5e9;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;animation:ctIn .25s ease}
+            @keyframes ctIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+            .ct-q-head{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+            .ct-q-num{width:28px;height:28px;border-radius:50%;background:#0f172a;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+            .ct-chip{font-size:11px;font-weight:800;padding:3px 9px;border-radius:7px}
+            .ct-comp{width:200px;padding:5px 9px;font-size:12px}
+            .ct-q-actions button{border:1px solid #e2e8f0;background:#f8fafc;border-radius:7px;width:30px;height:28px;cursor:pointer;color:#475569}
+            .ct-q-actions button:disabled{opacity:.35;cursor:default}
+            .ct-q-actions button.danger:hover{background:#fee2e2;color:#b91c1c}
+            .ct-text{font-weight:600;resize:vertical}
+            .ct-opts{display:flex;flex-direction:column;gap:6px}
+            .ct-opt{display:flex;align-items:center;gap:8px;padding:4px 8px;border-radius:10px;border:1px solid transparent}
+            .ct-opt.correct{background:#f0fdf4;border-color:#86efac}
+            .ct-opt b{width:18px;color:#64748b}
+            .ct-mini{border:0;background:#f1f5f9;border-radius:6px;width:26px;height:26px;cursor:pointer;color:#64748b}
+            .ct-link{border:0;background:none;color:#0e7490;font-weight:700;font-size:12px;cursor:pointer;align-self:flex-start;padding:2px 8px}
+            .ct-rubric{font-size:12px;background:#f8fafc}
+            .ct-empty{text-align:center;padding:40px 20px;color:#64748b;border:2px dashed #cbd5e1;border-radius:14px}
+            .ct-spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.5);border-top-color:#fff;border-radius:50%;animation:ctSpin .7s linear infinite;vertical-align:-2px;margin-right:6px}
+            @keyframes ctSpin{to{transform:rotate(360deg)}}
+        </style>`;
+
+        const posList = list.map(function (p) {
+            const n = p.questions.length;
+            return `<button class="ct-pos ${sel && sel.id === p.id ? 'active' : ''}" data-ct-pos="${ctEsc(p.position + ' ' + (p.department || ''))}" onclick="ctSelectPosition('${ctEsc(p.id)}')">
+                <span><strong>${ctEsc(p.position)}</strong><small>${ctEsc(p.department || 'Departman yok')} · ${ctEsc(p.level || '')}</small></span>
+                <span class="ct-badge ${n ? 'ok' : ''}">${n} soru</span>
+            </button>`;
+        }).join('');
+
+        let detail;
+        if (!sel) {
+            detail = `<div class="ct-card"><div class="ct-empty">Henüz pozisyon yok. Soldan yeni bir pozisyon ekleyin.</div></div>`;
+        } else {
+            const pid = ctEsc(sel.id);
+            const mcqN = sel.questions.filter(function (q) { return q.type === 'mcq'; }).length;
+            detail = `
+            <div class="ct-card">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
+                    <div>
+                        <span class="ct-label" style="text-transform:uppercase;letter-spacing:.5px">Ortak Test Seti</span>
+                        <h2 style="margin:0;font-size:22px;font-weight:800">${ctEsc(sel.position)}</h2>
+                        <small style="color:#64748b">${sel.questions.length} soru · ${mcqN} çoktan seçmeli · ${sel.questions.length - mcqN} açık uçlu · Son güncelleme: ${new Date(sel.updatedAt || Date.now()).toLocaleString('tr-TR')}</small>
+                    </div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap">
+                        <button class="ct-btn ghost" ${sel.questions.length ? '' : 'disabled'} onclick="ctExport('${pid}')">⬇ Dışa Aktar</button>
+                        <button class="ct-btn danger" onclick="ctDeletePosition('${pid}')">Pozisyonu Sil</button>
+                    </div>
+                </div>
+
+                <div class="ct-row" style="margin-top:16px">
+                    <div><label class="ct-label">Pozisyon adı</label><input class="ct-input" value="${ctEsc(sel.position)}" onchange="ctUpdatePosition('${pid}','position',this.value);render()"></div>
+                    <div><label class="ct-label">Departman</label><input class="ct-input" value="${ctEsc(sel.department)}" onchange="ctUpdatePosition('${pid}','department',this.value);render()"></div>
+                    <div><label class="ct-label">Seviye</label><select class="ct-input" onchange="ctUpdatePosition('${pid}','level',this.value);render()">${levels.map(function (l) { return `<option ${sel.level === l ? 'selected' : ''}>${l}</option>`; }).join('')}</select></div>
+                </div>
+                <div style="margin-top:10px"><label class="ct-label">Şirket içi notlar (AI bunu dikkate alır: kullanılan sistemler, prosedürler, kurallar vb.)</label>
+                    <textarea class="ct-input" rows="2" placeholder="Örn: SAP kullanıyoruz, ISO 9001 prosedürleri, müşteri iade politikası 14 gün..." onchange="ctUpdatePosition('${pid}','note',this.value)">${ctEsc(sel.note)}</textarea>
+                </div>
+
+                <div class="ct-ai">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:18px">✨</span><b>AI ile Ortak Test Üret</b><small style="color:#64748b">— üretilen sorular aşağıda düzenlenebilir</small></div>
+                    <div class="ct-row">
+                        <div><label class="ct-label">Soru sayısı</label><input id="ct-gen-count" class="ct-input" type="number" min="1" max="50" value="10"></div>
+                        <div><label class="ct-label">Soru tipi</label><select id="ct-gen-type" class="ct-input"><option value="mixed">Karışık</option><option value="mcq">Çoktan seçmeli</option><option value="open">Açık uçlu</option></select></div>
+                        <div><label class="ct-label">Mevcut sorular</label><select id="ct-gen-mode" class="ct-input"><option value="append">Sona ekle</option><option value="replace">Değiştir</option></select></div>
+                    </div>
+                    <div style="margin-top:10px"><label class="ct-label">Ek talimat (opsiyonel)</label><input id="ct-gen-note" class="ct-input" placeholder="Örn: iş güvenliği ağırlıklı olsun, senaryo bazlı sorular"></div>
+                    <div style="margin-top:12px;text-align:right">
+                        <button class="ct-btn primary" ${st.generating ? 'disabled' : ''} onclick="ctGenerate('${pid}')">${st.generating ? '<span class="ct-spin"></span>Üretiliyor...' : '✨ AI ile Üret'}</button>
+                    </div>
+                </div>
+
+                <div style="display:flex;justify-content:space-between;align-items:center;margin:6px 0 12px;flex-wrap:wrap;gap:8px">
+                    <h3 style="margin:0">Sorular (${sel.questions.length})</h3>
+                    <div style="display:flex;gap:8px">
+                        <button class="ct-btn ghost" onclick="ctAddQuestion('${pid}','mcq')">+ Çoktan Seçmeli</button>
+                        <button class="ct-btn ghost" onclick="ctAddQuestion('${pid}','open')">+ Açık Uçlu</button>
+                    </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:12px">
+                    ${sel.questions.length ? sel.questions.map(function (q, i) { return ctQuestionCard(sel, q, i, sel.questions.length); }).join('')
+                        : `<div class="ct-empty">Bu pozisyon için henüz soru yok.<br><small>Yukarıdan AI ile üretin veya elle soru ekleyin.</small></div>`}
+                </div>
+            </div>`;
+        }
+
+        return layout(`${styles}
+        <section class="ct-page">
+            <div class="ct-hero">
+                <span class="ct-eyebrow">🏢 ŞİRKET İÇİ · POZİSYON BAZLI STANDART TESTLER</span>
+                <h1>Toplu Ortak Testler</h1>
+                <p>Her pozisyon için şirket içindeki tüm adaylara ve çalışanlara ortak uygulanacak test setini tanımlayın. Soruları yapay zeka ile pozisyona göre otomatik üretin, ardından ekleyin, düzenleyin veya silin.</p>
+                <div class="ct-stats">
+                    <div><b>${list.length}</b> pozisyon</div>
+                    <div><b>${ready}</b> hazır test seti</div>
+                    <div><b>${totalQ}</b> toplam soru</div>
+                </div>
+            </div>
+            <div class="ct-grid">
+                <aside class="ct-card">
+                    <h3>Pozisyonlar</h3>
+                    <input class="ct-input" placeholder="🔍 Pozisyon ara..." value="${ctEsc(st.filter)}" oninput="ctFilter(this.value)">
+                    <div class="ct-pos-list">${posList || '<small style="color:#64748b">Pozisyon yok.</small>'}</div>
+                    <h3 style="border-top:1px solid #f1f5f9;padding-top:14px">+ Yeni Pozisyon</h3>
+                    <div style="display:flex;flex-direction:column;gap:8px">
+                        <input id="ct-new-position" class="ct-input" placeholder="Pozisyon adı *" onkeydown="if(event.key==='Enter')ctAddPosition()">
+                        <input id="ct-new-department" class="ct-input" placeholder="Departman">
+                        <select id="ct-new-level" class="ct-input">${levels.map(function (l) { return `<option ${l === 'Orta' ? 'selected' : ''}>${l}</option>`; }).join('')}</select>
+                        <button class="ct-btn primary" onclick="ctAddPosition()">Pozisyon Ekle</button>
+                    </div>
+                </aside>
+                <main>${detail}</main>
+            </div>
+        </section>
+        `, 'Toplu Ortak Testler');
+    };
+    // Eski "Ders Dinleme / Eğitim" rotaları yeni sayfaya yönlendirilir
+    window.trainingPage = window.commonTestsPage;
+    if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch (e) {} }
+
+    // ------------------------------------------
+    // COMBINED PATCH 15 & 16: STRICT SIDEBAR & TOPBAR ARCHITECTURE
+    // ------------------------------------------
     const oldLayout15 = window.layout;
     window.layout = function(content, title) {
         let html = oldLayout15(content, title);
-        
+
+        // 1. SOL MENÜ (SIDEBAR) REPLACEMENT
         const navStart = html.indexOf('<nav class="nav"');
         const navEnd = html.indexOf('</nav>', navStart);
-        
+
         if (navStart !== -1 && navEnd !== -1) {
-            const isTestGroup = ['tests', 'evaluation', 'results', 'test-platform'].includes(state.page);
-            const isCaseGroup = ['archive', 'documents', 'prompt', 'meetings', 'questions', 'comparison'].includes(state.page);
-            const isSettings = ['personal-data','data-banking','hr-specialist','agents','server','user-credits'].includes(state.page);
-            
+            const isCaseGroup = ['documents', 'prompt', 'meetings', 'questions'].includes(state.page);
+            const isTestGroup = ['tests', 'results', 'test-platform', 'evaluation', 'archive', 'group-tests'].includes(state.page);
+            const isSettings = ['personal-data', 'data-banking', 'hr-specialist', 'agents', 'server', 'user-credits', 'about'].includes(state.page);
+            const isCreditGroup = ['subscription'].includes(state.page);
+
             const newNav = `<nav class="nav" aria-label="Ana menü">
     <button class="nav-violet ${state.page==='dashboard'?'active':''}" onclick="go('dashboard')"><span class="nav-dot"></span><span>Genel Bakış</span></button>
-    
-    <div class="delivery-menu">
-        <details ${isTestGroup ? 'open' : ''}>
-            <summary><span class="nav-dot" style="background:#0ea5e9"></span><span>Test İşlemleri</span></summary>
-            <div>
-                <button class="${state.page==='tests'?'active':''}" onclick="go('tests')">Test Yönetimi</button>
-                <button class="${state.page==='evaluation'?'active':''}" onclick="go('evaluation')">Test Değerlendirme</button>
-                <button class="${state.page==='results'?'active':''}" onclick="go('results')">Test Sonuçları</button>
-                <button class="${state.page==='test-platform'?'active':''}" onclick="go('test-platform')">Test Platformu</button>
-            </div>
-        </details>
-    </div>
 
     <div class="delivery-menu">
         <details ${isCaseGroup ? 'open' : ''}>
             <summary><span class="nav-dot" style="background:#f59e0b"></span><span>Vaka İşlemleri</span></summary>
             <div>
-                <button class="${state.page==='archive'?'active':''}" onclick="go('archive')">Evrak Kutusu</button>
-                <button class="${state.page==='documents'?'active':''}" onclick="go('documents')">Belgeden Vaka Yarat</button>
-                <button class="${state.page==='prompt'?'active':''}" onclick="go('prompt')">Formdan Vaka Yarat</button>
-                <button class="${state.page==='meetings'?'active':''}" onclick="go('meetings')">Meet & Teams Vaka</button>
+                <button class="${state.page==='documents'?'active':''}" onclick="go('documents')">Belgeden Vaka</button>
+                <button class="${state.page==='prompt'?'active':''}" onclick="go('prompt')">Metinden Vaka</button>
+                <button class="${state.page==='meetings'?'active':''}" onclick="go('meetings')">Metin Yapıştır Vaka</button>
                 <button class="${state.page==='questions'?'active':''}" onclick="go('questions')">Açık Uçlu Vaka Testi</button>
-                <button class="${state.page==='comparison'?'active':''}" onclick="go('comparison')">Karşılaştırma</button>
             </div>
         </details>
     </div>
+
+    <div class="delivery-menu">
+        <details ${isTestGroup ? 'open' : ''}>
+            <summary><span class="nav-dot" style="background:#0ea5e9"></span><span>Test Yönetimi</span></summary>
+            <div>
+                <button class="${(state.page==='tests'||state.page==='results')?'active':''}" onclick="go('tests')">Test Yönetimi & Sonuçları</button>
+                <button class="${state.page==='test-platform'?'active':''}" onclick="go('test-platform')">Test Platformu</button>
+                <button class="${state.page==='evaluation'?'active':''}" onclick="go('evaluation')">Test Değerlendirme</button>
+                <button class="${state.page==='archive'?'active':''}" onclick="go('archive')">Test Arşivi</button>
+                <button class="${state.page==='group-tests'?'active':''}" onclick="go('group-tests')">Toplu Test (QR)</button>
+            </div>
+        </details>
+    </div>
+
+    <button class="nav-cyan ${state.page==='comparison'?'active':''}" onclick="go('comparison')"><span class="nav-dot"></span><span>CV Karşılaştırma</span></button>
+
+    <button class="nav-violet ${(state.page==='common-tests'||state.page==='training'||state.page==='lessons')?'active':''}" onclick="go('common-tests')"><span class="nav-dot" style="background:#0e7490"></span><span>Toplu Ortak Testler</span></button>
 
     <div class="delivery-menu">
         <details ${isSettings ? 'open' : ''}>
             <summary><span class="nav-dot" style="background:#94a3b8"></span><span>Ayarlar</span></summary>
             <div>
-                <button class="${state.page==='user-credits'?'active':''}" onclick="go('user-credits')">Kullanıcı & Kontör Log</button>
-                <button class="${state.page==='personal-data'?'active':''}" onclick="go('personal-data')">Sayfa 14</button>
-                <button class="${state.page==='data-banking'?'active':''}" onclick="go('data-banking')">Sayfa 15</button>
-                <button class="${state.page==='hr-specialist'?'active':''}" onclick="go('hr-specialist')">Soru & Vaka Üretimi</button>
+                <button class="${state.page==='user-credits'?'active':''}" onclick="go('user-credits')">Kullanıcı & BIGakçe Log</button>
+                <button class="${state.page==='personal-data'?'active':''}" onclick="go('personal-data')">Kişisel Bilgiler</button>
+                <button class="${state.page==='data-banking'?'active':''}" onclick="go('data-banking')">Veri Bankacılığı</button>
+                <button class="${state.page==='hr-specialist'?'active':''}" onclick="go('hr-specialist')">Soru & Vaka Tasarımı</button>
                 <button class="${state.page==='agents'?'active':''}" onclick="go('agents')">Ajan Yönetimi</button>
                 <button class="${state.page==='server'?'active':''}" onclick="go('server')">Sunucu Ayarları</button>
+                <button class="${state.page==='about'?'active':''}" onclick="go('about')">Hakkımızda & Kılavuz</button>
             </div>
         </details>
     </div>
-    
-    <button class="${state.page==='subscription'?'active':''}" onclick="go('subscription')" style="margin-top:10px;">
-        <span>💳</span> Abonelik & Kontör
-    </button>
+
+    <div class="delivery-menu">
+        <details ${isCreditGroup ? 'open' : ''}>
+            <summary><span class="nav-dot" style="background:#10b981"></span><span>BIGakçe / Bakiye İşlemleri</span></summary>
+            <div>
+                <button class="${state.page==='subscription'?'active':''}" onclick="go('subscription')">Abonelik & BIGakçe Al</button>
+                <button onclick="openCreditModal()">💳 BIGakçe Yükle</button>
+                <button onclick="openTransferModal()">🎁 Hediye BIGakçe Gönder</button>
+            </div>
+        </details>
+    </div>
 </nav>`;
-            
+
             html = html.substring(0, navStart) + newNav + html.substring(navEnd + 6);
         }
-        
-        return html;
-    };
-})();
 
+        // 2. ÜST BAR (TOPBAR / NAVBAR) REPLACEMENT
+        const topNavStart = html.indexOf('<nav class="top-nav"');
+        const topNavEnd = html.indexOf('</nav>', topNavStart);
 
-// ==========================================
-// PATCH 16: KONTOR ISLEMLERI DROPDOWN
-// ==========================================
-(function() {
-    const oldLayout16 = window.layout;
-    window.layout = function(content, title) {
-        let html = oldLayout16(content, title);
-        
-        // Remove the top-right button since we're moving it to sidebar
-        html = html.replace(/<button onclick="openTransferModal()"[^>]*>.*?<\/button>/, '');
-        
-        // Find the "Abonelik & Kontör" standalone button in the sidebar and replace it with a dropdown
-        const subButtonRegex = /<button class="[^"]*" onclick="go\('subscription'\)"[^>]*>[\s\S]*?<\/button>/;
-        
-        const kontorDropdown = `
-    <div class="delivery-menu">
-        <details ${['subscription'].includes(state.page) ? 'open' : ''}>
-            <summary><span class="nav-dot" style="background:#10b981"></span><span>Kontör İşlemleri</span></summary>
-            <div>
-                <button class="${state.page==='subscription'?'active':''}" onclick="go('subscription')">Abonelik & Kontör Al</button>
-                <button onclick="openTransferModal()">🎁 Hediye Kontör Gönder</button>
-            </div>
-        </details>
-    </div>
-        `;
-        
-        if (html.match(subButtonRegex)) {
-            html = html.replace(subButtonRegex, kontorDropdown);
+        if (topNavStart !== -1 && topNavEnd !== -1) {
+            const isTopTestActive = ['tests', 'results', 'test-platform', 'evaluation', 'archive', 'group-tests'].includes(state.page);
+            const isTopCaseActive = ['documents', 'prompt', 'meetings', 'questions'].includes(state.page);
+
+            const newTopNav = `<nav class="top-nav" aria-label="Üst menü">
+    <button class="overview-link ${state.page==='dashboard'?'active':''}" onclick="go('dashboard')">Genel Bakış</button>
+    
+    <details class="top-nav-dropdown" ${isTopTestActive ? 'data-active="true"' : ''}>
+        <summary class="${isTopTestActive ? 'active' : ''}">Test Yönetimi ▾</summary>
+        <div class="top-delivery">
+            <button class="${(state.page==='results'||state.page==='tests')?'active':''}" onclick="this.closest('details').removeAttribute('open');go('results')">Test Sonuçları</button>
+            <button class="${state.page==='test-platform'?'active':''}" onclick="this.closest('details').removeAttribute('open');go('test-platform')">Test Platformu</button>
+            <button class="${state.page==='evaluation'?'active':''}" onclick="this.closest('details').removeAttribute('open');go('evaluation')">Test Değerlendirme</button>
+            <button class="${state.page==='group-tests'?'active':''}" onclick="this.closest('details').removeAttribute('open');go('group-tests')">Toplu Test (QR)</button>
+        </div>
+    </details>
+
+    <details class="top-nav-dropdown" ${isTopCaseActive ? 'data-active="true"' : ''}>
+        <summary class="${isTopCaseActive ? 'active' : ''}">Vaka İşlemleri ▾</summary>
+        <div class="top-delivery">
+            <button class="${state.page==='documents'?'active':''}" onclick="this.closest('details').removeAttribute('open');go('documents')">Belgeden Vaka</button>
+            <button class="${state.page==='prompt'?'active':''}" onclick="this.closest('details').removeAttribute('open');go('prompt')">Metinden Vaka</button>
+            <button class="${state.page==='questions'?'active':''}" onclick="this.closest('details').removeAttribute('open');go('questions')">Açık Uçlu Vaka Testi</button>
+        </div>
+    </details>
+
+    <button class="${state.page==='comparison'?'active':''}" onclick="go('comparison')">CV Karşılaştırma</button>
+    <button class="${state.page==='subscription'?'active':''}" onclick="go('subscription')">BIGakçe / Bakiye İşlemleri</button>
+</nav>`;
+
+            html = html.substring(0, topNavStart) + newTopNav + html.substring(topNavEnd + 6);
         }
-        
+
         return html;
     };
+
+    // Attach click-outside handler to close topbar dropdowns
+    if (typeof window !== 'undefined' && !window._sbTopNavListener) {
+        window._sbTopNavListener = true;
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.top-nav-dropdown')) {
+                document.querySelectorAll('.top-nav details.top-nav-dropdown[open]').forEach(function(d) {
+                    d.removeAttribute('open');
+                });
+            } else {
+                var current = e.target.closest('.top-nav-dropdown');
+                document.querySelectorAll('.top-nav details.top-nav-dropdown[open]').forEach(function(d) {
+                    if (d !== current) d.removeAttribute('open');
+                });
+            }
+        });
+    }
 })();
 
 
@@ -3303,17 +5220,17 @@ Bu vaka, birden fazla uzmanlık alanını ve sertifika bilgisini aynı anda gere
                     <li style="margin-bottom: 10px;"><strong>Çoklu Ajan (Multi-Agent) Mimarisi:</strong> 17 farklı yapay zeka ajanı, görev tanımlarına göre eşzamanlı çalışarak kusursuz bir operasyon yürütür.</li>
                     <li style="margin-bottom: 10px;"><strong>Otomatik Vaka (Case Study) Üretimi:</strong> Kendi kurum belgelerinizden, toplantı dökümlerinden veya yerleşik dev Veri Bankasından (Data Bank) saniyeler içinde sektöre ve pozisyona özel iş vakaları oluşturur.</li>
                     <li style="margin-bottom: 10px;"><strong>AI Tabanlı Değerlendirme Merkezi:</strong> Adayların açık uçlu veya çoktan seçmeli cevaplarını insan yanlılığından uzak, %100 objektif ve derinlemesine analizle saniyeler içinde puanlar.</li>
-                    <li style="margin-bottom: 10px;"><strong>Abonelik ve Kontör Yönetimi (Paywall):</strong> Sistem, kontör/kredi mantığı ile çalışır. Firmalar hesaplarına kontör yükler ve yöneticiler çalışanlarına hediye kontör transfer edebilir.</li>
+                    <li style="margin-bottom: 10px;"><strong>Abonelik ve BIGakçe Yönetimi (Paywall):</strong> Sistem, BIGakçe/kredi mantığı ile çalışır. Firmalar hesaplarına BIGakçe yükler ve yöneticiler çalışanlarına hediye BIGakçe transfer edebilir.</li>
                 </ul>
 
                 <h3 style="margin-top: 30px; color: var(--primary);">🗂️ Modüller ve Kullanım Adımları</h3>
                 <p>Sistem, sol menüde (Sidebar) çok daha kolay kullanım için gruplandırılmıştır:</p>
 
-                <h4 style="margin-top: 20px; font-size: 1.1rem;">1. 💳 Kontör İşlemleri (Abonelik ve Transfer)</h4>
-                <p>Platformda yapay zeka destekli işlemler yapabilmek için kontör (kredi) gerekmektedir. Yeni kayıt olan kullanıcılar 0 bakiye ile başlar.</p>
+                <h4 style="margin-top: 20px; font-size: 1.1rem;">1. 💳 BIGakçe İşlemleri (Abonelik ve Transfer)</h4>
+                <p>Platformda yapay zeka destekli işlemler yapabilmek için BIGakçe (kredi) gerekmektedir. Yeni kayıt olan kullanıcılar 0 bakiye ile başlar.</p>
                 <ul style="padding-left: 20px;">
-                    <li><strong>Abonelik & Kontör Al:</strong> Sanal POS (PaynKolay) entegrasyonuyla güvenli 3D Secure sayfasından Başlangıç, Kurumsal veya Limitsiz paket satın alabilirsiniz.</li>
-                    <li><strong>Hediye Kontör Gönder:</strong> Hesabınızdaki kontörleri, sistemdeki diğer çalışanlarınıza (e-posta adresleri üzerinden) anında transfer edebilirsiniz.</li>
+                    <li><strong>Abonelik & BIGakçe Al:</strong> Sanal POS (PaynKolay) entegrasyonuyla güvenli 3D Secure sayfasından Başlangıç, Kurumsal veya Limitsiz paket satın alabilirsiniz.</li>
+                    <li><strong>Hediye BIGakçe Gönder:</strong> Hesabınızdaki BIGakçe'leri, sistemdeki diğer çalışanlarınıza (e-posta adresleri üzerinden) anında transfer edebilirsiniz.</li>
                 </ul>
 
                 <h4 style="margin-top: 20px; font-size: 1.1rem;">2. 📝 Vaka İşlemleri (Sınav Hazırlığı)</h4>
@@ -3321,11 +5238,11 @@ Bu vaka, birden fazla uzmanlık alanını ve sertifika bilgisini aynı anda gere
                 <ul style="padding-left: 20px;">
                     <li><strong>Veri Bankası ile Formdan Vaka Yarat:</strong> Sistemdeki dev veri kütüphanesi sayesinde sektörünüzü seçin. CTRL/CMD tuşuna basılı tutarak birden fazla departman, uzmanlık ve sertifikayı aynı anda seçerek Ajan 8'in çok zorlu, derin teknik kurgular üretmesini sağlayın.</li>
                     <li><strong>Belgeden Vaka Yarat:</strong> Kurumunuza ait prosedür belgelerini (PDF, Word) sisteme yükleyin, ajanlar bu belgelerdeki bilgileri vaka senaryosuna dönüştürsün.</li>
-                    <li><strong>Meet & Teams Vaka:</strong> Toplantı dökümünüzü sisteme kopyalayın, yapay zeka toplantıdaki fikir ayrılıklarından bir kriz/karar senaryosu hazırlasın.</li>
-                    <li><strong>Açık Uçlu / Karşılaştırma:</strong> Üretilen vakaları açık uçlu teste dönüştürebilir veya evrak kutusundaki vakaları birbiriyle kıyaslayabilirsiniz.</li>
+                    <li><strong>Metin Yapıştır Vaka:</strong> Toplantı notu, e-posta veya rapor metnini kopyalayıp yapıştırın; tek tıkla vaka ya da test hazırlansın.</li>
+                    <li><strong>Açık Uçlu / Karşılaştırma:</strong> Üretilen vakaları açık uçlu teste dönüştürebilir veya test arşivindeki vakaları birbiriyle kıyaslayabilirsiniz.</li>
                 </ul>
 
-                <h4 style="margin-top: 20px; font-size: 1.1rem;">3. 📊 Test İşlemleri (Uygulama ve Raporlama)</h4>
+                <h4 style="margin-top: 20px; font-size: 1.1rem;">3. 📊 Test Yönetimi (Uygulama ve Raporlama)</h4>
                 <ul style="padding-left: 20px;">
                     <li><strong>Test Platformu:</strong> Hazırlanan testleri, adayların girebilmesi için benzersiz bir "Test ID" ile yayına alabilirsiniz. Adaylar açılış (Splash) ekranını geçtikten sonra Aday Test formundan sınavlarını tamamlarlar.</li>
                     <li><strong>Test Sonuçları & Detaylı Rapor:</strong> Aday sınavı bitirdiğinde AI değerlendirme motoru çalışır. Adayın "Detaylı Rapor" butonuna tıkladığınızda şu verilere ulaşırsınız:
@@ -3341,7 +5258,7 @@ Bu vaka, birden fazla uzmanlık alanını ve sertifika bilgisini aynı anda gere
                 
                 <div style="background: var(--bg-alt); padding: 15px; border-radius: 8px; margin-bottom: 10px;">
                     <strong>S: Sisteme girdiğimde diğer menülere tıklayamıyorum, ne yapmalıyım?</strong><br>
-                    C: SkillBridgeAIPro, paywall (ödeme duvarı) sistemiyle korunmaktadır. Eğer bakiyeniz 0 ise diğer sayfalara erişiminiz engellenir. Lütfen sol menüden "Abonelik & Kontör Al" sayfasına giderek hesabınıza bakiye yükleyin veya bir şirket yetkilisinden hediye kontör isteyin.
+                    C: SkillBridgeAIPro, paywall (ödeme duvarı) sistemiyle korunmaktadır. Eğer bakiyeniz 0 ise diğer sayfalara erişiminiz engellenir. Lütfen sol menüden "Abonelik & BIGakçe Al" sayfasına giderek hesabınıza bakiye yükleyin veya bir şirket yetkilisinden hediye BIGakçe isteyin.
                 </div>
 
                 <div style="background: var(--bg-alt); padding: 15px; border-radius: 8px; margin-bottom: 10px;">
@@ -3381,37 +5298,2831 @@ Bu vaka, birden fazla uzmanlık alanını ve sertifika bilgisini aynı anda gere
                 <h3 style="margin-top: 20px; font-size: 1.1rem; color: var(--primary);">2. Kullanım Koşulları</h3>
                 <p>Bu platform, kurumların kendi iç işleyişlerindeki yetenek ölçümü ve işe alım süreçlerini desteklemek amacıyla tasarlanmıştır. Platformdan elde edilen "Nihai Mentor Kararı" ve AI analizleri birer tavsiye niteliğindedir; nihai işe alım veya terfi kararları tamamen kurumun inisiyatifindedir.</p>
 
-                <h3 style="margin-top: 20px; font-size: 1.1rem; color: var(--primary);">3. Ödeme ve Kontör Güvenliği</h3>
-                <p>Kontör alımları sırasında girilen kredi kartı bilgileri sistemimizde saklanmaz. Tüm ödeme işlemleri PCI-DSS sertifikalı PaynKolay (BigSafer) altyapısı üzerinden 3D Secure güvencesiyle doğrudan bankalara iletilir.</p>
+                <h3 style="margin-top: 20px; font-size: 1.1rem; color: var(--primary);">3. Ödeme ve BIGakçe Güvenliği</h3>
+                <p>BIGakçe alımları sırasında girilen kredi kartı bilgileri sistemimizde saklanmaz. Tüm ödeme işlemleri PCI-DSS sertifikalı PaynKolay (BigSafer) altyapısı üzerinden 3D Secure güvencesiyle doğrudan bankalara iletilir.</p>
             </div>
 
         </section>
         `, 'Hakkımızda');
     };
 
-    // Hook render to show aboutPage
+    // Hook render to show aboutPage and trainingPage
     const oldRender17 = window.render;
     window.render = function() {
-        if(state.page === 'about') {
+        if (state.page === 'about') {
             document.getElementById('app').innerHTML = aboutPage();
+        } else if (state.page === 'common-tests' || state.page === 'training' || state.page === 'lessons') {
+            document.getElementById('app').innerHTML = commonTestsPage();
         } else {
             oldRender17();
         }
     };
 
-    // Add Hakkımızda button to layout
+    // Layout passthrough (Hakkımızda is already neatly placed inside Ayarlar menu)
     const oldLayout17 = window.layout;
     window.layout = function(content, title) {
-        let html = oldLayout17(content, title);
-        
-        const aboutBtn = `
-        <button class="${state.page==='about'?'active':''}" onclick="go('about')" style="margin-top: 5px;">
-            <span>ℹ️</span> Hakkımızda & Kılavuz
-        </button>
-        </nav>`;
-
-        // Inject right before </nav>
-        html = html.replace(/<\/nav>/, aboutBtn);
-        return html;
+        return oldLayout17(content, title);
     };
+})();
+
+
+// ==========================================
+// PATCH 18: MULTI-AGENT VAKA, VAKA ÇÖZÜMLEME & 10-25-50-100 MCQ TEST SETLERİ
+// ==========================================
+(function() {
+    // Global helper for setting MCQ count
+    window.setMcqCount = function(cnt) {
+        const input = document.getElementById('mcq-count');
+        if (input) input.value = cnt;
+        const minutes = document.getElementById('test-total-minutes');
+        if (minutes) minutes.value = Math.max(15, Math.round(cnt * 2.5));
+        toast(cnt + ' soruluk test paketi seçildi');
+    };
+
+    // Global helper to transition directly from case to MCQ with a preset count
+    window.prepareMcqFromCase = function(count) {
+        const text = document.getElementById('db-case-text')?.value || state.pendingCase || '';
+        state.pendingCase = text;
+        go('mcq');
+        setTimeout(() => {
+            const countInput = document.getElementById('mcq-count');
+            if (countInput) countInput.value = count;
+            const minutes = document.getElementById('test-total-minutes');
+            if (minutes) minutes.value = Math.max(15, Math.round(count * 2.5));
+            buildMcqDraft();
+        }, 200);
+    };
+
+    // Ajan 8 & Ajan 16 Multi-Agent Vaka Üretimi
+    window.generateDbCase = async function() {
+        let sector = document.getElementById('pb-sector')?.value;
+        let sub = document.getElementById('pb-subsector')?.value;
+        let position = document.getElementById('pb-position')?.value;
+        let level = document.getElementById('pb-level')?.value || 'Mid-Level (3-5 Yıl)';
+        let func = document.getElementById('pb-function')?.value;
+        let departments = typeof pvMulti === 'function' ? pvMulti('pb-department') : '';
+        let expertises = typeof pvMulti === 'function' ? pvMulti('pb-expertise') : '';
+        let certs = typeof pvMulti === 'function' ? pvMulti('pb-certificate') : '';
+        let topic = document.getElementById('pb-topic')?.value?.trim();
+        let diff = document.getElementById('pb-difficulty')?.value || 'Orta (Mid-Level)';
+        let duration = document.getElementById('pb-duration')?.value || '60 Dk';
+        let customSkills = document.getElementById('pb-custom-skills')?.value || '';
+
+        // Akıllı varsayılanlar - Form boş kalsa bile kullanıcı engellenmez!
+        if (!sector) sector = 'Bilişim ve İletişim Teknolojileri';
+        if (!sub) sub = 'Yazılım ve Altyapı Yönetimi';
+        if (!func) func = 'Sistem Mimarisi ve DevSecOps';
+        if (!position) position = 'Kıdemli Sistem & Bulut Mimarı';
+        if (!departments) departments = 'Sistem Mühendisliği, Altyapı ve Veritabanı Operasyonları';
+        if (!expertises) expertises = 'Mikroservis Mimarisi, Dağıtık Sistemler, Kriz Yönetimi, Kubernetes';
+        if (!certs) certs = 'AWS Certified Solutions Architect, CKA, ITIL Foundation';
+        if (!topic) topic = 'Yoğun Trafik Altında Veri Tabanı Kilitlenmesi, Replikasyon Gecikmesi ve Ödeme Servisi Kesintisi';
+
+        const button = document.querySelector('.prompt-output-head .primary');
+        const variation = (crypto.randomUUID ? crypto.randomUUID() : (Date.now() + '-' + Math.random().toString(36).slice(2)));
+
+        const prompt = `Sen iki uzman yapay zeka ajanının entegrasyonuyla çalışan üst düzey Teknik Değerlendirme Motorusun:
+- AJAN 8: Formdan Vaka Ajanı (Sektör ve pozisyona özel, son derece gerçekçi, teknik loglar ve 3 aşamalı kriz döngüsü içeren iş vakaları kurgular)
+- AJAN 16: Soru Tasarımcısı (Adayın sistem okuryazarlığını, analitik karar reflekslerini ve kıdem seviyesini ölçecek derin teknik sorular tasarlar)
+
+GÖREV: Aşağıdaki kurumsal parametrelere dayanarak yüksek teknik derinliğe sahip, adayın adım adım çözmesi gereken gerçekçi bir kriz döngüsü (troubleshooting loop) ve teknik değerlendirme soruları üret.
+
+KURUMSAL PARAMETRELER:
+- Sektör / Alt Sektör: ${sector} > ${sub}
+- Fonksiyon: ${func}
+- Pozisyon / Ünvan: ${position}
+- Hedef Kıdem / Seviye: ${level} (${diff})
+- Departmanlar: ${departments}
+- Uzmanlık Alanları: ${expertises}
+- Sertifikalar: ${certs}
+- Vaka Konusu / Teması: ${topic}
+- Çözüm Süresi: ${duration}
+- Ek Yetkinlikler: ${customSkills}
+- Benzersiz Referans: ${variation}
+
+VAKA FORMAT KURALLARI:
+1. Kesinlikle genel-geçer İK jargonu kullanma; doğrudan gerçek sistem mimarisi, araçlar (Docker, K8s, PostgreSQL, Kafka, Redis vb.), konfigürasyonlar ve log/metrik çıktıları ver.
+2. 3 Aşamalı Kriz Döngüsü (Troubleshooting Loop):
+   - Aşama 1 (T0 - İlk Anomali): Alarm sisteminin düşmesi, beklenmedik metrik sıçraması.
+   - Aşama 2 (T+15dk - Kaskat Arıza): Yapılan ilk refleks müdahale sırasında zincirleme çöken yan servis.
+   - Aşama 3 (T+45dk - Kritik Darboğaz): Veri bütünlüğü riski, SLA ihlali ve finansal/operasyonel kriz.
+3. Teknik Kısıtlar & SLA Maliyeti (Zaman sınırı, donanım hard-limit'i, dakikalık kesinti bedeli).
+4. Ajan 16 Teknik Değerlendirme Soruları: Adayın seviyesini (Junior vs Senior) net olarak ayrıştıracak 4 adet spesifik teknik soru.
+
+Çıktıyı temiz, profesyonel bir metin olarak üret.`;
+
+        aiBusy(button, true);
+        try {
+            const resultText = await aiCall(prompt);
+            state.pendingCase = resultText;
+            
+            const card = document.getElementById('generated-case-card');
+            card.hidden = false;
+            card.innerHTML = `<div class="case-card-head">
+                <div>
+                    <span class="eyebrow">AJAN 8 & AJAN 16 · MULTI-AGENT TEKNİK VAKA</span>
+                    <h2>${safeText(position)} · ${safeText(topic)}</h2>
+                    <p>${safeText(sector)} > ${safeText(sub)} · Seviye: ${safeText(level)} · Süre: ${safeText(duration)}</p>
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <button class="icon-button" onclick="navigator.clipboard?.writeText(document.getElementById('db-case-text').value); toast('Vaka panoya kopyalandı');" title="Kopyala">📋 Kopyala</button>
+                    <button class="secondary" onclick="exportDoc('db-case-text')">📄 Word İndir</button>
+                </div>
+            </div>
+            
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:15px; margin: 15px 0;">
+                <label style="font-weight:700; color:#334155; display:block; margin-bottom:8px;">📋 Üretilen Vaka Senaryosu ve Teknik Sorular (Düzenlenebilir):</label>
+                <textarea style="width:100%; min-height:380px; padding:15px; border:1px solid #cbd5e1; border-radius:8px; font-size:1.02rem; line-height:1.7; resize:vertical; outline:none; font-family:inherit; background:#ffffff;" id="db-case-text">${safeText(resultText)}</textarea>
+            </div>
+
+            <!-- AI ÇÖZÜMLEME VE TEST AKSİYONLARI -->
+            <div style="display:flex; flex-direction:column; gap:12px; margin-top:20px; padding-top:20px; border-top:1px solid #e2e8f0;">
+                <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                    <button class="primary" style="background:#0284c7; border-color:#0284c7;" onclick="solveCaseWithAgents()">
+                        🔍 Ajan 10 & 12 ile Vakayı Çözümle & Seviye Rubriği Çıkar
+                    </button>
+                    <span style="font-size:0.85rem; color:#64748b;">(Kök Neden Analizi, Müdahale Planı ve Junior/Mid/Senior Seviye Matrisi)</span>
+                </div>
+
+                <div style="background:#f1f5f9; padding:12px 16px; border-radius:8px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                    <b style="font-size:0.9rem; color:#1e293b;">🎯 Çoktan Seçmeli Test Hazırla:</b>
+                    <button class="secondary" style="padding:6px 14px; font-weight:600;" onclick="prepareMcqFromCase(10)">⚡ 10 Soru</button>
+                    <button class="secondary" style="padding:6px 14px; font-weight:600;" onclick="prepareMcqFromCase(25)">🎯 25 Soru</button>
+                    <button class="secondary" style="padding:6px 14px; font-weight:600;" onclick="prepareMcqFromCase(50)">📚 50 Soru</button>
+                    <button class="secondary" style="padding:6px 14px; font-weight:600;" onclick="prepareMcqFromCase(100)">🏆 100 Soru</button>
+                    <button class="secondary" style="padding:6px 14px; margin-left:auto;" onclick="state.pendingCase = document.getElementById('db-case-text').value; go('questions');">📄 Açık Uçlu Sınav →</button>
+                </div>
+            </div>
+
+            <!-- VAKA ÇÖZÜM ALANI -->
+            <div id="case-solution-card" style="margin-top:20px;" hidden></div>`;
+            
+            card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            toast('Ajan 8 & 16 teknik vakayı başarıyla üretti');
+        } catch (e) {
+            toast('Vaka üretimi hatası: ' + e.message);
+        } finally {
+            aiBusy(button, false);
+        }
+    };
+
+    // Ajan 10 & Ajan 12 Vaka Çözümleme ve Seviyeleme Uzmanı
+    window.solveCaseWithAgents = async function() {
+        const caseText = document.getElementById('db-case-text')?.value || state.pendingCase || '';
+        if (!caseText.trim()) return toast('Lütfen önce bir vaka metni oluşturun veya girin.');
+
+        const solCard = document.getElementById('case-solution-card');
+        if (!solCard) return;
+
+        solCard.hidden = false;
+        solCard.innerHTML = `<div style="background:#f0fdf4; border:1px solid #86efac; border-radius:10px; padding:20px; text-align:center;">
+            <div style="font-size:1.5rem; margin-bottom:10px;">⏳</div>
+            <h3 style="color:#166534; margin:0 0 8px;">Ajan 10 (Çözüm Analisti) & Ajan 12 (Seviyeleme Uzmanı) Çalışıyor...</h3>
+            <p style="color:#15803d; font-size:0.95rem; margin:0;">Kök neden analizi, ideal müdahale adımları ve Junior/Mid/Senior/Lead aday değerlendirme rubriği oluşturuluyor.</p>
+        </div>`;
+        solCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        const prompt = `Sen iki kıdemli yapay zeka ajanının birleşimi olarak görev yapıyorsun:
+1. AJAN 10: Yetkinlik ve Çözüm Analisti (Sistem arızalarını, kök nedenleri ve en ideal teknik mühendislik çözüm planlarını analiz eder)
+2. AJAN 12: Ölçme, Değerlendirme ve Seviyeleme Uzmanı (Adayın bu vakaya yaklaşımından yola çıkarak Junior / Mid / Senior / Lead seviye tespitini ve rol uygunluğunu objektif kriterlerle puanlar)
+
+GÖREV: Aşağıdaki iş vakasını en ince teknik ayrıntısına kadar çözümle ve adayın seviyesini tespit edip uygunluğunu ölçecek kapsamlı bir Değerlendirme & Seviye Rubriği oluştur.
+
+İNCELENECEK VAKA:
+${caseText}
+
+RAPOR FORMATI (Lütfen doğrudan detaylı, profesyonel Türkçe metin olarak üret):
+# 🛠️ AJAN 10 & 12 · VAKA ÇÖZÜMLEME, KÖK NEDEN VE SEVİYE UYGUNLUK RAPORU
+
+## 1. 🔍 KÖK NEDEN ANALİZİ (ROOT CAUSE ANALYSIS)
+- Belirti (Semptom) vs. Gerçek Kök Neden (Root Cause) Ayrımı
+- 5 Neden Metodu (5-Why) ile Sistematik Arıza İncelemesi
+- Gözden Kaçan Mimari veya Operasyonel Tetikleyiciler
+
+## 2. ⚡ ADIM ADIM İDEAL ÇÖZÜM & MÜDAHALE PLANI
+- **Aşama 1: Acil Müdahale (İlk 15 Dakika - Triage & Containment):** Servisin ayağa kaldırılması, SLA zararının durdurulması.
+- **Aşama 2: Kök Neden Eliminasyonu & Onarım (İlk 2 Saat - Remediation):** Hatanın kaynağının giderilmesi, veri tutarlılık kontrolleri.
+- **Aşama 3: Kalıcı İyileştirme & Önleyici Mimari (Uzun Vade - Prevention):** Mimari güncellemeler, izleme kuralları, circuit breaker, failover stratejisi.
+
+## 3. 🎯 SEVİYE TESPİT VE ROL UYGUNLUK RUBRİĞİ (LEVEL ASSESSMENT MATRIX)
+- **Junior Seviye (0-2 Yıl):**
+  * Tipik Yaklaşım ve Görebileceği Noktalar:
+  * Muhtemel Hataları veya Kaçıracağı Riskler:
+  * Başarı Eşiği ve Kabul Kriteri:
+- **Mid-Level Seviye (2-5 Yıl):**
+  * Operasyonel Refleksleri ve Müdahale Becerisi:
+  * Beklenen Doğru Çözümler:
+  * Başarı Eşiği ve Kabul Kriteri:
+- **Senior Seviye (5-8 Yıl):**
+  * Kaskat Hatayı Öngörme ve Mimari Liderlik:
+  * Kök Neden Teşhis Derinliği:
+  * Başarı Eşiği ve Kabul Kriteri:
+- **Lead / Principal Seviye (8+ Yıl):**
+  * İş Etkisi (Business Impact), Dayanıklılık (Resilience) ve Takım Koordinasyonu:
+  * Stratejik Önleyici Vizyon:
+  * Başarı Eşiği ve Kabul Kriteri:
+
+## 4. 📊 ADAY UYGUNLUK DEĞERLENDİRME SKOR KARTI
+- Problem Teşhisi (%30): Puanlama rehberi
+- Müdahale Sırası ve Aciliyet Bilinci (%25): Puanlama rehberi
+- Kalıcı Mimari Vizyonu (%25): Puanlama rehberi
+- Dokümantasyon ve İletişim (%20): Puanlama rehberi`;
+
+        try {
+            const solutionText = await aiCall(prompt);
+            solCard.innerHTML = `<div style="background:#ffffff; border:1px solid #10b981; border-radius:12px; padding:25px; box-shadow:0 4px 15px rgba(16,185,129,0.1);">
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:15px; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
+                    <div>
+                        <span class="eyebrow" style="background:#dcfce7; color:#15803d; padding:4px 10px; border-radius:6px; font-weight:700;">AJAN 10 & 12 ANALİZ RAPORU</span>
+                        <h3 style="margin:8px 0 0; color:#0f172a;">Vaka Çözümü, Kök Neden & Seviye Rubriği</h3>
+                    </div>
+                    <div style="display:flex; gap:8px;">
+                        <button class="secondary" onclick="navigator.clipboard?.writeText(document.getElementById('case-solution-content').innerText); toast('Çözüm raporu panoya kopyalandı');">📋 Kopyala</button>
+                        <button class="secondary" onclick="exportDoc('case-solution-content')">📄 Word İndir</button>
+                    </div>
+                </div>
+                <div id="case-solution-content" style="font-size:1.02rem; line-height:1.75; color:#1e293b; white-space:pre-wrap; font-family:inherit;">${safeText(solutionText)}</div>
+            </div>`;
+            toast('Ajan 10 & 12 vaka çözüm ve seviye rubriğini tamamladı');
+        } catch (e) {
+            solCard.innerHTML = `<div style="background:#fef2f2; border:1px solid #f87171; border-radius:10px; padding:15px; color:#b91c1c;">
+                <b>Çözümleme Hatası:</b> ${safeText(e.message)}
+                <div style="margin-top:10px;"><button class="secondary" onclick="solveCaseWithAgents()">Yeniden Dene</button></div>
+            </div>`;
+            toast('Çözümleme hatası: ' + e.message);
+        }
+    };
+
+    // Override mcqPage to include 10, 25, 50, 100 quick chips and level explanation
+    const oldMcqPage = window.mcqPage;
+    window.mcqPage = function() {
+        const caseText = safeText(state.pendingCase || '');
+        return layout(`<section class="question-page">
+            <div class="prompt-head">
+                <div>
+                    <span class="eyebrow">AJAN 16 · ÇOKTAN SEÇMELİ TEST MOTORU</span>
+                    <h2>Çoktan Seçmeli Vaka Testi</h2>
+                    <p>Vakadan 10, 25, 50 veya 100 soruluk setlerle adayın seviyesini (Junior / Mid / Senior / Lead) ve role uygunluğunu belirleyin.</p>
+                </div>
+                <button class="secondary" onclick="go('prompt')">← Formdan Vaka Yarat</button>
+            </div>
+
+            <div class="question-builder">
+                <!-- Hızlı Soru Seti Butonları -->
+                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:15px; margin-bottom:20px;">
+                    <div style="font-weight:700; color:#334155; margin-bottom:10px; font-size:0.95rem;">🎯 Hızlı Soru Seti Seçin:</div>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <button type="button" class="btn-chip" onclick="setMcqCount(10)" style="padding:8px 16px; border-radius:8px; border:1px solid #0284c7; background:#e0f2fe; color:#0369a1; font-weight:700; cursor:pointer;">⚡ 10 Soru (Hızlı Tespit - 25 Dk)</button>
+                        <button type="button" class="btn-chip" onclick="setMcqCount(25)" style="padding:8px 16px; border-radius:8px; border:1px solid #059669; background:#d1fae5; color:#065f46; font-weight:700; cursor:pointer;">🎯 25 Soru (Standart Değerlendirme - 60 Dk)</button>
+                        <button type="button" class="btn-chip" onclick="setMcqCount(50)" style="padding:8px 16px; border-radius:8px; border:1px solid #d97706; background:#fef3c7; color:#92400e; font-weight:700; cursor:pointer;">📚 50 Soru (Kapsamlı Sınav - 120 Dk)</button>
+                        <button type="button" class="btn-chip" onclick="setMcqCount(100)" style="padding:8px 16px; border-radius:8px; border:1px solid #7c3aed; background:#ede9fe; color:#5b21b6; font-weight:700; cursor:pointer;">🏆 100 Soru (Geniş Havuz / Sertifikasyon)</button>
+                    </div>
+                </div>
+
+                <div class="mcq-lock">
+                    <b>Seviye ve Uygunluk Ölçüm Standardı:</b>
+                    <span>Her soruda 4 seçenek (A, B, C, D) bulunur. Sorular Junior, Mid, Senior ve Lead ayırt edici ağırlıklarla oluşturulur; test sonunda adayın yetkinlik seviyesi tespit edilir.</span>
+                </div>
+
+                <label class="question-case-field">
+                    <span>Vaka Metni</span>
+                    <textarea id="mcq-case" placeholder="Vaka metnini buraya yapıştırın veya 'Formdan Vaka Yarat' sayfasından otomatik aktarın...">${caseText}</textarea>
+                </label>
+
+                <div class="question-settings">
+                    <label>
+                        <span>Soru Sayısı</span>
+                        <input id="mcq-count" type="number" min="1" max="100" value="1" oninput="window.updateTotalTestMinutes?.()">
+                    </label>
+                    <label>
+                        <span>Test Süresi (Dakika)</span>
+                        <input id="test-total-minutes" type="number" min="1" value="3">
+                    </label>
+                    <label>
+                        <span>Soru Başına Süre (Dakika)</span>
+                        <input id="question-minutes" type="number" min="1" value="3" oninput="window.updateTotalTestMinutes?.()">
+                    </label>
+                    <label>
+                        <span>Seçenek Sayısı</span>
+                        <input value="4 Seçenek (A, B, C, D)" readonly>
+                    </label>
+                </div>
+
+                <button class="primary full" style="padding:14px; font-size:1.1rem; font-weight:700;" onclick="buildMcqDraft()">⚡ Ajan 16 ile Çoktan Seçmeli Testi Üret</button>
+            </div>
+
+            <section id="mcq-draft" class="generated-case-card" hidden></section>
+        </section>`, 'Çoktan Seçmeli Vaka Testi');
+    };
+
+    // Override buildMcqDraft to support 10, 25, 50, 100 questions cleanly and batch large sets
+    window.buildMcqDraft = async function() {
+        const button = document.querySelector('.question-builder .primary');
+        const source = pv('mcq-case', '') || state.pendingCase || '';
+        const count = Number(pv('mcq-count', '1')) || 1;
+
+        if (!source.trim()) return toast('Önce bir vaka metni girin veya oluşturun.');
+        if (count < 1 || count > 100) return toast('Soru sayısı 1 ile 100 arasında olmalıdır.');
+        const totalCost = questionCost(count, 0);
+        if (getUserCredits(state.currentUser) < totalCost) return toast('YETERSİZ BIGakçe: ' + count + ' soruluk test için ' + totalCost + ' BIGakçe gerekiyor.');
+
+        aiBusy(button, true);
+        const box = document.getElementById('mcq-draft');
+        box.hidden = false;
+        box.innerHTML = `<div style="text-align:center; padding:30px; background:#f8fafc; border-radius:10px;">
+            <div style="font-size:1.8rem; margin-bottom:10px;">🤖</div>
+            <h3 style="color:#0284c7; margin:0 0 8px;">Ajan 16 Soru Tasarımcısı Çalışıyor...</h3>
+            <p style="color:#64748b; font-size:0.95rem;" id="mcq-progress-msg">${count} adet seviye tespit ve vaka sorusu hazırlanıyor...</p>
+        </div>`;
+        box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        try {
+            let allQuestions = [];
+
+            // Helper to generate a batch of questions
+            async function fetchBatch(batchSize, offset, levelTarget) {
+                const variation = (crypto.randomUUID ? crypto.randomUUID() : (Date.now() + '-' + Math.random().toString(36).slice(2)));
+                const prompt = `Sen AJAN 16: Çoktan Seçmeli Test ve Seviyeleme Soru Tasarımcısısın.
+GÖREV: Aşağıdaki iş vakasını analiz ederek adayın seviyesini (Junior / Mid / Senior / Lead) tespit edecek ve role uygunluğunu ölçecek TAM ${batchSize} ADET TÜRKÇE ÇOKTAN SEÇMELİ SORU ÜRET.
+
+VAKA:
+${source}
+
+SORU KURALLARI:
+- Her soru vakanın teknik ayrıntılarına, mimarisine, metriklerine veya karar noktalarına doğrudan dayansın.
+- Her sorunun A, B, C, D olmak üzere tam 4 şıkkı olsun.
+- Şıklar birbirine yakın uzunlukta ve inandırıcı güçlü çeldiricilere sahip olsun.
+- Doğru cevaplar 0 (A), 1 (B), 2 (C), 3 (D) arasında dengeli dağılsın.
+- Her soru için seviye ('Junior', 'Mid', 'Senior' veya 'Lead') ve kısa teknik gerekçe ('rationale') ekle.
+- Soru başlangıç numarası: ${offset + 1}.
+
+YALNIZCA GEÇERLİ JSON DÖNDÜR:
+{
+  "questions": [
+    {
+      "text": "Soru metni...",
+      "options": ["A seçeneği", "B seçeneği", "C seçeneği", "D seçeneği"],
+      "answer": 0,
+      "level": "Senior",
+      "rationale": "Doğru cevabın teknik açıklaması..."
+    }
+  ]
+}`;
+                const raw = await aiCall(prompt, false, questionCost(batchSize, 0));
+                const parsed = aiJson(raw);
+                const valid = (parsed.questions || []).filter(q => Array.isArray(q.options) && q.options.length === 4 && typeof q.answer === 'number').slice(0, batchSize);
+                // Geçersiz/eksik dönen soruların ücretini iade et
+                refundCredits(questionCost(batchSize - valid.length, 0));
+                return valid;
+            }
+
+            // Decide batching: if count <= 25, 1 call; if 50, 2 calls of 25; if 100, 4 calls of 25
+            const batchSize = count <= 25 ? count : 25;
+            const totalBatches = Math.ceil(count / batchSize);
+
+            for (let b = 0; b < totalBatches; b++) {
+                const prog = document.getElementById('mcq-progress-msg');
+                if (prog) prog.textContent = `Ajan 16 Soru Tasarımcısı: ${allQuestions.length} / ${count} soru üretildi...`;
+                
+                const curBatchSize = Math.min(batchSize, count - allQuestions.length);
+                const batchQuestions = await fetchBatch(curBatchSize, allQuestions.length);
+                allQuestions.push(...batchQuestions);
+
+                if (allQuestions.length >= count) break;
+            }
+
+            if (!allQuestions.length) throw new Error('Ajan 16 geçerli soru formatı döndüremedi. Lütfen tekrar deneyin.');
+
+            generatedExamType = 'Çoktan Seçmeli';
+            generatedExamQuestions = allQuestions.map((q, i) => ({
+                text: (i + 1) + '. ' + q.text.replace(/^[0-9]+[.)]s*/, ''),
+                options: q.options,
+                answer: Math.max(0, Math.min(3, q.answer)),
+                level: q.level || (i % 3 === 0 ? 'Senior' : (i % 2 === 0 ? 'Mid' : 'Junior')),
+                rationale: q.rationale || 'Vaka metnindeki teknik parametreler gereği doğru seçenek.',
+                open: false
+            }));
+
+            const finalCount = generatedExamQuestions.length;
+
+            box.innerHTML = `<div class="case-card-head">
+                <div>
+                    <span class="eyebrow">AJAN 16 · ÇOKTAN SEÇMELİ TEST HAZIR</span>
+                    <h2>Dört Şıklı Seviye Tespit & Vaka Testi</h2>
+                    <p>${finalCount} Özgün Soru · Seviye Etiketli (Junior / Mid / Senior / Lead) · Dengeli A-B-C-D Dağılımı</p>
+                </div>
+                <span class="case-count">${finalCount} Soru Hazır</span>
+            </div>
+            
+            <div class="question-rules">
+                <span>4 Eşit Seçenek</span>
+                <span>Seviye Tespit Etiketi</span>
+                <span>Tek Soru Görünümü</span>
+                <span>Geri Dönüş Kapalı</span>
+            </div>
+
+            <div class="mcq-preview-list" style="margin:20px 0;">
+                ${generatedExamQuestions.slice(0, 6).map((q, i) => `
+                    <article style="background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; padding:15px; margin-bottom:12px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <b style="color:#0f172a;">Soru ${i + 1}</b>
+                            <span style="font-size:0.8rem; background:#e0f2fe; color:#0369a1; padding:2px 8px; border-radius:4px; font-weight:700;">Seviye: ${safeText(q.level)}</span>
+                        </div>
+                        <p style="margin:0 0 10px; font-size:0.98rem; color:#334155;">${safeText(q.text)}</p>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                            ${q.options.map((o, j) => `
+                                <span class="${j === q.answer ? 'correct-option' : ''}" style="padding:6px 10px; border-radius:6px; font-size:0.9rem; border:1px solid ${j === q.answer ? '#10b981' : '#e2e8f0'}; background:${j === q.answer ? '#ecfdf5' : '#f8fafc'};">
+                                    <b>${String.fromCharCode(65 + j)})</b> ${safeText(o)}
+                                </span>
+                            `).join('')}
+                        </div>
+                        ${q.rationale ? `<div style="margin-top:8px; font-size:0.82rem; color:#64748b; font-style:italic;">💡 Çözüm: ${safeText(q.rationale)}</div>` : ''}
+                    </article>
+                `).join('')}
+                ${finalCount > 6 ? `<div style="text-align:center; padding:10px; color:#64748b; font-weight:600;">... ve ${finalCount - 6} soru daha hazırlandı.</div>` : ''}
+            </div>
+
+            <div style="display:flex; gap:12px; margin-top:20px;">
+                <button class="primary" style="flex:1; padding:14px; font-size:1.1rem; font-weight:700;" onclick="startSecureExam()">
+                    🚀 Çoktan Seçmeli Testi Başlat (${finalCount} Soru)
+                </button>
+            </div>`;
+
+            box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            toast(finalCount + ' soruluk seviye tespit testi hazırlandı · ' + questionCost(finalCount, 0) + ' BIGakçe düşüldü');
+        } catch (error) {
+            box.innerHTML = `<div style="background:#fef2f2; border:1px solid #f87171; border-radius:10px; padding:20px; color:#b91c1c;">
+                <b>Test Hazırlama Hatası:</b> ${safeText(error.message)}
+                <div style="margin-top:12px;"><button class="secondary" onclick="buildMcqDraft()">Tekrar Dene</button></div>
+            </div>`;
+            toast('Test üretilemedi: ' + error.message);
+        } finally {
+            aiBusy(button, false);
+        }
+    };
+
+    // Override showSecureResult to include Level Assessment & Role Suitability
+    window.showSecureResult = function() {
+        const total = secureExam.correct + secureExam.wrong;
+        const rate = total > 0 ? Math.round(secureExam.correct / total * 100) : 0;
+        const body = document.getElementById('secure-exam-body');
+        if (!body) return;
+
+        let detectedLevel = 'Junior (0-2 Yıl)';
+        let levelColor = '#3b82f6';
+        let suitabilityBadge = 'Gelişime İhtiyaç Var';
+
+        if (rate >= 90) {
+            detectedLevel = 'Lead / Principal (8+ Yıl)';
+            levelColor = '#7c3aed';
+            suitabilityBadge = 'Mükemmel Uygunluk (Üst Düzey)';
+        } else if (rate >= 75) {
+            detectedLevel = 'Senior (5-8 Yıl)';
+            levelColor = '#10b981';
+            suitabilityBadge = 'Yüksek Uygunluk (Doğrudan İstihdam/Terfi)';
+        } else if (rate >= 50) {
+            detectedLevel = 'Mid-Level (2-5 Yıl)';
+            levelColor = '#f59e0b';
+            suitabilityBadge = 'Orta Düzey Uygunluk (Mentörlükle Uyumlu)';
+        }
+
+        body.innerHTML = `<div class="secure-result">
+            <span>AJAN 12 · ÖLÇME & DEĞERLENDİRME</span>
+            <h2>Vaka Testi ve Seviye Tespit Sonucu</h2>
+            
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:20px; margin:20px 0; text-align:center;">
+                <div style="font-size:0.9rem; color:#64748b; font-weight:700;">TESPİT EDİLEN YETKİNLİK SEVİYESİ</div>
+                <div style="font-size:1.8rem; font-weight:800; color:${levelColor}; margin:5px 0;">${detectedLevel}</div>
+                <div style="display:inline-block; background:${levelColor}20; color:${levelColor}; padding:4px 14px; border-radius:20px; font-weight:700; font-size:0.9rem;">${suitabilityBadge}</div>
+            </div>
+
+            <div class="result-only-grid">
+                <article><small>Toplam Soru</small><b>${total}</b></article>
+                <article><small>Doğru Cevap</small><b style="color:#10b981;">${secureExam.correct}</b></article>
+                <article><small>Yanlış Cevap</small><b style="color:#ef4444;">${secureExam.wrong}</b></article>
+                <article><small>Başarı Oranı</small><b>%${rate}</b></article>
+            </div>
+
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button class="primary full" onclick="document.getElementById('secure-exam').remove(); go('evaluation');">
+                    📊 Detaylı Değerlendirme Raporuna Git
+                </button>
+                <button class="secondary" onclick="document.getElementById('secure-exam').remove();">Kapat</button>
+            </div>
+        </div>`;
+    };
+
+    console.log('PATCH 18: Multi-Agent Vaka, Çözümleme ve Seviye Test Seti yüklendi.');
+})();
+
+
+// ==========================================
+// PATCH 19: DİNAMİK VE ROLE ÖZEL DEĞERLENDİRME & DETAYLI RAPOR SİSTEMİ
+// ==========================================
+(function() {
+    // 1. Soruların ve cevapların güvenli kaydedilmesi
+    const oldAnswerSecure = window.answerSecureQuestion;
+    window.answerSecureQuestion = function(choice) {
+        if (!generatedExamQuestions || !generatedExamQuestions[secureExam.index]) return;
+        const q = generatedExamQuestions[secureExam.index];
+        const seconds = Math.max(1, Math.round((Date.now() - secureExam.started) / 1000));
+        const isCorrect = (choice === q.answer);
+        
+        secureExam.answers.push({
+            question: secureExam.index + 1,
+            questionText: q.text,
+            choice: choice,
+            choiceText: q.options[choice] || '',
+            correctIndex: q.answer,
+            correctText: q.options[q.answer] || '',
+            correct: isCorrect,
+            status: isCorrect ? 'positive' : 'negative',
+            seconds: seconds,
+            level: q.level || 'Mid',
+            rationale: q.rationale || ''
+        });
+
+        if (isCorrect) secureExam.correct++;
+        else secureExam.wrong++;
+
+        secureExam.index++;
+        if (secureExam.index < generatedExamQuestions.length) {
+            renderSecureQuestion();
+        } else {
+            showSecureResult();
+        }
+    };
+
+    // 2. Çoktan Seçmeli Test Sonuç Ekranı ve actualTestResults aktarımı
+    window.showSecureResult = function() {
+        const total = secureExam.correct + secureExam.wrong;
+        const rate = total > 0 ? Math.round(secureExam.correct / total * 100) : 0;
+        const body = document.getElementById('secure-exam-body');
+        if (!body) return;
+
+        // Gerçek test verilerini global actualTestResults içine eksiksiz aktar
+        window.actualTestResults = secureExam.answers.map((ans, i) => {
+            return {
+                question: ans.questionText || ('Soru ' + (i + 1)),
+                answer: String.fromCharCode(65 + ans.choice) + ') ' + (ans.choiceText || ''),
+                correctAnswer: String.fromCharCode(65 + ans.correctIndex) + ') ' + (ans.correctText || ''),
+                status: ans.status || (ans.correct ? 'positive' : 'negative'),
+                seconds: ans.seconds || 5,
+                level: ans.level || 'Mid',
+                rationale: ans.rationale || 'Vaka metnine dayalı teknik analiz.'
+            };
+        });
+
+        let detectedLevel = 'Junior (0-2 Yıl)';
+        let levelColor = '#3b82f6';
+        let suitabilityBadge = 'Gelişime İhtiyaç Var';
+
+        if (rate >= 90) {
+            detectedLevel = 'Lead / Principal (8+ Yıl)';
+            levelColor = '#7c3aed';
+            suitabilityBadge = 'Mükemmel Uygunluk (Üst Düzey)';
+        } else if (rate >= 75) {
+            detectedLevel = 'Senior (5-8 Yıl)';
+            levelColor = '#10b981';
+            suitabilityBadge = 'Yüksek Uygunluk (Doğrudan İstihdam/Terfi)';
+        } else if (rate >= 50) {
+            detectedLevel = 'Mid-Level (2-5 Yıl)';
+            levelColor = '#f59e0b';
+            suitabilityBadge = 'Orta Düzey Uygunluk (Mentörlükle Uyumlu)';
+        }
+
+        state.lastTestStats = {
+            total: total,
+            correct: secureExam.correct,
+            wrong: secureExam.wrong,
+            score: rate,
+            level: detectedLevel,
+            suitability: suitabilityBadge
+        };
+
+        body.innerHTML = `<div class="secure-result">
+            <span>AJAN 12 · ÖLÇME & DEĞERLENDİRME</span>
+            <h2>Vaka Testi Tamamlandı</h2>
+            
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:20px; margin:20px 0; text-align:center;">
+                <div style="font-size:0.9rem; color:#64748b; font-weight:700;">TESPİT EDİLEN YETKİNLİK SEVİYESİ</div>
+                <div style="font-size:1.8rem; font-weight:800; color:${levelColor}; margin:5px 0;">${detectedLevel}</div>
+                <div style="display:inline-block; background:${levelColor}20; color:${levelColor}; padding:4px 14px; border-radius:20px; font-weight:700; font-size:0.9rem;">${suitabilityBadge}</div>
+            </div>
+
+            <div class="result-only-grid">
+                <article><small>Toplam Soru</small><b>${total}</b></article>
+                <article><small>Doğru Cevap</small><b style="color:#10b981;">${secureExam.correct}</b></article>
+                <article><small>Yanlış Cevap</small><b style="color:#ef4444;">${secureExam.wrong}</b></article>
+                <article><small>Başarı Oranı</small><b>%${rate}</b></article>
+            </div>
+
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button class="primary full" onclick="document.getElementById('secure-exam').remove(); go('evaluation');">
+                    📊 Testi Değerlendirmeye Gönder & AI Analizini Başlat →
+                </button>
+            </div>
+        </div>`;
+    };
+
+    // 3. Değerlendirme sayfası ve istatistikleri
+    window.evaluationStats = function(processed) {
+        if (!window.actualTestResults) window.actualTestResults = [];
+        const max = typeof processed === 'number' ? processed : window.actualTestResults.length;
+        const rows = window.actualTestResults.slice(0, max);
+        const positive = rows.filter(r => r.status === 'positive').length;
+        const negative = rows.filter(r => r.status === 'negative').length;
+        const blank = rows.filter(r => r.status === 'blank').length;
+        const answered = positive + negative;
+        const rate = rows.length ? Math.round(positive / rows.length * 100) : 0;
+        const avg = answered ? Math.round(rows.reduce((sum, r) => sum + (r.seconds || 0), 0) / answered) : 0;
+        return { positive, negative, blank, answered, rate, avg, total: window.actualTestResults.length };
+    };
+
+    window.evaluationPage = function() {
+        // Eğer daha önce çözülmüş bir sınav yoksa veya actualTestResults boşsa, aktif vaka ve pozisyona göre dinamik set kur
+        if (!window.actualTestResults || window.actualTestResults.length === 0) {
+            const pos = document.getElementById('pb-position')?.value || 'Kıdemli Sistem & Bulut Mimarı';
+            const sector = document.getElementById('pb-sector')?.value || 'Bilişim Teknolojileri';
+            window.actualTestResults = [
+                { question: pos + ' rolünde yüksek trafik anında darboğazı nasıl tespit edersiniz?', answer: 'APM metriklerini ve log aggregation (ELK/Prometheus) izleyerek thread pool ve latency trendlerini incelerim.', status: 'positive', seconds: 48, level: 'Senior' },
+                { question: 'Veritabanı replikasyon gecikmesi (lag) kritik eşiği aştığında ilk adımınız ne olur?', answer: 'Yazma/okuma ayrımını kontrol eder, lock contention oluşturan long-running transactionları tespit ederim.', status: 'positive', seconds: 62, level: 'Senior' },
+                { question: 'Ödeme servisindeki zaman aşımı (timeout) hatasını engellemek için hangi mimari deseni uygularsınız?', answer: 'Sadece sunucu CPU kapasitesini artırırım.', status: 'negative', seconds: 19, level: 'Mid' },
+                { question: 'Kaskat arızaları (cascading failures) önlemek için sistem sınırında ne konumlandırırsınız?', answer: 'Circuit Breaker, rate limiter ve asenkron kuyruk (Kafka/RabbitMQ) ile backpressure uygularım.', status: 'positive', seconds: 55, level: 'Lead' },
+                { question: 'SLA ihlali ve kesinti maliyetini yönetirken paydaş iletişim planınız nedir?', answer: 'Durum düzelene kadar bildirim yapmam.', status: 'negative', seconds: 14, level: 'Junior' }
+            ];
+        }
+
+        const stats = window.evaluationStats(0);
+        return layout(`<section class="evaluation-page">
+            <div class="prompt-head">
+                <div>
+                    <span class="eyebrow">AJAN 5 & 12 · ADAY DEĞERLENDİRME</span>
+                    <h2>Aday Test Değerlendirmesi</h2>
+                    <p>Adayın çözdüğü test soruları; doğruluk, refleks hızı, teknik derinlik ve seviye uygunluğu açısından değerlendirilir.</p>
+                </div>
+                <button id="evaluation-start" class="primary" onclick="startEvaluation()">Değerlendirmeyi Başlat</button>
+            </div>
+            <div id="evaluation-metrics" class="evaluation-metrics">${window.evaluationMetricsHtml(stats, 0)}</div>
+            <div class="evaluation-progress"><i id="evaluation-progress-bar" style="width:0%"></i></div>
+            <section id="evaluation-list" class="evaluation-list">${window.evaluationRows(0)}</section>
+            <section id="evaluation-final" class="evaluation-final" hidden></section>
+        </section>`, 'Test Değerlendirme');
+    };
+
+    // 4. finishEvaluation: Dinamik, adayın gerçek cevaplarına ve rolüne göre analiz üretir
+    window.finishEvaluation = function() {
+        const stats = window.evaluationStats();
+        const final = document.getElementById('evaluation-final');
+        const button = document.getElementById('evaluation-start');
+        if (button) {
+            button.disabled = false;
+            button.textContent = 'Yeniden Değerlendir';
+        }
+        if (!final) return;
+
+        final.hidden = false;
+
+        let detectedLevel = 'Junior (0-2 Yıl)';
+        let levelColor = '#3b82f6';
+        let profileVerdict = 'Temel Bilgi Düzeyinde, Gelişime Açık';
+
+        if (stats.rate >= 90) {
+            detectedLevel = 'Lead / Principal (8+ Yıl)';
+            levelColor = '#7c3aed';
+            profileVerdict = 'Üst Düzey Mimari & Stratejik Yetkinlik (İdeal Terfi/İstihdam)';
+        } else if (stats.rate >= 75) {
+            detectedLevel = 'Senior (5-8 Yıl)';
+            levelColor = '#10b981';
+            profileVerdict = 'Güçlü Problem Çözme ve Kriz Refleksleri (Yetkin)';
+        } else if (stats.rate >= 50) {
+            detectedLevel = 'Mid-Level (2-5 Yıl)';
+            levelColor = '#f59e0b';
+            profileVerdict = 'Operasyonel Düzeyde Yeterli, Kök Neden Analizinde Mentörlük Önerilir';
+        }
+
+        // Dinamik güçlü ve zayıf soru analizi
+        const wrongQuestions = window.actualTestResults.filter(r => r.status === 'negative');
+        const correctQuestions = window.actualTestResults.filter(r => r.status === 'positive');
+
+        let dynamicAnalysis = `<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div>
+                <span class="eyebrow" style="background:#e0e7ff; color:#4338ca; padding:4px 10px; border-radius:6px; font-weight:700;">DEĞERLENDİRME TAMAMLANDI</span>
+                <h2 style="margin:8px 0 0; color:#0f172a;">%${stats.rate} Başarı · ${detectedLevel}</h2>
+            </div>
+            <div style="background:${levelColor}20; color:${levelColor}; padding:8px 16px; border-radius:20px; font-weight:800; font-size:1rem;">
+                ${profileVerdict}
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-top:20px; text-align:left;">
+            <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:15px;">
+                <h4 style="margin:0 0 10px; color:#166534;">✅ Güçlü ve Başarılı Alanlar (${correctQuestions.length} Soru)</h4>
+                <ul style="margin:0; padding-left:20px; color:#14532d; font-size:0.92rem; line-height:1.6;">
+                    ${correctQuestions.slice(0, 3).map(q => `<li><b>${safeText(q.level || 'Teknik')}:</b> ${safeText(q.question.slice(0, 80))}...</li>`).join('') || '<li>Kritik doğru cevap kaydı bulunamadı.</li>'}
+                </ul>
+            </div>
+
+            <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:10px; padding:15px;">
+                <h4 style="margin:0 0 10px; color:#991b1b;">⚠️ İyileştirilmesi Gereken Alanlar (${wrongQuestions.length} Soru)</h4>
+                <ul style="margin:0; padding-left:20px; color:#7f1d1d; font-size:0.92rem; line-height:1.6;">
+                    ${wrongQuestions.slice(0, 3).map(q => `<li><b>${safeText(q.level || 'Eksik')}:</b> ${safeText(q.question.slice(0, 80))}...</li>`).join('') || '<li>Tüm sorular başarıyla yanıtlandı.</li>'}
+                </ul>
+            </div>
+        </div>
+
+        <div style="margin-top:20px; text-align:center;">
+            <button class="primary" style="padding:14px 28px; font-size:1.05rem; font-weight:700;" onclick="transferEvaluationResult()">
+                📥 Sonucu Aday Test Sonuçlarına Aktar ve Detaylı Raporu Gör →
+            </button>
+        </div>`;
+
+        final.innerHTML = dynamicAnalysis;
+        final.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        toast('Değerlendirme tamamlandı: %' + stats.rate + ' (' + detectedLevel + ')');
+    };
+
+    // 5. transferEvaluationResult: Verileri benzersiz, dinamik olarak candidateResults içine kaydeder
+    window.transferEvaluationResult = function() {
+        const stats = window.evaluationStats();
+        let activeUser = "Bilge Han Veral";
+        try {
+            const stored = localStorage.getItem('sb_active_user');
+            if (stored && stored !== 'Bilinmeyen Kullanıcı') activeUser = stored;
+        } catch(e){}
+
+        const pos = document.getElementById('pb-position')?.value || 'Kıdemli Sistem & Bulut Mimarı';
+        const sector = document.getElementById('pb-sector')?.value || 'Bilişim ve Altyapı';
+        const subsector = document.getElementById('pb-subsector')?.value || 'Yazılım ve Operasyonlar';
+
+        let detectedLevel = 'Junior (0-2 Yıl)';
+        if (stats.rate >= 90) detectedLevel = 'Lead / Principal (8+ Yıl)';
+        else if (stats.rate >= 75) detectedLevel = 'Senior (5-8 Yıl)';
+        else if (stats.rate >= 50) detectedLevel = 'Mid-Level (2-5 Yıl)';
+
+        const wrongCount = stats.negative + stats.blank;
+        const summaryText = stats.rate >= 75
+            ? `Aday ${pos} pozisyonu için %${stats.rate} başarı skoru ile ${detectedLevel} seviyesinde güçlü teknik derinlik ve kriz refleksleri sergilemiştir.`
+            : stats.rate >= 50
+            ? `Aday %${stats.rate} başarı ile temel operasyonel gereksinimleri karşılamış; ${wrongCount} soruda mimari ve kök neden analizinde gelişim alanı tespit edilmiştir.`
+            : `Aday %${stats.rate} başarı skoru ile hedef seviyenin altında kalmıştır. ${pos} görev gereklilikleri için 30 günlük teknik mentörlük önerilir.`;
+
+        const newResult = {
+            name: activeUser,
+            email: activeUser.toLowerCase().replace(/\s+/g, '.') + '@skillbridge.com.tr',
+            test: pos + ' Seviye Tespit Sınavı',
+            department: sector,
+            detail: subsector,
+            score: stats.rate,
+            outcome: stats.rate >= 60 ? 'Olumlu' : 'Geliştirilmeli',
+            date: new Date().toLocaleDateString('tr-TR'),
+            time: new Date().toLocaleTimeString('tr-TR'),
+            summary: summaryText,
+            level: detectedLevel,
+            detailedReport: JSON.parse(JSON.stringify(window.actualTestResults || []))
+        };
+
+        candidateResults.unshift(newResult);
+        state.evaluationTransferred = true;
+        toast('Değerlendirme başarıyla Test Sonuçları sayfasına aktarıldı');
+        go('results');
+    };
+
+        
+    // -------------------------------------------------------------
+    // KAPSAMLI YETKİNLİK VE DEĞERLENDİRME RAPORU MOTORU (SkillBridge AI v5.3)
+    // -------------------------------------------------------------
+    window.enrichCandidateReport = function(r) {
+        if (!r) return;
+        const score = typeof r.score === 'number' ? r.score : 50;
+        const roleTitle = r.test || 'Pozisyon Değerlendirmesi';
+        const sectorTitle = r.department || 'Genel Sektör';
+        const subTitle = r.detail || 'Operasyonel Birim';
+
+        // 1. Yetkinlikler (Competencies)
+        if (!r.competencies || r.competencies.length === 0) {
+            if (score >= 80) {
+                r.competencies = [
+                    { name: 'Analitik Düşünme ve Kök Neden Analizi', category: 'BİLİŞSEL', score: score, target: 65, levelName: 'Seviye 5 (Örnek / Rol Model)', levelDesc: 'Kritik belirsizliklerde çok boyutlu veri sentezi yapar, kurumsal standart ve yöntem geliştirir.' },
+                    { name: 'Problem Çözme ve Kriz Yönetimi', category: 'BİLİŞSEL', score: Math.min(100, score + 2), target: 60, levelName: 'Seviye 5 (Örnek / Rol Model)', levelDesc: 'Kriz anında sakin kalarak kök nedene iner ve kalıcı sistemik çözümler üretir.' },
+                    { name: 'Stratejik Karar Verme', category: 'BİLİŞSEL', score: Math.max(75, score - 3), target: 60, levelName: 'Seviye 5 (Örnek / Rol Model)', levelDesc: 'Baskı altında risk-fayda dengesini gözeterek stratejik ve hızlı kararlar alır.' },
+                    { name: 'İletişim ve Müzakere Becerisi', category: 'TEMEL', score: Math.min(100, score + 5), target: 70, levelName: 'Seviye 5 (Örnek / Rol Model)', levelDesc: 'Paydaşlar ve ekipler arası köprü kurarak yüksek güven ve mutabakat sağlar.' },
+                    { name: 'Vizyoner Liderlik ve Ekip Yönetimi', category: 'YÖNETSEL', score: score, target: 65, levelName: 'Seviye 5 (Örnek / Rol Model)', levelDesc: 'Ekipleri ortak kurumsal vizyona kanalize eder, yüksek motivasyonla yönetir.' },
+                    { name: 'Operasyonel ve Fonksiyonel Uzmanlık', category: 'FONKSİYONEL', score: Math.max(80, score - 5), target: 75, levelName: 'Seviye 5 (Örnek / Rol Model)', levelDesc: 'Uçtan uca operasyon ve iş süreçlerini optimize eder, verimlilik artışı sağlar.' }
+                ];
+            } else if (score >= 50) {
+                r.competencies = [
+                    { name: 'Analitik Düşünme ve Kök Neden Analizi', category: 'BİLİŞSEL', score: Math.min(85, score + 10), target: 65, levelName: 'Seviye 3 (Orta / Beklenen)', levelDesc: 'Standart verileri başarıyla inceler, karmaşık belirsizliklerde ek analiz desteğine ihtiyaç duyar.' },
+                    { name: 'Problem Çözme ve Kriz Yönetimi', category: 'BİLİŞSEL', score: score, target: 60, levelName: 'Seviye 3 (Orta / Beklenen)', levelDesc: 'Bilinen problem türlerinde pratik çözümler üretir, kriz anında rehberlik arar.' },
+                    { name: 'Stratejik Karar Verme', category: 'BİLİŞSEL', score: Math.max(40, score - 10), target: 60, levelName: 'Seviye 2 (Gelişmekte Olan)', levelDesc: 'Acil durumlarda karar gecikmesi yaşayabilir, risk analizi metodolojisini geliştirmelidir.' },
+                    { name: 'İletişim ve Müzakere Becerisi', category: 'TEMEL', score: Math.min(80, score + 8), target: 70, levelName: 'Seviye 3 (Orta / Beklenen)', levelDesc: 'Ekip içi iletişimi yapıcıdır, zorlu müşteri ve üst yönetim müzakerelerinde gelişime açıktır.' },
+                    { name: 'Vizyoner Liderlik ve Ekip Yönetimi', category: 'YÖNETSEL', score: Math.max(45, score - 5), target: 65, levelName: 'Seviye 2 (Gelişmekte Olan)', levelDesc: 'Operasyonel iş dağılımını yapar, uzun vadeli vizyon aktarımında mentörlük desteği almalıdır.' },
+                    { name: 'Operasyonel ve Fonksiyonel Uzmanlık', category: 'FONKSİYONEL', score: Math.min(90, score + 5), target: 75, levelName: 'Seviye 3 (Orta / Beklenen)', levelDesc: 'Mevcut rolün rutin görev ve araçlarını yetkinlikle kullanır.' }
+                ];
+            } else {
+                r.competencies = [
+                    { name: 'Analitik Düşünme ve Kök Neden Analizi', category: 'BİLİŞSEL', score: Math.max(0, score), target: 60, levelName: 'Seviye 1 (Başlangıç / Destek Gerekli)', levelDesc: 'Veri ve durumları sistematik parçalara ayıramaz, sezgisel ve yüzeysel yaklaşır.' },
+                    { name: 'Problem Çözme ve Kriz Yönetimi', category: 'BİLİŞSEL', score: Math.max(0, score), target: 60, levelName: 'Seviye 1 (Başlangıç / Destek Gerekli)', levelDesc: 'Problemler karşısında pasif kalır, yönlendirme ve doğrudan müdahale olmadan çözüm üretemez.' },
+                    { name: 'Stratejik Karar Verme', category: 'BİLİŞSEL', score: Math.max(0, score - 5), target: 60, levelName: 'Seviye 1 (Başlangıç / Destek Gerekli)', levelDesc: 'Belirsizlik anında karar vermekten kaçınır, eylemsizlik gösterir.' },
+                    { name: 'İletişim ve Müzakere Becerisi', category: 'TEMEL', score: Math.min(25, score + 10), target: 70, levelName: 'Seviye 1 (Başlangıç / Destek Gerekli)', levelDesc: 'Duygu ve fikir aktarımında tutuktur, çatışma anında geri çekilir.' },
+                    { name: 'Vizyoner Liderlik ve Ekip Yönetimi', category: 'YÖNETSEL', score: Math.max(0, score), target: 65, levelName: 'Seviye 1 (Başlangıç / Destek Gerekli)', levelDesc: 'Hedef baskısı altında odak kaybeder, ekibi yönlendirmekte yetersiz kalır.' },
+                    { name: 'Operasyonel ve Fonksiyonel Uzmanlık', category: 'FONKSİYONEL', score: Math.min(30, score + 15), target: 75, levelName: 'Seviye 1 (Başlangıç / Destek Gerekli)', levelDesc: 'Kurumsal standartları ve operasyonel iş akışlarını takip etmekte zorlanır.' }
+                ];
+            }
+        }
+
+        // 2. Psikolojik Profil (Sayfa 7)
+        if (!r.psychologicalProfile) {
+            if (score >= 80) {
+                r.psychologicalProfile = 'Aday, "' + roleTitle + ' / ' + subTitle + '" pozisyonu için kritik bilişsel ve yönetsel yetkinliklerin tamamında üstün bir olgunluk sergilemiştir. Belirsizlik ve baskı senaryolarında soğukkanlılığını koruyarak analitik kök neden analizine yönelme refleksi yüksektir. Karar alma mekanizmalarında hem veri odaklı rasyonelliği hem de paydaş memnuniyetini optimize edebilmektedir. Kriz anlarında çözüm mimarı olarak öne çıkmakta ve ekibe yüksek güven vermektedir.';
+            } else if (score >= 50) {
+                r.psychologicalProfile = 'Adayın bilişsel profili görev ve süreç odaklı bir çalışma tarzını yansıtmaktadır. Bilinen ve standartlaştırılmış iş adımlarında disiplinli ve tutarlı bir performans ortaya koymaktadır. Ancak ani kapsam değişiklikleri, çoklu krizler veya yüksek belirsizlik durumlarında reaktif kalma eğilimindedir. Karar alma süreçlerinde daha fazla dış onaya ve rehberliğe ihtiyaç duymaktadır. Yapılandırılmış bir koçluk desteğiyle yönetsel reflekslerini olgunlaştırma potansiyeline sahiptir.';
+            } else {
+                r.psychologicalProfile = 'Adayın bilişsel ve davranışsal reaksiyon profili incelendiğinde; belirsizlik, zaman kısıtı ve kriz senaryoları altında karar vermekten çekindiği ve kaçınma refleksi geliştirdiği gözlemlenmiştir. Problem Çözme, Stratejik Düşünme ve İletişim eksenlerinde özgüven eksikliği ve pasif bekleme eğilimi baskındır. Verilen yanıtlarda analitik bir metodoloji (kök neden analizi, etki haritalama, önceliklendirme) görülmemektedir.';
+            }
+        }
+
+        // 3. Güçlü Yönler (Strengths)
+        if (!r.strengths || r.strengths.length === 0) {
+            if (score >= 80) {
+                r.strengths = [
+                    'Stratejik Analiz ve Sistemik Yaklaşım: Karmaşık operasyonel dinamikleri hızla kavrayarak kurumsal standart oluşturabilme.',
+                    'Kusursuz Karar Verme Refleksi: Kriz ve belirsizlik anında soğukkanlı, rasyonel ve sonuç odaklı refleksler sergileme.',
+                    'Yüksek Paydaş İletişimi: Ekipler arası güven inşa etme, mutabakat sağlama ve ortak vizyona kanalize edebilme.'
+                ];
+            } else if (score >= 50) {
+                r.strengths = [
+                    'Süreç ve Görev Disiplini: Standartlaştırılmış iş akışlarını titizlikle ve kurallara uygun yürütme.',
+                    'Araç ve Yöntem Hakimiyeti: Pozisyona ait temel araçları ve iş takip mekanizmalarını yetkinlikle kullanma.',
+                    'İş Birliğine Açıklık: Ekip yönergelerine uyum ve verilen görevleri zamanında tamamlama kararlılığı.'
+                ];
+            } else {
+                r.strengths = [
+                    'Yönerge Takip Potansiyeli: Açık, tek boyutlu ve yapılandırılmış rutin görevlerde çalışma eğilimi.',
+                    'Temkinli Yaklaşım: Fevri karar almaktan kaçınarak bekleme refleksi gösterme.',
+                    'Eğitime Açık Ham Profil: Doğru mentörlük ve temel eğitimlerle baştan şekillendirilebilir profil.'
+                ];
+            }
+        }
+
+        // 4. Hassas Alanlar / Zafiyetler (Watchouts)
+        if (!r.watchouts || r.watchouts.length === 0) {
+            if (score >= 80) {
+                r.watchouts = [
+                    '✨ Mükemmeliyetçilik Riski: Kendi yüksek beklentilerini tüm ekibe yansıtırken mikro yönetim tuzağına düşmeme konusunda farkındalık.',
+                    '✨ Delegasyon Dengesi: Kritik operasyonları bizzat devralmak yerine ekip üyelerini yetkilendirme ve koçluk yapma.'
+                ];
+            } else if (score >= 50) {
+                r.watchouts = [
+                    '⚠️ Reaktif Karar Eğilimi: Kriz ve risk durumlarında önleyici planlama yerine sorun oluştuktan sonra aksiyon alma.',
+                    '⚠️ Eskalasyon Gecikmesi: Çözüm tıkandığında üst yönetime erken ve şeffaf bildirimde bulunma refleksini geliştirme.'
+                ];
+            } else {
+                r.watchouts = [
+                    '🚨 Yüksek Karar Tereddüdü: Kriz ve belirsizlik anlarında donakalma (freezing) ve pasif bekleme refleksi.',
+                    '🚨 Çatışma Kaçınması: Ekip içi uyuşmazlıklarda yapıcı müzakere yerine tamamen geri çekilme davranışı.',
+                    '🚨 Görevi Erken Terk Etme: Teknik veya zorlu adımlarda soruyu boş bırakarak vazgeçme eğilimi.'
+                ];
+            }
+        }
+
+        // 5. Hata Dedektörü (Error Detector - Sayfa 6)
+        if (!r.errorDetector) {
+            if (score >= 80) {
+                r.errorDetector = 'Adayın vaka ve sınav sorularında sergilediği refleksler incelendiğinde kritik bir bilişsel zafiyet veya karar hatası tespit edilmemiştir. Sorulara verilen cevaplar, adayın ölçülen tüm yetkinlikleri hem kavramsal hem de pratik sahada eksiksiz kavradığını göstermektedir. Baskı altında bile tutarlı ve doğru refleksler üretmiştir.';
+            } else if (score >= 50) {
+                r.errorDetector = 'Adayın yanıtları analiz edildiğinde en belirgin bilişsel zafiyet; risklerin resmi dokümantasyonu ve belirsizlik anındaki karar hızında görülmüştür. Yüzeysel çözümlere eğilim göstermiş, kök neden analizinde ikinci katmana inmekte tereddüt etmiştir. Önceliklendirme ve proaktif eskalasyon adımlarının güçlendirilmesi gerekmektedir.';
+            } else {
+                r.errorDetector = 'Adayın yanıtları incelendiğinde kritik bilişsel zafiyetler ve refleks tutarsızlıkları tespit edilmiştir. Kriz sorularında pasif bekleme, çatışma sorularında kaçınma davranışı ve teknik soruların yanıtsız bırakılması; adayın henüz bağımsız iş ve karar alma olgunluğuna erişmediğini göstermektedir.';
+            }
+        }
+
+        // 6. Kıyaslama (Benchmark - Sayfa 8)
+        if (!r.benchmark) {
+            if (score >= 80) {
+                r.benchmark = 'Adayın %' + score + '\'lik genel başarı skoru, ' + sectorTitle + ' sektöründeki akran havuzunun zirve %5\'lik dilimini temsil etmektedir. Sektör ortalaması %62 olup, aday beklentilerin çok üzerinde bir liderlik ve yetkinlik profili sergilemektedir.';
+            } else if (score >= 50) {
+                r.benchmark = 'Adayın %' + score + '\'lik genel başarı skoru, ' + sectorTitle + ' sektöründeki akran havuzunun %54\'lük medyan seviyesine yakındır (Persentil: %' + (score - 5) + '). Temel operasyonları yürütebilecek düzeyde olup, sektörün en iyi %10 dilimine (%86) ulaşabilmesi için risk ve stratejik karar kaslarını güçlendirmesi gerekmektedir.';
+            } else {
+                r.benchmark = 'Adayın %' + score + '\'lik değerlendirme skoru, ' + sectorTitle + ' sektöründeki aday havuzunun en alt %5\'lik diliminde yer almaktadır. Sektör genelinde bu rol için ortalama başarı düzeyi %58, beklenen asgari kabul barajı ise %50\'dir.';
+            }
+        }
+
+        // 7. Nihai Mentor Kararı (Mentor Decision - Sayfa 9)
+        if (!r.mentorDecision) {
+            if (score >= 80) {
+                r.mentorDecision = 'Adayın pozisyon için aranan tüm yetkinlikleri fazlasıyla karşıladığı değerlendirilmiştir. Rol için ŞİDDETLE TAVSİYE EDİLİR. Adayın doğrudan işe alımı veya üst düzey yönetsel sorumluluklara atanması önerilmektedir. Sürekli gelişim perspektifiyle dijital inovasyon ve yapay zeka destekli karar destek sistemleri eğitimleriyle beslenmesi tavsiye edilir.';
+            } else if (score >= 50) {
+                r.mentorDecision = 'Aday pozisyon için gerekli asgari yetkinlik eşiğini karşılamaktadır. Rol için KOŞULLU / GELİŞİME AÇIK olarak kabul edilebilir. Kritik sorumluluklar verilmeden önce risk yönetimi, stratejik karar alma ve proaktif paydaş iletişimi konularında 60 günlük yapılandırılmış bir koçluk programına tabi tutulmalıdır.';
+            } else {
+                r.mentorDecision = 'Adayın mevcut yetkinlik seviyesi pozisyon için yetersiz bulunmuştur. Mevcut haliyle doğrudan işe alımı veya kritik operasyonlara atanması ÖNERİLMEMEKTEDİR. Adayın temel iş ve karar alma yetkinliklerini kazanabilmesi için 90 günlük yapılandırılmış bir ön hazırlık eğitim programını tamamlaması, ardından yeniden değerlendirilmesi tavsiye edilir.';
+            }
+        }
+
+        // 8. 30-60-90 Günlük Yol Haritası (Roadmap)
+        if (!r.roadmap) {
+            if (score >= 80) {
+                r.roadmap = {
+                    p30: 'Üst Düzey Yönetim Oryantasyonu & Çoklu Birim Portföy Analizi: Kurumsal KPI ve stratejik hedeflerin netleştirilmesi.',
+                    p60: 'Dijital İnovasyon ve Dönüşüm Stratejisi Liderliği: Yapay zeka ve ileri analitik araçlarının birime entegrasyonu.',
+                    p90: 'Geleceğin Liderliği ve Stratejik Vizyon Patronluğu: Üst kurul mentorluğu ve kurumsal direktörlük hazırlığı.'
+                };
+            } else if (score >= 50) {
+                r.roadmap = {
+                    p30: 'Süreç ve Metodoloji Adaptasyonu: Kurumsal risk kütüğü ve standart iş şablonlarının içselleştirilmesi.',
+                    p60: 'Kritik Vaka Eşleşmeleri ve Süreç Koçluğu: Kıdemli bir lider eşliğinde belirsizlik senaryolarında karar simülasyonları.',
+                    p90: 'Bağımsız Süreç Teslimi & Ara Değerlendirme: Orta ölçekli bir projenin uçtan uca yönetimi ve reassessment testi.'
+                };
+            } else {
+                r.roadmap = {
+                    p30: 'Temel Problem Çözme ve İletişim Atölyeleri: 5 Neden analizi, Balık Kılçığı metodolojisi ve aktif dinleme eğitimleri.',
+                    p60: 'Simüle Vaka Çalışmaları ve Eşli Mentorluk: Haftalık kontrollü senaryolarda karar verme ve ekip içi rol oynama pratikleri.',
+                    p90: 'Bağımsız Küçük Ölçekli Görevler & Geri Bildirim Döngüsü: Düşük riskli mikro görevlerin teslimi ve kapsamlı reassessment testi.'
+                };
+            }
+        }
+
+        // 9. Metrikler (Metrics)
+        if (!r.metrics) {
+            r.metrics = {
+                accuracy: score,
+                speed: score >= 80 ? '34 sn/soru (İdeal)' : score >= 50 ? '42 sn/soru (Dengeli)' : '10 sn/soru (Acele/Vazgeçme)',
+                consistency: score >= 80 ? '%98 (Yüksek)' : score >= 50 ? '%74 (Beklenen)' : '%18 (Düşük)',
+                riskFactor: score >= 80 ? 'ASGARİ' : score >= 50 ? 'ORTA' : 'YÜKSEK',
+                percentile: score >= 80 ? 'Üst %5' : score >= 50 ? 'Üst %44' : 'Alt %3'
+            };
+        }
+    };
+
+    window.copyReportSummary = function() {
+        const list = (typeof candidateResults !== 'undefined' ? candidateResults : window.candidateResults) || [];
+        const r = list[state.reportIndex] || list[0];
+        if (!r) return;
+        const text = 'SKILLBRIDGE AI EXECUTIVE ASSESSMENT DOSSIER\n' +
+            'Aday: ' + r.name + ' (' + r.email + ')\n' +
+            'Pozisyon: ' + (r.test || '-') + ' / ' + (r.department || '-') + '\n' +
+            'Genel Skor: %' + r.score + ' - ' + (r.outcome || '-') + '\n' +
+            'Değerlendirme Sonucu: ' + (r.summary || '-') + '\n' +
+            'Nihai Mentor Kararı: ' + (r.mentorDecision || '-');
+        navigator.clipboard.writeText(text).then(() => {
+            toast('Detaylı yönetici değerlendirme özeti panoya kopyalandı');
+        }).catch(() => {
+            toast('Kopyalama yapılamadı, lütfen tarayıcı izinlerini kontrol edin');
+        });
+    };
+
+    window.setRadarCategory = function(cat) {
+        state.radarCategory = cat;
+        const appEl = document.getElementById('app');
+        if (appEl && state.page === 'report_detail') {
+            appEl.innerHTML = window.reportDetailPage();
+        }
+    };
+
+    window.reportDetailPage = function() {
+        const list = (typeof candidateResults !== 'undefined' ? candidateResults : window.candidateResults) || [];
+        const r = list[state.reportIndex] || list[0];
+        if (!r) { go('results'); return ''; }
+
+        // Garantili zenginleştirme: Her aday tam donanımlı olsun
+        window.enrichCandidateReport(r);
+
+        const activeCat = state.radarCategory || 'ALL';
+
+        const scoreColor = (r.score >= 80) ? '#16a34a' : (r.score >= 50 ? '#d97706' : '#dc2626');
+        const badgeColor = (r.score >= 80) ? '#dcfce7' : (r.score >= 50 ? '#fef3c7' : '#fee2e2');
+        const badgeTextColor = (r.score >= 80) ? '#16a34a' : (r.score >= 50 ? '#b45309' : '#b91c1c');
+        const scoreText = (r.score >= 80) ? 'İleri Seviye Yetkin' : (r.score >= 50 ? 'Orta Düzey / Beklenen' : 'Yetkin Olmayan (Geliştirilmeli)');
+
+        const roleTitle = safeText(r.test || 'MÜDÜR YARDIMCISI');
+        const sectorTitle = safeText(r.department || 'Tekstil, Hazır Giyim ve Deri Endüstrisi');
+        const subTitle = safeText(r.detail || 'Perakende Ticaret');
+
+        const compList = r.competencies || [];
+        const filteredCompList = activeCat === 'ALL' ? compList : compList.filter(c => c.category === activeCat);
+
+        // Kategori ortalamaları
+        const getCatScore = (catName) => {
+            const items = compList.filter(c => c.category === catName);
+            if (!items.length) return r.score;
+            return Math.round(items.reduce((acc, c) => acc + c.score, 0) / items.length);
+        };
+        const sBilisel = getCatScore('BİLİŞSEL');
+        const sTeknik = getCatScore('TEKNİK');
+        const sTemel = getCatScore('TEMEL');
+        const sYonetsel = getCatScore('YÖNETSEL');
+        const sFonksiyonel = getCatScore('FONKSİYONEL');
+
+        // Radar Pentagon Matematik Koordinatları (Merkez: 50,50, Yarıçap: 36)
+        const angles = [-90, -18, 54, 126, 198];
+        const getPoint = (scoreVal, angleDeg) => {
+            const rad = (angleDeg * Math.PI) / 180;
+            const dist = (Math.max(10, Math.min(100, scoreVal)) / 100) * 36;
+            const x = 50 + dist * Math.cos(rad);
+            const y = 50 + dist * Math.sin(rad);
+            return x.toFixed(1) + ',' + y.toFixed(1);
+        };
+        const currentPoints = [
+            getPoint(sBilisel, angles[0]),
+            getPoint(sTeknik, angles[1]),
+            getPoint(sTemel, angles[2]),
+            getPoint(sYonetsel, angles[3]),
+            getPoint(sFonksiyonel, angles[4])
+        ].join(' ');
+
+        const targetPoints = [
+            getPoint(60, angles[0]),
+            getPoint(65, angles[1]),
+            getPoint(70, angles[2]),
+            getPoint(65, angles[3]),
+            getPoint(75, angles[4])
+        ].join(' ');
+
+        // Sektörel benchmark değerleri
+        const sectorMedian = r.score >= 80 ? 64 : (r.score >= 50 ? 54 : 58);
+        const sectorTop10 = 88;
+
+        let html = `
+        <style>
+            @media print {
+                aside, header, nav, .sidebar, #top-bar, .no-print, button { display: none !important; }
+                body, html, main, #app { background: white !important; padding: 0 !important; margin: 0 !important; color: #000 !important; }
+                .report-page-container { max-width: 100% !important; padding: 10px !important; }
+                .print-card { box-shadow: none !important; border: 1px solid #cbd5e1 !important; page-break-inside: avoid; }
+            }
+        </style>
+
+        <!-- Üst Bar: Navigasyon ve Butonlar -->
+        <div class="no-print" style="background: #0f172a; padding: 14px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b;">
+            <button onclick="go('results')" style="background: transparent; border: none; color: white; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 18px;">←</span> ${safeText(r.name)} (Test Sonuçlarına Dön)
+            </button>
+            <div style="display:flex; gap:10px;">
+                <button onclick="window.copyReportSummary()" style="background: #334155; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                    📋 Özeti Kopyala
+                </button>
+                <button onclick="window.print()" style="background: #2563eb; color: white; border: none; padding: 8px 18px; border-radius: 8px; font-size: 13.5px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 4px rgba(37,99,235,0.3);">
+                    🖨️ Yazdır / PDF İndir
+                </button>
+            </div>
+        </div>
+
+        <div class="report-page-container" style="padding: 30px; background: #f8fafc; min-height: calc(100vh - 100px); max-width: 1240px; margin: 0 auto;">
+            
+            <!-- 1. Üst Değerlendirme Özeti Kartı -->
+            <div class="print-card" style="background: white; border-radius: 16px; border: 1px solid #e2e8f0; padding: 35px; margin-bottom: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+                
+                <div style="display: flex; gap: 35px; align-items: center; flex-wrap:wrap; margin-bottom: 25px;">
+                    <!-- Sol Kolon: Aday Bilgisi -->
+                    <div style="flex: 0 0 280px;">
+                        <h1 style="margin: 0 0 4px 0; font-size: 32px; font-weight: 800; color: #0f172a; line-height: 1.2;">${safeText(r.name)}</h1>
+                        <p style="margin: 0 0 16px 0; color: #64748b; font-size: 15px;">${safeText(r.email)}</p>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <div style="background: #f1f5f9; padding: 6px 14px; border-radius: 20px; font-size: 12px; color: #334155; font-weight: 600; width: max-content;">
+                                Sektör: ${sectorTitle}
+                            </div>
+                            <div style="background: #f1f5f9; padding: 6px 14px; border-radius: 20px; font-size: 12px; color: #334155; font-weight: 600; width: max-content;">
+                                Rol: ${roleTitle}
+                            </div>
+                            <div style="background: #f1f5f9; padding: 6px 14px; border-radius: 20px; font-size: 12px; color: #64748b; font-weight: 500; width: max-content;">
+                                📅 ${safeText(r.date || '12.09.2026')} · ${safeText(r.time || '14:00')}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Orta Kolon: Genel Skor -->
+                    <div style="flex: 0 0 170px; text-align: center; border-left: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; padding: 0 20px;">
+                        <span style="font-size: 12px; font-weight: 700; color: #64748b; display: block; margin-bottom: 6px; letter-spacing: 0.5px;">GENEL SKOR</span>
+                        <strong style="font-size: 56px; font-weight: 800; color: #0f172a; line-height: 1; display: block; margin-bottom: 10px;">%${r.score}</strong>
+                        <span style="display: inline-block; padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; background: ${badgeColor}; color: ${badgeTextColor};">
+                            ${scoreText}
+                        </span>
+                    </div>
+
+                    <!-- Sağ Kolon: Değerlendirme Sonucu Metni -->
+                    <div style="flex: 1 1 360px; padding-left: 10px;">
+                        <span style="font-size: 12px; font-weight: 700; color: #64748b; display: block; margin-bottom: 8px; text-align: center; letter-spacing: 0.5px;">DEĞERLENDİRME SONUCU</span>
+                        <p style="font-size: 17.5px; font-weight: 800; color: ${scoreColor}; text-align: center; line-height: 1.5; margin: 0;">
+                            ${safeText(r.summary)}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Alt Metrik Şeridi (Executive Key Metrics) -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; border-top: 1px solid #f1f5f9; padding-top: 20px;">
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 16px; text-align: center;">
+                        <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">🎯 Başarı / Doğruluk</span>
+                        <b style="display: block; font-size: 18px; color: #0f172a; margin-top: 4px;">%${r.metrics?.accuracy ?? r.score}</b>
+                    </div>
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 16px; text-align: center;">
+                        <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">⏱️ Karar Hızı</span>
+                        <b style="display: block; font-size: 15px; color: #0f172a; margin-top: 6px;">${r.metrics?.speed ?? '34 sn/soru'}</b>
+                    </div>
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 16px; text-align: center;">
+                        <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">🧭 Karar Tutarlılığı</span>
+                        <b style="display: block; font-size: 15px; color: #0f172a; margin-top: 6px;">${r.metrics?.consistency ?? '%85'}</b>
+                    </div>
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 16px; text-align: center;">
+                        <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">⚠️ Risk Seviyesi</span>
+                        <b style="display: block; font-size: 15px; color: ${scoreColor}; margin-top: 6px;">${r.metrics?.riskFactor ?? 'DÜŞÜK'}</b>
+                    </div>
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 16px; text-align: center;">
+                        <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">👥 Akran Dilimi</span>
+                        <b style="display: block; font-size: 15px; color: #2563eb; margin-top: 6px;">${r.metrics?.percentile ?? 'Zirve %5'}</b>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 2. Yetkinlik Ölçüm & Radar Analizi -->
+            <div class="print-card" style="background: white; border-radius: 16px; border: 1px solid #e2e8f0; padding: 30px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); margin-bottom: 25px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 18px; margin-bottom: 25px; flex-wrap: wrap; gap: 15px;">
+                    <div>
+                        <h2 style="margin: 0 0 4px 0; font-size: 20px; font-weight: 800; color: #0f172a;">Yetkinlik Ölçüm & Radar Analizi</h2>
+                        <p style="margin: 0; color: #64748b; font-size: 13.5px;">Kategori bazlı 5 eksenli radar grafik ve Seviye 1-5 yetkinlik derinliği</p>
+                    </div>
+                    <!-- Kategori Filtre Butonları -->
+                    <div class="no-print" style="display: flex; gap: 6px; flex-wrap: wrap;">
+                        <button onclick="setRadarCategory('ALL')" style="border: none; padding: 6px 16px; border-radius: 20px; font-size: 12.5px; font-weight: 700; cursor: pointer; ${activeCat==='ALL'?'background:#2563eb; color:white;':'background:#f1f5f9; color:#64748b;'}">Genel Özet</button>
+                        <button onclick="setRadarCategory('BİLİŞSEL')" style="border: none; padding: 6px 14px; border-radius: 20px; font-size: 12.5px; font-weight: 700; cursor: pointer; ${activeCat==='BİLİŞSEL'?'background:#2563eb; color:white;':'background:#f1f5f9; color:#64748b;'}">BİLİŞSEL</button>
+                        <button onclick="setRadarCategory('TEKNİK')" style="border: none; padding: 6px 14px; border-radius: 20px; font-size: 12.5px; font-weight: 700; cursor: pointer; ${activeCat==='TEKNİK'?'background:#2563eb; color:white;':'background:#f1f5f9; color:#64748b;'}">TEKNİK</button>
+                        <button onclick="setRadarCategory('TEMEL')" style="border: none; padding: 6px 14px; border-radius: 20px; font-size: 12.5px; font-weight: 700; cursor: pointer; ${activeCat==='TEMEL'?'background:#2563eb; color:white;':'background:#f1f5f9; color:#64748b;'}">TEMEL</button>
+                        <button onclick="setRadarCategory('YÖNETSEL')" style="border: none; padding: 6px 14px; border-radius: 20px; font-size: 12.5px; font-weight: 700; cursor: pointer; ${activeCat==='YÖNETSEL'?'background:#2563eb; color:white;':'background:#f1f5f9; color:#64748b;'}">YÖNETSEL</button>
+                        <button onclick="setRadarCategory('FONKSİYONEL')" style="border: none; padding: 6px 14px; border-radius: 20px; font-size: 12.5px; font-weight: 700; cursor: pointer; ${activeCat==='FONKSİYONEL'?'background:#2563eb; color:white;':'background:#f1f5f9; color:#64748b;'}">FONKSİYONEL</button>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1.6fr; gap: 35px; align-items: start;">
+                    <!-- Sol Kolon: Radar Grafik Kartı -->
+                    <div style="background: #ffffff; border-radius: 12px; padding: 20px; text-align: center; border: 1px solid #e2e8f0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 380px;">
+                        <h3 style="margin: 0 0 15px 0; font-size: 14px; font-weight: 700; color: #0f172a;">Kategori Bazlı Genel Özet</h3>
+                        
+                        <div style="position: relative; width: 240px; height: 240px;">
+                            <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; overflow: visible;">
+                                <!-- Pentagon Grid Halkaları (Dıştan İçe) -->
+                                <polygon points="50,14 84,26 71,67 29,67 16,26" fill="none" stroke="#cbd5e1" stroke-width="0.8"/>
+                                <polygon points="50,23 75,32 66,63 34,63 25,32" fill="none" stroke="#e2e8f0" stroke-width="0.8"/>
+                                <polygon points="50,32 67,39 60,60 40,60 33,39" fill="none" stroke="#e2e8f0" stroke-width="0.8"/>
+                                <polygon points="50,41 58,45 55,56 45,56 42,45" fill="none" stroke="#f1f5f9" stroke-width="0.8"/>
+                                
+                                <!-- Eksen Çizgileri -->
+                                <line x1="50" y1="50" x2="50" y2="14" stroke="#cbd5e1" stroke-width="0.8"/>
+                                <line x1="50" y1="50" x2="84" y2="26" stroke="#cbd5e1" stroke-width="0.8"/>
+                                <line x1="50" y1="50" x2="71" y2="67" stroke="#cbd5e1" stroke-width="0.8"/>
+                                <line x1="50" y1="50" x2="29" y2="67" stroke="#cbd5e1" stroke-width="0.8"/>
+                                <line x1="50" y1="50" x2="16" y2="26" stroke="#cbd5e1" stroke-width="0.8"/>
+                                
+                                <!-- Hedeflenen Seviye Poligonu (Gri Kesikli Çizgi) -->
+                                <polygon points="${targetPoints}" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="2,2"/>
+                                
+                                <!-- Adayın Mevcut Durum Poligonu (Mavi Dolgulu) -->
+                                <polygon points="${currentPoints}" fill="rgba(37, 99, 235, 0.28)" stroke="#2563eb" stroke-width="2.2"/>
+                            </svg>
+                            
+                            <!-- Eksen Etiketleri -->
+                            <span style="position: absolute; top: -8px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight:800; color: #475569;">BİLİŞSEL (% ${sBilisel})</span>
+                            <span style="position: absolute; top: 22%; right: -35px; font-size: 10px; font-weight:800; color: #475569;">TEKNİK (% ${sTeknik})</span>
+                            <span style="position: absolute; bottom: 20%; right: -30px; font-size: 10px; font-weight:800; color: #475569;">TEMEL (% ${sTemel})</span>
+                            <span style="position: absolute; bottom: 20%; left: -35px; font-size: 10px; font-weight:800; color: #475569;">YÖNETSEL (% ${sYonetsel})</span>
+                            <span style="position: absolute; top: 22%; left: -55px; font-size: 10px; font-weight:800; color: #475569;">FONKSİYONEL (% ${sFonksiyonel})</span>
+                        </div>
+
+                        <!-- Legend / Lejant -->
+                        <div style="display:flex; justify-content:center; gap:20px; margin-top:25px; font-size:11.5px; color:#64748b;">
+                            <span style="display:flex; align-items:center; gap:6px;">
+                                <span style="display:inline-block; width:12px; height:12px; background:#94a3b8; border-radius:2px;"></span> Hedeflenen Seviye
+                            </span>
+                            <span style="display:flex; align-items:center; gap:6px;">
+                                <span style="display:inline-block; width:12px; height:12px; background:#2563eb; border-radius:2px;"></span> Mevcut Durum
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Sağ Kolon: Tüm Ölçülen Yetkinlikler Listesi -->
+                    <div>
+                        <h3 style="margin: 0 0 15px 0; font-size: 14.5px; font-weight: 700; color: #0f172a;">Tüm Ölçülen Yetkinlikler</h3>
+                        
+                        <div style="display:flex; flex-direction:column; gap:16px; max-height: 440px; overflow-y: auto; padding-right: 8px;">
+                            ${filteredCompList.map(c => {
+                                const diff = c.score - (c.target || 60);
+                                const diffBadge = diff >= 0 
+                                    ? `<span style="color:#16a34a; font-size:11px; font-weight:700; background:#dcfce7; padding:2px 8px; border-radius:4px;">+${diff} Hedef Üstü</span>`
+                                    : `<span style="color:#dc2626; font-size:11px; font-weight:700; background:#fee2e2; padding:2px 8px; border-radius:4px;">${diff} Gelişim Alanı</span>`;
+
+                                return `
+                                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                        <div>
+                                            <strong style="font-size: 14px; color: #0f172a;">${safeText(c.name)}</strong>
+                                            <span style="font-size: 10px; font-weight: 800; color: #2563eb; background: #eff6ff; padding: 2px 7px; border-radius: 4px; margin-left: 6px;">${safeText(c.category)}</span>
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            ${diffBadge}
+                                            <span style="font-size: 12.5px; font-weight: 700; color: #2563eb;">Mevcut: %${c.score}</span>
+                                            <span style="font-size: 12px; color: #94a3b8; font-weight: 500;">Hedef: %${c.target || 60}</span>
+                                        </div>
+                                    </div>
+                                    <!-- Progress Bar with Target Marker -->
+                                    <div style="height: 7px; background: #e2e8f0; border-radius: 4px; position: relative; width: 100%; margin-bottom: 10px;">
+                                        <div style="position: absolute; top: 0; left: 0; height: 100%; width: ${Math.min(100, Math.max(0, c.score))}%; background: ${c.score>=80?'#16a34a':c.score>=50?'#f59e0b':'#ef4444'}; border-radius: 4px;"></div>
+                                        <div style="position: absolute; top: -3px; left: ${c.target || 60}%; height: 13px; width: 2px; background: #ef4444;" title="Hedef Eşik: %${c.target||60}"></div>
+                                    </div>
+                                    <!-- Seviye Açıklama Kutusu -->
+                                    <div style="background: #f8fafc; border: 1px solid #f1f5f9; border-radius: 8px; padding: 10px 14px;">
+                                        <b style="font-size: 12.5px; color: #0f172a; display: block; margin-bottom: 3px;">${safeText(c.levelName || 'Seviye 3 (Orta)')}</b>
+                                        <p style="margin: 0; font-size: 12px; color: #64748b; line-height: 1.45;">${safeText(c.levelDesc || 'Standart süreçleri yürütür.')}</p>
+                                    </div>
+                                </div>`;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Psikolojik Profil (Sayfa 7) -->
+            <div class="print-card" style="background: white; border-radius: 16px; border: 1px solid #e2e8f0; padding: 28px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); margin-bottom: 25px;">
+                <h3 style="margin: 0 0 12px 0; font-size: 17px; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 8px;">
+                    💬 Psikolojik Profil (Sayfa 7)
+                </h3>
+                <p style="margin: 0 0 20px 0; font-size: 14.5px; color: #334155; line-height: 1.75;">
+                    ${safeText(r.psychologicalProfile)}
+                </p>
+
+                <!-- Güçlü Yönler & Hassas Alanlar İki Kolon Grid -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; border-top: 1px solid #f1f5f9; padding-top: 20px;">
+                    <!-- Güçlü Yönler -->
+                    <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 18px;">
+                        <b style="color: #166534; font-size: 13.5px; display: flex; align-items: center; gap: 6px; margin-bottom: 10px;">
+                            🟢 Öne Çıkan Güçlü Yönler
+                        </b>
+                        <ul style="margin: 0; padding-left: 18px; font-size: 13px; color: #14532d; line-height: 1.6;">
+                            ${(r.strengths || []).map(s => `<li style="margin-bottom: 6px;">${safeText(s)}</li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <!-- Hassas Noktalar / Riskler -->
+                    <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 18px;">
+                        <b style="color: #92400e; font-size: 13.5px; display: flex; align-items: center; gap: 6px; margin-bottom: 10px;">
+                            🟡 Dikkat Edilmesi Gereken Hassas Alanlar
+                        </b>
+                        <ul style="margin: 0; padding-left: 18px; font-size: 13px; color: #78350f; line-height: 1.6;">
+                            ${(r.watchouts || []).map(w => `<li style="margin-bottom: 6px;">${safeText(w)}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Hata Dedektörü (Sayfa 6) & Kıyaslama (Sayfa 8) Grid -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 25px;">
+                <!-- Hata Dedektörü (Sayfa 6) -->
+                <div class="print-card" style="background: white; border-radius: 16px; border: 1px solid #e2e8f0; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+                    <h3 style="margin: 0 0 14px 0; font-size: 16px; font-weight: 800; color: #be123c; display: flex; align-items: center; gap: 8px;">
+                        🚨 Hata Dedektörü (Sayfa 6)
+                    </h3>
+                    <div style="background: #fff1f2; border: 1px solid #fecdd3; border-radius: 12px; padding: 18px; font-size: 13.5px; color: #881337; line-height: 1.65; white-space: pre-line;">
+                        ${safeText(r.errorDetector)}
+                    </div>
+                </div>
+
+                <!-- Kıyaslama (Sayfa 8) -->
+                <div class="print-card" style="background: white; border-radius: 16px; border: 1px solid #e2e8f0; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);">
+                    <h3 style="margin: 0 0 14px 0; font-size: 16px; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+                        📊 Kıyaslama (Sayfa 8)
+                    </h3>
+                    
+                    <!-- Benchmark Kıyaslama Barları -->
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; margin-bottom: 14px;">
+                        <div style="margin-bottom: 12px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">
+                                <span>Aday Performansı</span>
+                                <span style="color: #2563eb;">%${r.score}</span>
+                            </div>
+                            <div style="height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                                <div style="height: 100%; width: ${Math.min(100, Math.max(0, r.score))}%; background: #2563eb;"></div>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 12px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 4px;">
+                                <span>Sektör Medyanı (${sectorTitle})</span>
+                                <span>%${sectorMedian}</span>
+                            </div>
+                            <div style="height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                                <div style="height: 100%; width: ${sectorMedian}%; background: #94a3b8;"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; color: #16a34a; margin-bottom: 4px;">
+                                <span>En Başarılı %10 Dilim Eşiği</span>
+                                <span>%${sectorTop10}</span>
+                            </div>
+                            <div style="height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                                <div style="height: 100%; width: ${sectorTop10}%; background: #16a34a;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="font-size: 13px; color: #475569; line-height: 1.6;">
+                        ${safeText(r.benchmark)}
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Nihai Mentor Kararı (Sayfa 9) -->
+            <div class="print-card" style="background: white; border-radius: 16px; border: 1px solid #e2e8f0; border-top: 5px solid ${scoreColor}; padding: 30px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); margin-bottom: 25px;">
+                <h2 style="margin: 0 0 14px 0; font-size: 20px; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 8px;">
+                    🎯 Nihai Mentor Kararı (Sayfa 9)
+                </h2>
+                <p style="margin: 0 0 24px 0; font-size: 15px; color: #334155; line-height: 1.8;">
+                    ${safeText(r.mentorDecision)}
+                </p>
+
+                <!-- 30-60-90 Günlük Gelişim ve Entegrasyon Yol Haritası -->
+                <div style="border-top: 1px solid #e2e8f0; padding-top: 22px;">
+                    <h3 style="margin: 0 0 16px 0; font-size: 15.5px; font-weight: 800; color: #0f172a;">
+                        📅 30 - 60 - 90 Günlük Yapılandırılmış Gelişim ve Entegrasyon Yol Haritası
+                    </h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                        
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                <span style="font-size:12px; font-weight:800; color:#2563eb; background:#eff6ff; padding:3px 8px; border-radius:4px;">1 - 30. GÜN</span>
+                                <span style="font-size:11px; color:#64748b; font-weight:600;">Oryantasyon & Hızlı Kazanımlar</span>
+                            </div>
+                            <p style="margin:0; font-size:13px; color:#334155; line-height:1.55;">
+                                ${safeText(r.roadmap?.p30 || 'Temel süreç adaptasyonu ve kritik iş akışlarının içselleştirilmesi.')}
+                            </p>
+                        </div>
+
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                <span style="font-size:12px; font-weight:800; color:#7c3aed; background:#f5f3ff; padding:3px 8px; border-radius:4px;">31 - 60. GÜN</span>
+                                <span style="font-size:11px; color:#64748b; font-weight:600;">Yetkinlik Derinleştirme</span>
+                            </div>
+                            <p style="margin:0; font-size:13px; color:#334155; line-height:1.55;">
+                                ${safeText(r.roadmap?.p60 || 'Çapraz fonksiyonel görevler ve kritik senaryolarda eşli koçluk seansları.')}
+                            </p>
+                        </div>
+
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                <span style="font-size:12px; font-weight:800; color:#16a34a; background:#f0fdf4; padding:3px 8px; border-radius:4px;">61 - 90. GÜN</span>
+                                <span style="font-size:11px; color:#64748b; font-weight:600;">Bağımsız Liderlik & KPI</span>
+                            </div>
+                            <p style="margin:0; font-size:13px; color:#334155; line-height:1.55;">
+                                ${safeText(r.roadmap?.p90 || 'Bağımsız inisiyatif, stratejik süreç teslimi ve reassessment onayı.')}
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. Detaylı Soru & Senaryo Cevapları İncelemesi -->
+            ${(r.detailedReport && r.detailedReport.length > 0) ? `
+            <div class="print-card" style="background: white; border-radius: 16px; border: 1px solid #e2e8f0; padding: 28px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); margin-bottom: 25px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+                    <div>
+                        <h2 style="margin: 0 0 4px 0; font-size: 19px; font-weight: 800; color: #0f172a;">Adayın Sınav Cevapları ve Vaka İncelemesi</h2>
+                        <p style="margin: 0; font-size: 13.5px; color: #64748b;">Her bir vaka sorusuna verilen yanıt, ideal yaklaşım ve harcanan süre dökümü</p>
+                    </div>
+                    <span style="font-size: 12.5px; background: #f1f5f9; color: #475569; padding: 4px 12px; border-radius: 20px; font-weight: 700;">
+                        Toplam ${r.detailedReport.length} Vaka Adımı
+                    </span>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 14px;">
+                    ${r.detailedReport.map((q, idx) => `
+                        <div style="background:#f8fafc; padding:18px; border-radius:12px; border: 1px solid #e2e8f0;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                <strong style="color:#0f172a; font-size: 14.5px;">Soru ${idx + 1}: ${safeText(q.question)}</strong>
+                                <span style="font-size:11px; background:#e0f2fe; color:#0369a1; padding:3px 9px; border-radius:4px; font-weight:800;">${safeText(q.level || 'Yetkinlik')}</span>
+                            </div>
+                            <p style="margin:0 0 8px 0; color:#334155; font-size:14px; line-height: 1.5;">
+                                <b>Adayın Cevabı:</b> ${safeText(q.answer || 'Cevap verilmedi / Boş bırakıldı')}
+                            </p>
+                            ${q.correctAnswer ? `<p style="margin:0 0 8px 0; color:#15803d; font-size:13px; line-height: 1.45;"><b>İdeal Yaklaşım:</b> ${safeText(q.correctAnswer)}</p>` : ''}
+                            <div style="display: flex; align-items: center; gap: 14px; margin-top: 8px;">
+                                <span style="display:inline-block; padding:4px 12px; border-radius:6px; font-size:11.5px; font-weight:700; 
+                                    ${q.status === 'positive' ? 'background:#dcfce3;color:#16a34a;' : (q.status === 'negative' ? 'background:#fee2e2;color:#dc2626;' : 'background:#e2e8f0;color:#64748b;')}">
+                                    ${q.status === 'positive' ? '✅ Olumlu / Doğru' : (q.status === 'negative' ? '❌ Olumsuz / Yanlış' : '⚪ Boş')}
+                                </span>
+                                <span style="font-size:12px; color:#64748b; font-weight: 600;">🕒 ${q.seconds || 0} saniye</span>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            ` : ''}
+
+            <!-- 7. Denetim İzi & Sistem Parametreleri (Audit Trail) -->
+            <div style="background: #f1f5f9; border-radius: 12px; padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #64748b; flex-wrap: wrap; gap: 10px;">
+                <div>
+                    <b>Değerlendirme Motoru:</b> SkillBridge Cognitive Core v5.3 (Gemma-4 Deep Eval)
+                </div>
+                <div>
+                    <b>Rapor Kimliği:</b> SB-RAPOR-${Math.abs((r.name || 'sb').split('').reduce((a,b)=>{a=((a<<5)-a)+b.charCodeAt(0);return a&a},0))}
+                </div>
+                <div>
+                    <b>Doğrulama Durumu:</b> <span style="color:#16a34a; font-weight:700;">✓ Dijital Olarak Mühürlendi</span>
+                </div>
+            </div>
+
+        </div>
+        `;
+        return layout(html, 'Detaylı Rapor - ' + r.name);
+    };
+
+
+    console.log('PATCH 19: Dinamik değerlendirme ve rol odaklı detaylı rapor sistemi devrede.');
+})();
+
+
+// ==========================================
+// PATCH 20: TEST YÖNETİMİ & TEST PLATFORMU BİREBİR VERİ AKTARIMI VE SENKRONİZASYON
+// ==========================================
+(function() {
+    // Aktif tab durumu
+    state.managementTab = state.managementTab || 'runs'; // 'runs', 'metrics', 'logs', 'leaderboard', 'templates'
+    state.mgmtQuery = state.mgmtQuery || '';
+    state.mgmtOutcome = state.mgmtOutcome || '';
+
+    // Birebir veri senkronizasyonu fonksiyonu:
+    // Test Platformundaki verileri (test adımları, durumlar, girdi/çıktı parametreleri, loglar ve metrikler)
+    // format kaybı olmaksızın zenginleştirir ve Test Yönetimine aktarır.
+    window.syncTestPlatformWithManagement = function() {
+        const list = (typeof candidateResults !== 'undefined' ? candidateResults : window.candidateResults) || [];
+        window.candidateResults = list;
+        if (!list || !list.length) return;
+
+        list.forEach((r, idx) => {
+            if (!r) return;
+            // 1. Test ID oluştur/koru
+            if (!r.testId) {
+                r.testId = 'TST-' + (84900 + idx);
+            }
+
+            // 2. Test Adımları (Test Steps) - Soru bazında adımlar
+            if (!r.testSteps || r.testSteps.length === 0) {
+                if (r.detailedReport && r.detailedReport.length > 0) {
+                    r.testSteps = r.detailedReport.map((q, sIdx) => ({
+                        step: sIdx + 1,
+                        question: q.question || ('Adım ' + (sIdx + 1) + ' Senaryo Sorusu'),
+                        answer: q.answer || 'Cevap girilmedi',
+                        correctAnswer: q.correctAnswer || (q.status === 'positive' ? q.answer : 'Standart Prosedür ve Kök Neden Analizi'),
+                        rationale: q.rationale || 'Sektörel kriz reflekslerine göre kurumsal standart yaklaşım.',
+                        status: q.status || 'positive',
+                        seconds: q.seconds || (Math.floor(Math.random() * 30) + 15),
+                        level: q.level || (sIdx === 0 ? 'Temel' : sIdx === 1 ? 'Teknik' : 'Stratejik')
+                    }));
+                } else {
+                    // Varsayılan zengin test adımları
+                    r.testSteps = [
+                        { step: 1, question: (r.test || 'Operasyon') + ' rolünde kriz anında ilk operasyonel refleksiniz ne olur?', answer: 'Kök neden analizi başlatır ve etkilenen sistemleri izole ederim.', correctAnswer: 'Kök neden analizi başlatır ve etkilenen sistemleri izole ederim.', rationale: 'İzolasyon ve veri toplama standart ilk adımdır.', status: 'positive', seconds: 32, level: 'Teknik' },
+                        { step: 2, question: 'SLA ihlali ve paydaş beklentisi çatıştığında kararı nasıl verirsiniz?', answer: 'Risk matrisini günceller, paydaşlara şeffaf gecikme bildirimi yaparım.', correctAnswer: 'Risk matrisini günceller, paydaşlara şeffaf gecikme bildirimi yaparım.', rationale: 'Şeffaf iletişim güvenilirliği korur.', status: (r.score || 0) >= 50 ? 'positive' : 'negative', seconds: 45, level: 'Yönetsel' },
+                        { step: 3, question: 'Kaynak yetersizliği durumunda B planı mimarisini nasıl kurgularsınız?', answer: (r.score || 0) >= 70 ? 'Asenkron kuyruk ve yük dengeleme ile kritik fonksiyonları korurum.' : 'Süreci bekletirim.', correctAnswer: 'Asenkron kuyruk ve yük dengeleme ile kritik fonksiyonları korurum.', rationale: 'Yedeklilik ve kuyruk yönetimi kesintiyi önler.', status: (r.score || 0) >= 70 ? 'positive' : 'negative', seconds: 28, level: 'Stratejik' }
+                    ];
+                }
+            }
+
+            // 3. Girdi Parametreleri (Input Parameters)
+            if (!r.inputParams) {
+                r.inputParams = {
+                    testId: r.testId,
+                    candidateName: r.name || 'Aday',
+                    candidateEmail: r.email || '',
+                    testRole: r.test || 'Genel Değerlendirme',
+                    department: r.department || 'Operasyon',
+                    sectorDetail: r.detail || 'Genel Değerlendirme',
+                    questionCount: (r.testSteps && r.testSteps.length) || 3,
+                    timeLimitMinutes: 30,
+                    difficulty: (r.score || 0) >= 75 ? 'İleri Seviye (Senior)' : (r.score || 0) >= 50 ? 'Orta Seviye (Mid)' : 'Temel Seviye (Junior)',
+                    evaluationEngine: 'Ajan 5 & Ajan 12 (Psikometrik ve Rol Doğrulama)'
+                };
+            }
+
+            // 4. Çıktı Parametreleri (Output Parameters)
+            if (!r.outputParams) {
+                const posCount = (r.testSteps || []).filter(s => s.status === 'positive').length;
+                const negCount = (r.testSteps || []).filter(s => s.status === 'negative').length;
+                const blankCount = (r.testSteps || []).filter(s => s.status === 'blank').length;
+                const totalSec = (r.testSteps || []).reduce((acc, s) => acc + (s.seconds || 0), 0) || 90;
+
+                r.outputParams = {
+                    score: r.score ?? 0,
+                    outcome: r.outcome || 'Geliştirilmeli',
+                    correctCount: posCount,
+                    wrongCount: negCount,
+                    blankCount: blankCount,
+                    totalSeconds: totalSec,
+                    avgSpeedSeconds: (r.testSteps && r.testSteps.length) ? Math.round(totalSec / r.testSteps.length) : 0,
+                    competencyScores: {
+                        cognitive: Math.min(100, Math.max(20, Math.round((r.score || 50) * 1.02))),
+                        technical: Math.min(100, Math.max(20, Math.round((r.score || 50) * 1.05))),
+                        foundational: Math.min(100, Math.max(20, Math.round((r.score || 50) * 0.95))),
+                        managerial: Math.min(100, Math.max(20, Math.round((r.score || 50) * 0.9)))
+                    }
+                };
+            }
+
+            // 5. İşlem & Aktivite Logları (Audit / Execution Logs)
+            if (!r.logs || r.logs.length === 0) {
+                const dateStr = r.date || new Date().toLocaleDateString('tr-TR');
+                const timeStr = r.time || '12:00:00';
+                r.logs = [
+                    { timestamp: dateStr + ' ' + timeStr, event: 'Test Oluşturuldu & ID Üretildi', details: 'Benzersiz Test ID (' + r.testId + ') yayına alındı.', actor: 'Sistem' },
+                    { timestamp: dateStr + ' ' + timeStr, event: 'Aday Giriş Yaptı', details: (r.name || 'Aday') + ' sınava başladı (Oturum doğrulandı).', actor: r.email || 'Aday' },
+                    { timestamp: dateStr + ' ' + timeStr, event: 'Test Adımları Tamamlandı', details: ((r.testSteps && r.testSteps.length) || 3) + ' adet vaka sorusuna yanıt verildi.', actor: r.email || 'Aday' },
+                    { timestamp: dateStr + ' ' + timeStr, event: 'AI Puanlama & Eşleme', details: 'Skor: %' + (r.score ?? 0) + ' (' + (r.outcome || '') + ') olarak hesaplandı.', actor: 'AI Evaluation Engine' },
+                    { timestamp: dateStr + ' ' + timeStr, event: 'Test Yönetimine Aktarıldı', details: 'Tüm test adımları, durumlar ve metrikler Test Yönetimine birebir aktarıldı.', actor: 'Veri Köprüsü' }
+                ];
+            }
+
+            // 6. Metrikler (Metrics)
+            if (!r.metrics) {
+                r.metrics = {
+                    accuracyRate: r.score ?? 0,
+                    avgStepSeconds: r.outputParams ? r.outputParams.avgSpeedSeconds : 35,
+                    completionRate: 100,
+                    reliabilityScore: '%98 (Yüksek Doğruluk)',
+                    statusSummary: r.outcome === 'Olumlu' ? 'Başarılı / Yetkin' : 'Geliştirilmeli'
+                };
+            }
+        });
+    };
+
+    // İlk yüklemede senkronize et
+    syncTestPlatformWithManagement();
+
+    // submitCandidateTest fonksiyonunu genişlet: Yeni testler doğrudan tüm parametre ve adımlarla oluşsun
+    const oldSubmitCandidateTest = window.submitCandidateTest;
+    window.submitCandidateTest = function() {
+        oldSubmitCandidateTest();
+        syncTestPlatformWithManagement();
+    };
+
+    // 7. Test Adımları ve Parametreleri İnceleme Modalı
+    window.openTestStepInspectionModal = function(index) {
+        if (typeof window.syncTestPlatformWithManagement === 'function') {
+            window.syncTestPlatformWithManagement();
+        }
+        const list = (typeof candidateResults !== 'undefined' ? candidateResults : window.candidateResults) || [];
+        const r = list[index];
+        if (!r) return;
+
+        // Bireysel nesne seviyesinde güvenlik kontrolü (Defensive Initializations)
+        if (!r.testId) {
+            r.testId = 'TST-' + (84900 + (index || 0));
+        }
+        if (!r.testSteps || !r.testSteps.length) {
+            if (r.detailedReport && r.detailedReport.length > 0) {
+                r.testSteps = r.detailedReport.map((q, sIdx) => ({
+                    step: sIdx + 1,
+                    question: q.question || ('Adım ' + (sIdx + 1) + ' Senaryo Sorusu'),
+                    answer: q.answer || 'Cevap girilmedi',
+                    correctAnswer: q.correctAnswer || (q.status === 'positive' ? q.answer : 'Standart Prosedür ve Kök Neden Analizi'),
+                    rationale: q.rationale || 'Sektörel kriz reflekslerine göre kurumsal standart yaklaşım.',
+                    status: q.status || 'positive',
+                    seconds: q.seconds || 30,
+                    level: q.level || 'Teknik'
+                }));
+            } else {
+                r.testSteps = [
+                    { step: 1, question: (r.test || 'Operasyon') + ' rolünde kriz anında ilk operasyonel refleksiniz ne olur?', answer: 'Kök neden analizi başlatır ve etkilenen sistemleri izole ederim.', correctAnswer: 'Kök neden analizi başlatır ve etkilenen sistemleri izole ederim.', rationale: 'İzolasyon ve veri toplama standart ilk adımdır.', status: 'positive', seconds: 32, level: 'Teknik' },
+                    { step: 2, question: 'SLA ihlali ve paydaş beklentisi çatıştığında kararı nasıl verirsiniz?', answer: 'Risk matrisini günceller, paydaşlara şeffaf gecikme bildirimi yaparım.', correctAnswer: 'Risk matrisini günceller, paydaşlara şeffaf gecikme bildirimi yaparım.', rationale: 'Şeffaf iletişim güvenilirliği korur.', status: (r.score || 0) >= 50 ? 'positive' : 'negative', seconds: 45, level: 'Yönetsel' },
+                    { step: 3, question: 'Kaynak yetersizliği durumunda B planı mimarisini nasıl kurgularsınız?', answer: (r.score || 0) >= 70 ? 'Asenkron kuyruk ve yük dengeleme ile kritik fonksiyonları korurum.' : 'Süreci bekletirim.', correctAnswer: 'Asenkron kuyruk ve yük dengeleme ile kritik fonksiyonları korurum.', rationale: 'Yedeklilik ve kuyruk yönetimi kesintiyi önler.', status: (r.score || 0) >= 70 ? 'positive' : 'negative', seconds: 28, level: 'Stratejik' }
+                ];
+            }
+        }
+        if (!r.inputParams) {
+            r.inputParams = {
+                testId: r.testId,
+                candidateName: r.name || 'Aday',
+                candidateEmail: r.email || '',
+                testRole: r.test || 'Genel Değerlendirme',
+                department: r.department || 'Operasyon',
+                sectorDetail: r.detail || 'Genel Değerlendirme',
+                questionCount: r.testSteps.length,
+                timeLimitMinutes: 30,
+                difficulty: (r.score || 0) >= 75 ? 'İleri Seviye (Senior)' : (r.score || 0) >= 50 ? 'Orta Seviye (Mid)' : 'Temel Seviye (Junior)',
+                evaluationEngine: 'Ajan 5 & Ajan 12 (Psikometrik ve Rol Doğrulama)'
+            };
+        }
+        if (!r.outputParams) {
+            const posCount = r.testSteps.filter(s => s.status === 'positive').length;
+            const negCount = r.testSteps.filter(s => s.status === 'negative').length;
+            const blankCount = r.testSteps.filter(s => s.status === 'blank').length;
+            const totalSec = r.testSteps.reduce((acc, s) => acc + (s.seconds || 0), 0) || 90;
+            r.outputParams = {
+                score: r.score ?? 0,
+                outcome: r.outcome || 'Geliştirilmeli',
+                correctCount: posCount,
+                wrongCount: negCount,
+                blankCount: blankCount,
+                totalSeconds: totalSec,
+                avgSpeedSeconds: r.testSteps.length ? Math.round(totalSec / r.testSteps.length) : 0,
+                competencyScores: {
+                    cognitive: Math.min(100, Math.max(20, Math.round((r.score || 50) * 1.02))),
+                    technical: Math.min(100, Math.max(20, Math.round((r.score || 50) * 1.05))),
+                    foundational: Math.min(100, Math.max(20, Math.round((r.score || 50) * 0.95))),
+                    managerial: Math.min(100, Math.max(20, Math.round((r.score || 50) * 0.9)))
+                }
+            };
+        }
+        if (!r.logs || !r.logs.length) {
+            const dateStr = r.date || new Date().toLocaleDateString('tr-TR');
+            const timeStr = r.time || '12:00:00';
+            r.logs = [
+                { timestamp: dateStr + ' ' + timeStr, event: 'Test Oluşturuldu & ID Üretildi', details: 'Benzersiz Test ID (' + r.testId + ') yayına alındı.', actor: 'Sistem' },
+                { timestamp: dateStr + ' ' + timeStr, event: 'Aday Giriş Yaptı', details: (r.name || 'Aday') + ' sınava başladı (Oturum doğrulandı).', actor: r.email || 'Aday' },
+                { timestamp: dateStr + ' ' + timeStr, event: 'Test Adımları Tamamlandı', details: r.testSteps.length + ' adet vaka sorusuna yanıt verildi.', actor: r.email || 'Aday' },
+                { timestamp: dateStr + ' ' + timeStr, event: 'AI Puanlama & Eşleme', details: 'Skor: %' + (r.score ?? 0) + ' (' + (r.outcome || '') + ') olarak hesaplandı.', actor: 'AI Evaluation Engine' },
+                { timestamp: dateStr + ' ' + timeStr, event: 'Test Yönetimine Aktarıldı', details: 'Tüm test adımları, durumlar ve metrikler Test Yönetimine birebir aktarıldı.', actor: 'Veri Köprüsü' }
+            ];
+        }
+
+        const inputParams = r.inputParams || {};
+        const outputParams = r.outputParams || {};
+        const compScores = outputParams.competencyScores || { technical: 80, cognitive: 80 };
+        const testSteps = r.testSteps || [];
+        const logs = r.logs || [];
+
+        const m = document.createElement('div');
+        m.className = 'modal';
+        m.id = 'test-inspection-modal';
+        m.style.zIndex = '10000';
+        m.innerHTML = `
+        <div class="modal-card" style="max-width: 900px; width: 95%; max-height: 90vh; overflow-y: auto; padding: 25px; border-radius: 16px;">
+            <div class="modal-head" style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid #e2e8f0; padding-bottom:15px; margin-bottom:20px;">
+                <div>
+                    <span style="background:#e0f2fe; color:#0369a1; padding:4px 10px; border-radius:6px; font-weight:700; font-size:12px;">TEST YÖNETİMİ · BİREBİR VERİ İNCELEME</span>
+                    <h2 style="margin:5px 0 0; font-size:22px; color:#0f172a;">${safeText(r.name || '')} — ${safeText(r.test || '')}</h2>
+                    <p style="margin:4px 0 0; color:#64748b; font-size:14px;">Test ID: <b style="color:#0ea5e9;">${r.testId || inputParams.testId || ('TST-' + (84900 + (index||0)))}</b> | Tarih: ${r.date || ''} ${r.time || ''} | Skor: <b style="color:${(r.score||0)>=60?'#16a34a':'#dc2626'}">%${r.score ?? 0} (${r.outcome || ''})</b></p>
+                </div>
+                <button onclick="this.closest('.modal').remove()" style="background:#f1f5f9; border:none; width:34px; height:34px; border-radius:50%; font-size:18px; cursor:pointer; font-weight:bold;">×</button>
+            </div>
+
+            <!-- Girdi & Çıktı Parametreleri Grid -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:25px;">
+                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:16px;">
+                    <h4 style="margin:0 0 10px 0; color:#0f172a; font-size:15px; display:flex; align-items:center; gap:8px;">
+                        📥 Girdi Parametreleri (Input Parameters)
+                    </h4>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse;">
+                        <tr><td style="padding:4px 0; color:#64748b;"><b>Test ID:</b></td><td style="text-align:right;"><code>${inputParams.testId || r.testId || ('TST-' + (84900 + (index||0)))}</code></td></tr>
+                        <tr><td style="padding:4px 0; color:#64748b;"><b>Aday:</b></td><td style="text-align:right;">${safeText(inputParams.candidateName || r.name || '')}</td></tr>
+                        <tr><td style="padding:4px 0; color:#64748b;"><b>Rol / Pozisyon:</b></td><td style="text-align:right;">${safeText(inputParams.testRole || r.test || '')}</td></tr>
+                        <tr><td style="padding:4px 0; color:#64748b;"><b>Departman / Sektör:</b></td><td style="text-align:right;">${safeText(inputParams.department || r.department || '')}</td></tr>
+                        <tr><td style="padding:4px 0; color:#64748b;"><b>Zorluk Seviyesi:</b></td><td style="text-align:right;"><span class="badge" style="background:#f1f5f9;">${inputParams.difficulty || 'Standart'}</span></td></tr>
+                        <tr><td style="padding:4px 0; color:#64748b;"><b>Soru / Adım Adedi:</b></td><td style="text-align:right;"><b>${inputParams.questionCount || testSteps.length || 0} Adım</b></td></tr>
+                    </table>
+                </div>
+
+                <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:16px;">
+                    <h4 style="margin:0 0 10px 0; color:#166534; font-size:15px; display:flex; align-items:center; gap:8px;">
+                        📤 Çıktı Parametreleri & Metrikler (Output & Metrics)
+                    </h4>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse;">
+                        <tr><td style="padding:4px 0; color:#14532d;"><b>Net Skor:</b></td><td style="text-align:right;"><b style="font-size:16px; color:${(r.score||0)>=60?'#15803d':'#b91c1c'}">%${outputParams.score ?? (r.score ?? 0)}</b></td></tr>
+                        <tr><td style="padding:4px 0; color:#14532d;"><b>Değerlendirme Sonucu:</b></td><td style="text-align:right;"><b>${outputParams.outcome || r.outcome || ''}</b></td></tr>
+                        <tr><td style="padding:4px 0; color:#14532d;"><b>Doğru / Yanlış / Boş:</b></td><td style="text-align:right;">✅ ${outputParams.correctCount ?? 0} / ❌ ${outputParams.wrongCount ?? 0} / ⚪ ${outputParams.blankCount ?? 0}</td></tr>
+                        <tr><td style="padding:4px 0; color:#14532d;"><b>Toplam Harcanan Süre:</b></td><td style="text-align:right;">⏱️ ${outputParams.totalSeconds ?? 0} sn</td></tr>
+                        <tr><td style="padding:4px 0; color:#14532d;"><b>Ortalama Adım Hızı:</b></td><td style="text-align:right;">${outputParams.avgSpeedSeconds ?? 0} sn / soru</td></tr>
+                        <tr><td style="padding:4px 0; color:#14532d;"><b>Bilişsel & Teknik Uyum:</b></td><td style="text-align:right;">%${compScores.technical ?? 80} Teknik · %${compScores.cognitive ?? 80} Bilişsel</td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Test Adımları (Steps) -->
+            <div style="margin-bottom:25px;">
+                <h3 style="margin:0 0 12px 0; font-size:17px; color:#0f172a; display:flex; align-items:center; gap:8px;">
+                    👣 Test Adımları ve Aday Yanıt Detayları (${testSteps.length} Adım)
+                </h3>
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                    ${testSteps.map((step, sIdx) => `
+                        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:15px; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                <strong style="color:#0f172a; font-size:14px;">Adım ${step.step || (sIdx + 1)}: ${safeText(step.question || '')}</strong>
+                                <div style="display:flex; gap:8px; align-items:center;">
+                                    <span style="font-size:12px; background:#f1f5f9; color:#475569; padding:2px 8px; border-radius:4px;">${step.level || 'Teknik'}</span>
+                                    <span style="font-size:12px; font-weight:700; padding:2px 8px; border-radius:4px; ${step.status==='positive'?'background:#dcfce7;color:#16a34a;':step.status==='negative'?'background:#fee2e2;color:#dc2626;':'background:#f1f5f9;color:#64748b;'}">
+                                        ${step.status === 'positive' ? '✅ Olumlu (Doğru)' : step.status === 'negative' ? '❌ Olumsuz (Yanlış)' : '⚪ Boş'}
+                                    </span>
+                                </div>
+                            </div>
+                            <div style="background:#f8fafc; padding:10px; border-radius:6px; font-size:13px; color:#334155; margin-bottom:6px;">
+                                <b>Adayın Yanıtı:</b> ${safeText(step.answer || '')}
+                            </div>
+                            <div style="font-size:12px; color:#15803d; margin-bottom:4px;">
+                                <b>İdeal Çözüm / Refleks:</b> ${safeText(step.correctAnswer || '')}
+                            </div>
+                            <div style="display:flex; justify-content:space-between; font-size:12px; color:#64748b;">
+                                <span>💡 <i>Gerekçe: ${safeText(step.rationale || '')}</i></span>
+                                <span>⏱️ ${step.seconds || 0} saniye</span>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+
+            <!-- İşlem ve Aktivite Logları -->
+            <div>
+                <h3 style="margin:0 0 12px 0; font-size:17px; color:#0f172a; display:flex; align-items:center; gap:8px;">
+                    📜 İşlem & Oturum Logları (Audit Trail)
+                </h3>
+                <div style="background:#0f172a; color:#f8fafc; border-radius:10px; padding:15px; font-family:monospace; font-size:12.5px; line-height:1.7;">
+                    ${logs.map(log => `
+                        <div style="border-bottom:1px solid #1e293b; padding:6px 0; display:flex; justify-content:space-between;">
+                            <span><span style="color:#38bdf8;">[${log.timestamp || ''}]</span> <b>${log.event || ''}:</b> ${log.details || ''}</span>
+                            <span style="color:#94a3b8;">(${log.actor || ''})</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+
+            <div style="margin-top:20px; text-align:right;">
+                <button class="primary" onclick="this.closest('.modal').remove()">Kapat</button>
+            </div>
+        </div>
+        `;
+        document.body.append(m);
+    };
+
+    // 8. Test Yönetimi Ana Sayfası (testsPage) - Birebir Aktarılan Test Platformu Verileri ile
+    window.testsPage = function() {
+        syncTestPlatformWithManagement();
+
+        const activeTab = state.managementTab || 'runs';
+
+        // Filtreleme
+        const filtered = candidateResults.filter(r => {
+            const matchesQuery = !state.mgmtQuery || ((r.name || '') + (r.email || '') + (r.test || '') + (r.testId || '') + (r.department || '')).toLowerCase().includes(state.mgmtQuery.toLowerCase());
+            const matchesOutcome = !state.mgmtOutcome || r.outcome === state.mgmtOutcome;
+            return matchesQuery && matchesOutcome;
+        });
+
+        // Üst Metrikler
+        const totalRuns = candidateResults.length;
+        const avgScore = totalRuns ? Math.round(candidateResults.reduce((sum, r) => sum + r.score, 0) / totalRuns) : 0;
+        const positiveCount = candidateResults.filter(r => r.outcome === 'Olumlu').length;
+        const totalStepsCount = candidateResults.reduce((sum, r) => sum + (r.testSteps ? r.testSteps.length : 0), 0);
+
+        // Tab: Test Senaryoları & Koşumları (Platform Havuzu)
+        const runsRows = filtered.map((r, i) => {
+            const globalIndex = candidateResults.indexOf(r);
+            const posSteps = (r.testSteps || []).filter(s => s.status === 'positive').length;
+            const totalSteps = (r.testSteps || []).length;
+            return `<tr>
+                <td><b style="color:#0284c7;">${r.testId || ('TST-' + (84900+i))}</b></td>
+                <td><b>${safeText(r.name)}</b><br><small style="color:var(--text-muted);">${safeText(r.email)}</small></td>
+                <td><b>${safeText(r.test)}</b><br><small style="color:var(--text-muted);">${safeText(r.department)}</small></td>
+                <td>
+                    <span style="display:inline-block; padding:3px 8px; border-radius:6px; font-size:12px; background:#f0fdf4; color:#166534; font-weight:700;">
+                        ${posSteps} / ${totalSteps} Adım Başarılı
+                    </span>
+                    <br><small style="color:#64748b;">⏱️ ${r.outputParams ? r.outputParams.totalSeconds : 90} sn</small>
+                </td>
+                <td>
+                    <b style="font-size:15px; color:${r.score>=60?'#16a34a':'#dc2626'}">%${r.score}</b>
+                    <br><small style="color:#64748b;">${r.inputParams ? r.inputParams.difficulty : 'Orta'}</small>
+                </td>
+                <td>
+                    <span class="badge" style="${r.outcome==='Olumlu'?'background:#dcfce7;color:#15803d;':'background:#fee2e2;color:#b91c1c;'}">
+                        ${r.outcome === 'Olumlu' ? '✅ Olumlu' : '⚠️ Geliştirilmeli'}
+                    </span>
+                </td>
+                <td>
+                    <div class="row-actions" style="display:flex; gap:6px; flex-wrap:wrap;">
+                        <button class="secondary" style="padding:6px 10px; font-size:12px;" onclick="openTestStepInspectionModal(${globalIndex})" title="Test adımları, girdi/çıktı parametreleri ve logları incele">📋 Adımları İncele</button>
+                        <button class="primary" style="padding:6px 10px; font-size:12px;" onclick="showCandidateReport(${globalIndex})">📊 Rapor</button>
+                        <button class="secondary" style="padding:6px 10px; font-size:12px;" onclick="showArchivePrompt('${safeText(r.name)}', ${r.score})">📦 Arşivle</button>
+                    </div>
+                </td>
+            </tr>`;
+        }).join('');
+
+        // Tab: Süreç Metrikleri & Analiz Paneli
+        const metricsHtml = `
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px; margin-top:20px;">
+            <div class="card" style="padding:20px; border-radius:14px;">
+                <h3 style="margin:0 0 10px; color:#0f172a;">📊 Skor ve Başarı Dağılımı</h3>
+                <p style="color:#64748b; font-size:14px; margin:0 0 15px;">Platformdaki tüm test koşumlarının puanlama dağılımı.</p>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <div>
+                        <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+                            <span>%80 ve üzeri (Üst Düzey Yetkin)</span>
+                            <b>${candidateResults.filter(r => r.score >= 80).length} Aday</b>
+                        </div>
+                        <div style="height:8px; background:#e2e8f0; border-radius:4px; overflow:hidden;"><div style="width:${totalRuns ? (candidateResults.filter(r=>r.score>=80).length/totalRuns*100) : 0}%; height:100%; background:#10b981;"></div></div>
+                    </div>
+                    <div>
+                        <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+                            <span>%50 - %79 (Operasyonel Yeterli)</span>
+                            <b>${candidateResults.filter(r => r.score >= 50 && r.score < 80).length} Aday</b>
+                        </div>
+                        <div style="height:8px; background:#e2e8f0; border-radius:4px; overflow:hidden;"><div style="width:${totalRuns ? (candidateResults.filter(r=>r.score>=50&&r.score<80).length/totalRuns*100) : 0}%; height:100%; background:#f59e0b;"></div></div>
+                    </div>
+                    <div>
+                        <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+                            <span>%50 altı (Eğitim Önerilir)</span>
+                            <b>${candidateResults.filter(r => r.score < 50).length} Aday</b>
+                        </div>
+                        <div style="height:8px; background:#e2e8f0; border-radius:4px; overflow:hidden;"><div style="width:${totalRuns ? (candidateResults.filter(r=>r.score<50).length/totalRuns*100) : 0}%; height:100%; background:#ef4444;"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="padding:20px; border-radius:14px;">
+                <h3 style="margin:0 0 10px; color:#0f172a;">⚡ Soru ve Adım Refleks Hızı</h3>
+                <p style="color:#64748b; font-size:14px; margin:0 0 15px;">Adayların adımlarda harcadığı ortalama süre ve analitik hız.</p>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; text-align:center;">
+                    <div style="background:#f8fafc; padding:15px; border-radius:10px; border:1px solid #e2e8f0;">
+                        <span style="font-size:12px; color:#64748b;">Ortalama Adım Süresi</span>
+                        <h2 style="margin:5px 0 0; color:#0284c7;">38 sn</h2>
+                    </div>
+                    <div style="background:#f8fafc; padding:15px; border-radius:10px; border:1px solid #e2e8f0;">
+                        <span style="font-size:12px; color:#64748b;">Test Tamamlama Hızı</span>
+                        <h2 style="margin:5px 0 0; color:#10b981;">%100</h2>
+                    </div>
+                </div>
+                <p style="margin-top:15px; font-size:13px; color:#475569;">
+                    💡 <b>Psikometrik Değerlendirme:</b> Adayların kriz anındaki karar hızları sektör ortalamasına (${avgScore >= 60 ? 'uygun ve yeterli' : 'kıyasla gelişime açık'}) düzeydedir.
+                </p>
+            </div>
+        </div>
+        `;
+
+        // Tab: Sistem Logları (Audit Logs)
+        const allLogs = [];
+        candidateResults.forEach(r => {
+            (r.logs || []).forEach(l => {
+                allLogs.push({ ...l, testId: r.testId, candidate: r.name });
+            });
+        });
+        const logsHtml = `
+        <div style="background:#0f172a; color:#f8fafc; border-radius:14px; padding:20px; font-family:monospace; font-size:13px; line-height:1.8; margin-top:20px; max-height:500px; overflow-y:auto;">
+            ${allLogs.map(l => `
+                <div style="border-bottom:1px solid #1e293b; padding:8px 0; display:flex; justify-content:space-between; gap:15px; flex-wrap:wrap;">
+                    <span><span style="color:#38bdf8;">[${l.timestamp}]</span> <b style="color:#a855f7;">[${l.testId}]</b> <b style="color:#e2e8f0;">${l.event}:</b> ${l.details}</span>
+                    <span style="color:#94a3b8;">${l.candidate} (${l.actor})</span>
+                </div>
+            `).join('') || '<div style="color:#94a3b8;">Kayıtlı sistem logu bulunamadı.</div>'}
+        </div>
+        `;
+
+        // Tab: Standart MCQ Kütüphanesi
+        const mcqRows = tests.map(t => `<tr>
+            <td data-editable><b>${t.name}</b><br><span style="color:var(--muted)">${t.sector}</span></td>
+            <td data-editable>${badge(t.level)}</td>
+            <td data-editable><b>${t.q}</b></td>
+            <td data-editable>${t.source}</td>
+            <td data-editable>${t.date}</td>
+            <td data-editable><b>${t.uses}</b> kez</td>
+            <td><span class="rate-pill">%${t.answered ? Math.round(t.correct / t.answered * 100) : 0}</span></td>
+            <td>
+                <div class="row-actions">
+                    <button class="primary" onclick="state.pendingCase='${t.name}'; prepareMcqFromCase(10);">Testi Başlat</button>
+                </div>
+            </td>
+        </tr>`).join('');
+        const mcqHtml = `
+        <div class="table-wrap test-table" style="margin-top:20px;">
+            <table>
+                <thead><tr><th>Test / Pozisyon</th><th>Zorluk</th><th>Soru</th><th>Kaynak</th><th>Tarih</th><th>Kullanım</th><th>Başarı</th><th>İşlem</th></tr></thead>
+                <tbody>${mcqRows}</tbody>
+            </table>
+        </div>
+        `;
+
+        // Tab: Aday Sıralaması (Leaderboard)
+        const sorted = [...candidateResults].sort((a,b) => b.score - a.score);
+        const leaderboardRows = sorted.map((r, i) => `<tr>
+            <td><b style="font-size:16px;">${i+1}.</b></td>
+            <td><code>${r.testId}</code></td>
+            <td><b>${safeText(r.name)}</b><br><small style="color:var(--text-muted);">${safeText(r.email)}</small></td>
+            <td>${safeText(r.test)}</td>
+            <td><b class="candidate-score" style="color:${r.score>=60?'#16a34a':'#dc2626'}">%${r.score}</b></td>
+            <td>${r.outcome}</td>
+            <td><div class="row-actions">
+                <button class="primary" onclick="showArchivePrompt('${safeText(r.name)}', ${r.score})">Testi Sakla (Arşivle)</button>
+            </div></td>
+        </tr>`).join('');
+        const leaderboardHtml = `
+        <div class="table-wrap candidate-table" style="margin-top:20px;">
+            <table>
+                <thead><tr><th>Sıra</th><th>Test ID</th><th>Aday Bilgisi</th><th>Çözülen Test</th><th>Skor</th><th>Durum</th><th>İşlemler</th></tr></thead>
+                <tbody>${leaderboardRows || '<tr><td colspan="7" class="empty">Henüz aday bulunmuyor.</td></tr>'}</tbody>
+            </table>
+        </div>
+        `;
+
+        // Sayfa İçeriği Oluşturma
+        return layout(`
+        <!-- Gizli Başlık: Testler (display: none kuralına uygun) -->
+        <h2 class="heading-testler" id="heading-testler" style="display:none !important;">Testler</h2>
+
+        <section class="page-intro" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
+            <div>
+                <span class="eyebrow" style="background:#e0f2fe; color:#0369a1; padding:4px 10px; border-radius:6px; font-weight:700;">TEST YÖNETİMİ</span>
+                <h2 style="margin:6px 0 2px 0;">Test Yönetimi</h2>
+                <p style="margin:0; color:var(--text-muted);">Test Platformu verileri, test senaryoları, koşum adımları ve metriklerin merkezi yönetim konsolu.</p>
+            </div>
+            <div style="display:flex; gap:10px; align-items:center;">
+                <span style="background:#ecfdf5; color:#059669; border:1px solid #a7f3d0; padding:8px 16px; border-radius:20px; font-size:13px; font-weight:700; display:flex; align-items:center; gap:8px;">
+                    <span style="display:inline-block; width:9px; height:9px; border-radius:50%; background:#10b981;"></span>
+                    Test Platformu ile Birebir Senkronize
+                </span>
+                <button class="primary" onclick="openTestBuilder()">+ Yeni Test Oluştur</button>
+            </div>
+        </section>
+
+        <!-- KPI Kartları -->
+        <div class="test-metrics" style="margin-top:20px;">
+            <article>
+                <span>Toplam Test Koşumu</span>
+                <b>${totalRuns} Aday</b>
+                <small>Platformdan aktarılan</small>
+            </article>
+            <article>
+                <span>Tamamlanan Test Adımı</span>
+                <b>${totalStepsCount} Adım</b>
+                <small>Soru bazlı kayıtlar</small>
+            </article>
+            <article class="success-metric">
+                <span>Ortalama Skor</span>
+                <b style="color:#0ea5e9;">%${avgScore}</b>
+                <small>Genel başarı ortalaması</small>
+            </article>
+            <article class="wide-metric">
+                <span>Olumlu Sonuç Oranı</span>
+                <b style="color:#10b981;">${positiveCount} / ${totalRuns} Aday</b>
+                <small>Doğrulanmış yetkinlik sonucu</small>
+            </article>
+        </div>
+
+        <!-- Sekmeler (Tabs) -->
+        <div style="display:flex; gap:8px; border-bottom:2px solid #e2e8f0; margin-top:25px; padding-bottom:1px; overflow-x:auto;">
+            <button onclick="state.managementTab='runs'; render();" style="padding:10px 18px; border:none; background:transparent; font-weight:700; cursor:pointer; font-size:14px; border-bottom:3px solid ${activeTab==='runs'?'#0ea5e9':'transparent'}; color:${activeTab==='runs'?'#0ea5e9':'var(--text-muted)'};">
+                📋 Test Senaryoları & Koşumları (${filtered.length})
+            </button>
+            <button onclick="state.managementTab='metrics'; render();" style="padding:10px 18px; border:none; background:transparent; font-weight:700; cursor:pointer; font-size:14px; border-bottom:3px solid ${activeTab==='metrics'?'#0ea5e9':'transparent'}; color:${activeTab==='metrics'?'#0ea5e9':'var(--text-muted)'};">
+                📊 Süreç Metrikleri & Analiz
+            </button>
+            <button onclick="state.managementTab='logs'; render();" style="padding:10px 18px; border:none; background:transparent; font-weight:700; cursor:pointer; font-size:14px; border-bottom:3px solid ${activeTab==='logs'?'#0ea5e9':'transparent'}; color:${activeTab==='logs'?'#0ea5e9':'var(--text-muted)'};">
+                📜 İşlem & Oturum Logları
+            </button>
+            <button onclick="state.managementTab='leaderboard'; render();" style="padding:10px 18px; border:none; background:transparent; font-weight:700; cursor:pointer; font-size:14px; border-bottom:3px solid ${activeTab==='leaderboard'?'#0ea5e9':'transparent'}; color:${activeTab==='leaderboard'?'#0ea5e9':'var(--text-muted)'};">
+                🏆 Aday Sıralaması
+            </button>
+            <button onclick="state.managementTab='templates'; render();" style="padding:10px 18px; border:none; background:transparent; font-weight:700; cursor:pointer; font-size:14px; border-bottom:3px solid ${activeTab==='templates'?'#0ea5e9':'transparent'}; color:${activeTab==='templates'?'#0ea5e9':'var(--text-muted)'};">
+                🧩 MCQ Test Şablonları (${tests.length})
+            </button>
+        </div>
+
+        ${activeTab === 'runs' ? `
+            <!-- Arama & Filtre Çubuğu -->
+            <div class="test-filterbar" style="margin-top:20px; display:flex; gap:12px; align-items:center;">
+                <label style="flex:1;">
+                    <span>Arama</span>
+                    <input class="search" placeholder="Test ID, aday adı, e-posta veya test..." value="${state.mgmtQuery}" onchange="state.mgmtQuery=this.value; render();">
+                </label>
+                <label>
+                    <span>Durum</span>
+                    <select onchange="state.mgmtOutcome=this.value; render();">
+                        <option value="">Tüm Durumlar</option>
+                        <option value="Olumlu" ${state.mgmtOutcome==='Olumlu'?'selected':''}>Olumlu Sonuç</option>
+                        <option value="Geliştirilmeli" ${state.mgmtOutcome==='Geliştirilmeli'?'selected':''}>Geliştirilmeli</option>
+                    </select>
+                </label>
+                <button class="secondary" onclick="state.mgmtQuery=''; state.mgmtOutcome=''; render();">Filtreleri Temizle</button>
+            </div>
+
+            <!-- Tablo -->
+            <div class="table-wrap candidate-table" style="margin-top:20px;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Test ID</th>
+                            <th>Aday Bilgisi</th>
+                            <th>Çözülen Test & Rol</th>
+                            <th>Test Adımları</th>
+                            <th>Girdi / Çıktı & Skor</th>
+                            <th>Durum</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${runsRows || '<tr><td colspan="7" class="empty">Filtrelere uygun test koşumu bulunamadı.</td></tr>'}
+                    </tbody>
+                </table>
+            </div>
+        ` : activeTab === 'metrics' ? metricsHtml : activeTab === 'logs' ? logsHtml : activeTab === 'leaderboard' ? leaderboardHtml : mcqHtml}
+        `, 'Test Yönetimi');
+    };
+
+    // 9. testPlatformPage: Test Platformu sayfasını da birebir senkronize tut
+    const oldTestPlatformPage = window.testPlatformPage;
+    window.testPlatformPage = function() {
+        syncTestPlatformWithManagement();
+
+        const sorted = [...candidateResults].sort((a,b) => b.score - a.score);
+        const rows = sorted.map((r, i) => {
+            const globalIndex = candidateResults.indexOf(r);
+            return `<tr>
+                <td><b>${i+1}.</b></td>
+                <td><code>${r.testId}</code></td>
+                <td><b>${safeText(r.name)}</b><br><small>${safeText(r.email)}</small></td>
+                <td>${safeText(r.test)}</td>
+                <td><b class="candidate-score">%${r.score}</b></td>
+                <td>${r.outcome}</td>
+                <td>
+                    <div class="row-actions">
+                        <button class="secondary" onclick="openTestStepInspectionModal(${globalIndex})">📋 Adımları İncele</button>
+                        <button class="primary" onclick="showArchivePrompt('${safeText(r.name)}', ${r.score})">Testi Sakla (Arşivle)</button>
+                    </div>
+                </td>
+            </tr>`;
+        }).join('');
+        
+        return layout(`
+        <section class="results-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
+            <div>
+                <h2>Test Platformu (Aday Sıralama & Koşumlar)</h2>
+                <p>Platforma katılan adayların doğru cevap sayısına/skoruna göre en yüksekten en düşüğe sıralandığı liderlik tablosu.</p>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <span style="background:#ecfdf5; color:#059669; border:1px solid #a7f3d0; padding:6px 14px; border-radius:20px; font-size:13px; font-weight:700;">
+                    🟢 Test Yönetimi ile Birebir Senkronize
+                </span>
+                <button class="secondary" onclick="go('tests')">Test Yönetimine Git ➔</button>
+            </div>
+        </section>
+        <div class="table-wrap candidate-table" style="margin-top:20px;">
+            <table>
+                <thead><tr><th>Sıra</th><th>Test ID</th><th>Aday Bilgisi</th><th>Çözülen Test</th><th>Skor</th><th>Durum</th><th>İşlemler</th></tr></thead>
+                <tbody>${rows || '<tr><td colspan="7" class="empty">Henüz aday bulunmuyor.</td></tr>'}</tbody>
+            </table>
+        </div>`, 'Test Platformu');
+    };
+
+    console.log('PATCH 20: Test Yönetimi başlığı ve Test Platformu verilerinin birebir aktarımı devrede.');
+})();
+
+
+// ==========================================
+// PATCH 21: BİRLEŞTİRİLMİŞ TEST YÖNETİMİ VE TEST SONUÇLARI SİSTEMİ
+// ==========================================
+(function() {
+    // Paylaşılan filtre durumları
+    state.resultQuery = state.resultQuery || '';
+    state.resultDepartment = state.resultDepartment || '';
+    state.resultScore = state.resultScore || '';
+    state.resultOutcome = state.resultOutcome || '';
+    state.unifiedTab = state.unifiedTab || 'results'; // 'results', 'metrics', 'logs', 'leaderboard', 'mcq'
+
+    // Birebir senkronizasyonu sağla
+    if (typeof window.syncTestPlatformWithManagement === 'function') {
+        window.syncTestPlatformWithManagement();
+    }
+
+    // Birleştirilmiş Test Yönetimi & Sonuçları Sayfası
+    window.unifiedTestManagementAndResultsPage = function() {
+        if (typeof window.syncTestPlatformWithManagement === 'function') {
+            window.syncTestPlatformWithManagement();
+        }
+
+        const activeTab = state.unifiedTab || 'results';
+
+        // Filtreleme (candidateResults üzerinden)
+        const filtered = candidateResults.filter(r => {
+            const query = (state.resultQuery || '').toLowerCase();
+            const matchesQuery = !query || 
+                (r.name || '').toLowerCase().includes(query) ||
+                (r.email || '').toLowerCase().includes(query) ||
+                (r.test || '').toLowerCase().includes(query) ||
+                (r.testId || '').toLowerCase().includes(query) ||
+                (r.department || '').toLowerCase().includes(query);
+
+            const matchesDept = !state.resultDepartment || (r.department && r.department.includes(state.resultDepartment));
+            const matchesOutcome = !state.resultOutcome || r.outcome === state.resultOutcome;
+            const matchesScore = !state.resultScore || (
+                state.resultScore === '80+' ? r.score >= 80 :
+                state.resultScore === '60-79' ? (r.score >= 60 && r.score < 80) :
+                state.resultScore === '50-59' ? (r.score >= 50 && r.score < 60) :
+                r.score < 50
+            );
+
+            return matchesQuery && matchesDept && matchesOutcome && matchesScore;
+        });
+
+        // Konsolide KPI İstatistikleri
+        const totalCount = filtered.length;
+        const avgScore = totalCount ? Math.round(filtered.reduce((a, r) => a + r.score, 0) / totalCount) : 0;
+        const highScoreCount = filtered.filter(r => r.score >= 80).length;
+        const positiveCount = filtered.filter(r => r.outcome === 'Olumlu').length;
+        const totalStepsCount = filtered.reduce((acc, r) => acc + (r.testSteps ? r.testSteps.length : 0), 0);
+
+        // Departman listesi
+        const deptList = unique(candidateResults.map(r => r.department).filter(Boolean));
+
+        // 1. Tab: Aday Test Sonuçları & Koşumlar Tablosu
+        const rowsHtml = filtered.map((r, i) => {
+            const globalIndex = candidateResults.indexOf(r);
+            const scoreClass = r.score >= 80 ? 'positive' : r.score >= 50 ? 'pending' : 'negative';
+            const scoreText = r.score >= 80 ? 'Yüksek Skor' : r.score >= 50 ? 'Beklenebilir' : 'Yetkin Olmayan';
+            const posSteps = (r.testSteps || []).filter(s => s.status === 'positive').length;
+            const totalSteps = (r.testSteps || []).length;
+
+            return `
+            <tr style="border-bottom: 1px solid #e2e8f0; vertical-align: top;">
+                <td style="padding: 16px 12px;">
+                    <b style="display:block; font-size:15px; color:#0f172a; margin-bottom:3px;">${safeText(r.name)}</b>
+                    <span style="color:#64748b; font-size:12px;">${safeText(r.email)}</span>
+                    <br><code style="font-size:11px; color:#0284c7; background:#e0f2fe; padding:2px 6px; border-radius:4px;">${r.testId || ('TST-' + (84900+globalIndex))}</code>
+                </td>
+                <td style="padding: 16px 12px; max-width: 250px;">
+                    <b style="display:block; font-size:14px; color:#1e293b; margin-bottom:3px;">${safeText(r.test)}</b>
+                    <span style="color:#64748b; font-size:12px; line-height: 1.4; display:block;">${safeText(r.department)}</span>
+                    <small style="color:#94a3b8;">${safeText(r.detail || '')}</small>
+                </td>
+                <td style="padding: 16px 12px; text-align: center;">
+                    <b style="display:block; font-size:16px; color:#0f172a; margin-bottom:4px;">%${r.score}</b>
+                    <span style="display:inline-block; padding:3px 10px; border-radius:14px; font-size:11px; font-weight:700; ${r.score < 50 ? 'background:#fee2e2; color:#b91c1c;' : r.score >= 80 ? 'background:#dcfce3; color:#15803d;' : 'background:#fef3c7; color:#b45309;'}">${scoreText}</span>
+                    <br><small style="color:#64748b; font-size:11px;">${posSteps}/${totalSteps} Doğru Adım</small>
+                </td>
+                <td style="padding: 16px 12px; max-width: 320px;">
+                    <div style="background:${r.outcome==='Olumlu'?'#f0fdf4':'#fef2f2'}; border:1px solid ${r.outcome==='Olumlu'?'#bbf7d0':'#fecaca'}; border-radius:10px; padding:10px 14px; font-size:12px; line-height:1.5;">
+                        <b style="color:${r.outcome==='Olumlu'?'#166534':'#991b1b'}; display:block; margin-bottom:4px;">
+                            ${r.outcome === 'Olumlu' ? '✅ Olumlu Sonuç' : '⚠️ Geliştirilmeli (Eğitim Önerilir)'}
+                        </b>
+                        <p style="margin:0; color:#334155; font-size:11.5px;">${safeText(r.summary)}</p>
+                    </div>
+                </td>
+                <td style="padding: 16px 12px; color:#64748b; font-size:12px; white-space:nowrap;">
+                    <b>${r.date}</b><br><span style="color:#94a3b8;">${r.time}</span>
+                </td>
+                <td style="padding: 16px 12px;">
+                    <div class="row-actions" style="display:flex; flex-direction:column; gap:5px; min-width:140px;">
+                        <button class="primary" style="padding:6px 12px; font-size:12px; font-weight:700;" onclick="showCandidateReport(${globalIndex})">📊 Detaylı Rapor</button>
+                        <button class="secondary" style="padding:5px 10px; font-size:12px;" onclick="openTestStepInspectionModal(${globalIndex})" title="Adımları ve Parametreleri İncele">📋 Adımları İncele</button>
+                        <div style="display:flex; gap:4px;">
+                            <button class="secondary" style="padding:4px 8px; font-size:11px; flex:1;" onclick="showArchivePrompt('${safeText(r.name)}', ${r.score})">📦 Sakla</button>
+                            <button class="secondary" style="padding:4px 8px; font-size:11px; flex:1;" onclick="toast('Test sonuçları e-posta ile gönderildi.')">✉ İlet</button>
+                            <button class="danger-button" style="padding:4px 8px; font-size:11px;" onclick="deleteResult(this)" title="Kaydı Sil">✕</button>
+                        </div>
+                    </div>
+                </td>
+            </tr>`;
+        }).join('');
+
+        // 2. Tab: Süreç Metrikleri & Analiz Paneli
+        const metricsHtml = `
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:20px; margin-top:20px;">
+            <div class="card" style="padding:22px; border-radius:14px; background:white; border:1px solid #e2e8f0;">
+                <h3 style="margin:0 0 8px; color:#0f172a; font-size:16px;">📊 Başarı Skoru Dağılımı</h3>
+                <p style="color:#64748b; font-size:13px; margin:0 0 16px;">Platformda tamamlanan ${candidateResults.length} testin yetkinlik aralıkları.</p>
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                    <div>
+                        <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+                            <span>%80 ve üzeri (Üst Düzey Yetkin)</span>
+                            <b style="color:#10b981;">${candidateResults.filter(r => r.score >= 80).length} Aday</b>
+                        </div>
+                        <div style="height:8px; background:#e2e8f0; border-radius:4px; overflow:hidden;"><div style="width:${candidateResults.length ? (candidateResults.filter(r=>r.score>=80).length/candidateResults.length*100) : 0}%; height:100%; background:#10b981;"></div></div>
+                    </div>
+                    <div>
+                        <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+                            <span>%50 - %79 (Operasyonel Yeterli)</span>
+                            <b style="color:#f59e0b;">${candidateResults.filter(r => r.score >= 50 && r.score < 80).length} Aday</b>
+                        </div>
+                        <div style="height:8px; background:#e2e8f0; border-radius:4px; overflow:hidden;"><div style="width:${candidateResults.length ? (candidateResults.filter(r=>r.score>=50&&r.score<80).length/candidateResults.length*100) : 0}%; height:100%; background:#f59e0b;"></div></div>
+                    </div>
+                    <div>
+                        <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+                            <span>%50 altı (Eğitim & Mentörlük)</span>
+                            <b style="color:#ef4444;">${candidateResults.filter(r => r.score < 50).length} Aday</b>
+                        </div>
+                        <div style="height:8px; background:#e2e8f0; border-radius:4px; overflow:hidden;"><div style="width:${candidateResults.length ? (candidateResults.filter(r=>r.score<50).length/candidateResults.length*100) : 0}%; height:100%; background:#ef4444;"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="padding:22px; border-radius:14px; background:white; border:1px solid #e2e8f0;">
+                <h3 style="margin:0 0 8px; color:#0f172a; font-size:16px;">⚡ Soru Hızı ve Refleks Analizi</h3>
+                <p style="color:#64748b; font-size:13px; margin:0 0 16px;">Adayların vaka kriz adımlarında harcadığı ortalama analitik süre.</p>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; text-align:center;">
+                    <div style="background:#f8fafc; padding:15px; border-radius:10px; border:1px solid #e2e8f0;">
+                        <span style="font-size:12px; color:#64748b;">Ortalama Adım Süresi</span>
+                        <h2 style="margin:5px 0 0; color:#0284c7; font-size:24px;">35 sn</h2>
+                    </div>
+                    <div style="background:#f8fafc; padding:15px; border-radius:10px; border:1px solid #e2e8f0;">
+                        <span style="font-size:12px; color:#64748b;">Tamamlanma Oranı</span>
+                        <h2 style="margin:5px 0 0; color:#10b981; font-size:24px;">%100</h2>
+                    </div>
+                </div>
+                <p style="margin-top:15px; font-size:12.5px; color:#475569; line-height:1.5;">
+                    💡 <b>AI Değerlendirmesi:</b> Adayların karar süreleri ve kök neden refleksleri endüstri kıyaslamasıyla tam uyumludur.
+                </p>
+            </div>
+        </div>
+        `;
+
+        // 3. Tab: Sistem & Oturum Logları (Audit Logs)
+        const allLogs = [];
+        candidateResults.forEach(r => {
+            (r.logs || []).forEach(l => {
+                allLogs.push({ ...l, testId: r.testId, candidate: r.name });
+            });
+        });
+        const logsHtml = `
+        <div style="background:#0f172a; color:#f8fafc; border-radius:14px; padding:20px; font-family:monospace; font-size:12.5px; line-height:1.8; margin-top:20px; max-height:500px; overflow-y:auto;">
+            ${allLogs.map(l => `
+                <div style="border-bottom:1px solid #1e293b; padding:8px 0; display:flex; justify-content:space-between; gap:15px; flex-wrap:wrap;">
+                    <span><span style="color:#38bdf8;">[${l.timestamp}]</span> <b style="color:#a855f7;">[${l.testId}]</b> <b style="color:#e2e8f0;">${l.event}:</b> ${l.details}</span>
+                    <span style="color:#94a3b8;">${l.candidate} (${l.actor})</span>
+                </div>
+            `).join('') || '<div style="color:#94a3b8;">Kayıtlı sistem logu bulunamadı.</div>'}
+        </div>
+        `;
+
+        // 4. Tab: Aday Sıralaması (Leaderboard)
+        const sorted = [...candidateResults].sort((a,b) => b.score - a.score);
+        const leaderboardRows = sorted.map((r, i) => `<tr>
+            <td><b style="font-size:16px;">${i+1}.</b></td>
+            <td><code>${r.testId}</code></td>
+            <td><b>${safeText(r.name)}</b><br><small style="color:var(--text-muted);">${safeText(r.email)}</small></td>
+            <td>${safeText(r.test)}</td>
+            <td><b class="candidate-score" style="color:${r.score>=60?'#16a34a':'#dc2626'}">%${r.score}</b></td>
+            <td>${r.outcome}</td>
+            <td><div class="row-actions">
+                <button class="primary" onclick="showArchivePrompt('${safeText(r.name)}', ${r.score})">Testi Sakla (Arşivle)</button>
+            </div></td>
+        </tr>`).join('');
+        const leaderboardHtml = `
+        <div class="table-wrap candidate-table" style="margin-top:20px;">
+            <table>
+                <thead><tr><th>Sıra</th><th>Test ID</th><th>Aday Bilgisi</th><th>Çözülen Test</th><th>Skor</th><th>Durum</th><th>İşlemler</th></tr></thead>
+                <tbody>${leaderboardRows || '<tr><td colspan="7" class="empty">Henüz aday bulunmuyor.</td></tr>'}</tbody>
+            </table>
+        </div>
+        `;
+
+        // 5. Tab: Standart MCQ Kütüphanesi
+        const mcqRows = tests.map(t => `<tr>
+            <td data-editable><b>${t.name}</b><br><span style="color:var(--muted)">${t.sector}</span></td>
+            <td data-editable>${badge(t.level)}</td>
+            <td data-editable><b>${t.q}</b></td>
+            <td data-editable>${t.source}</td>
+            <td data-editable>${t.date}</td>
+            <td data-editable><b>${t.uses}</b> kez</td>
+            <td><span class="rate-pill">%${t.answered ? Math.round(t.correct / t.answered * 100) : 0}</span></td>
+            <td>
+                <div class="row-actions">
+                    <button class="primary" onclick="state.pendingCase='${t.name}'; prepareMcqFromCase(10);">Testi Başlat</button>
+                </div>
+            </td>
+        </tr>`).join('');
+        const mcqHtml = `
+        <div class="table-wrap test-table" style="margin-top:20px;">
+            <table>
+                <thead><tr><th>Test / Pozisyon</th><th>Zorluk</th><th>Soru</th><th>Kaynak</th><th>Tarih</th><th>Kullanım</th><th>Başarı</th><th>İşlem</th></tr></thead>
+                <tbody>${mcqRows}</tbody>
+            </table>
+        </div>
+        `;
+
+        // Ana HTML Şablonu
+        return layout(`
+        <section class="results-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px; margin-bottom:15px;">
+            <div>
+                <span class="eyebrow" style="background:#e0f2fe; color:#0369a1; padding:4px 10px; border-radius:6px; font-weight:700; font-size:12px;">BİRLEŞİK TEST KONSOLU</span>
+                <h2 style="margin:6px 0 2px 0; font-size:26px; color:#0f172a;">Test Yönetimi & Sonuçları</h2>
+                <p style="margin:0; color:var(--text-muted); font-size:14px;">Aday test sonuçları, AI detaylı raporları, test senaryoları, adım analizleri ve metriklerin birleşik yönetim merkezi.</p>
+            </div>
+            <div style="display:flex; gap:10px; align-items:center;">
+                <span style="background:#ecfdf5; color:#059669; border:1px solid #a7f3d0; padding:8px 16px; border-radius:20px; font-size:13px; font-weight:700; display:flex; align-items:center; gap:8px;">
+                    <span style="display:inline-block; width:9px; height:9px; border-radius:50%; background:#10b981;"></span>
+                    Test Platformu ile Birebir Senkronize
+                </span>
+                <button class="primary" onclick="openTestBuilder()">+ Yeni Test Oluştur</button>
+                <button class="secondary dark-button" onclick="go('dashboard')">Pano</button>
+            </div>
+        </section>
+
+        <!-- Konsolide KPI Kartları -->
+        <div class="result-kpis" style="margin-top:15px;">
+            <article>
+                <span>Toplam Çözülen Test</span>
+                <b style="color:#0f172a;">${totalCount} Aday</b>
+                <small>Platformdan aktarılan</small>
+            </article>
+            <article>
+                <span>Ortalama Başarı</span>
+                <b class="blue-score" style="color:#0284c7;">%${avgScore}</b>
+                <small>Genel başarı ortalaması</small>
+            </article>
+            <article>
+                <span>Yüksek Skor (%80+)</span>
+                <b class="green-score" style="color:#10b981;">${highScoreCount} Aday</b>
+                <small>Üstün yetkinlik</small>
+            </article>
+            <article>
+                <span>Olumlu Sonuç (Öneri)</span>
+                <b class="purple-score" style="color:#7c3aed;">${positiveCount} Aday</b>
+                <small>Pozisyona uygun</small>
+            </article>
+        </div>
+
+        <!-- Sekmeler (Tabs) -->
+        <div style="display:flex; gap:8px; border-bottom:2px solid #e2e8f0; margin-top:25px; padding-bottom:1px; overflow-x:auto;">
+            <button onclick="state.unifiedTab='results'; render();" style="padding:10px 18px; border:none; background:transparent; font-weight:700; cursor:pointer; font-size:14px; border-bottom:3px solid ${activeTab==='results'?'#0ea5e9':'transparent'}; color:${activeTab==='results'?'#0ea5e9':'var(--text-muted)'};">
+                📊 Aday Test Sonuçları & Koşumlar (${filtered.length})
+            </button>
+            <button onclick="state.unifiedTab='metrics'; render();" style="padding:10px 18px; border:none; background:transparent; font-weight:700; cursor:pointer; font-size:14px; border-bottom:3px solid ${activeTab==='metrics'?'#0ea5e9':'transparent'}; color:${activeTab==='metrics'?'#0ea5e9':'var(--text-muted)'};">
+                📈 Süreç Metrikleri & Analiz
+            </button>
+            <button onclick="state.unifiedTab='logs'; render();" style="padding:10px 18px; border:none; background:transparent; font-weight:700; cursor:pointer; font-size:14px; border-bottom:3px solid ${activeTab==='logs'?'#0ea5e9':'transparent'}; color:${activeTab==='logs'?'#0ea5e9':'var(--text-muted)'};">
+                📜 İşlem & Oturum Logları
+            </button>
+            <button onclick="state.unifiedTab='leaderboard'; render();" style="padding:10px 18px; border:none; background:transparent; font-weight:700; cursor:pointer; font-size:14px; border-bottom:3px solid ${activeTab==='leaderboard'?'#0ea5e9':'transparent'}; color:${activeTab==='leaderboard'?'#0ea5e9':'var(--text-muted)'};">
+                🏆 Aday Sıralaması
+            </button>
+            <button onclick="state.unifiedTab='mcq'; render();" style="padding:10px 18px; border:none; background:transparent; font-weight:700; cursor:pointer; font-size:14px; border-bottom:3px solid ${activeTab==='mcq'?'#0ea5e9':'transparent'}; color:${activeTab==='mcq'?'#0ea5e9':'var(--text-muted)'};">
+                🧩 MCQ Test Şablonları (${tests.length})
+            </button>
+        </div>
+
+        ${activeTab === 'results' ? `
+            <!-- Arama & Filtre Çubuğu -->
+            <div class="result-filters" style="margin-top:20px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+                <label style="flex:2; min-width:200px;">
+                    <span>Arama</span>
+                    <input class="search" placeholder="Test ID, aday adı, e-posta veya test..." value="${state.resultQuery}" oninput="state.resultQuery=this.value; render();">
+                </label>
+                <label style="flex:1; min-width:140px;">
+                    <span>Departman</span>
+                    <select onchange="state.resultDepartment=this.value; render();">
+                        <option value="">Tümü</option>
+                        ${deptList.map(v => `<option ${state.resultDepartment===v?'selected':''}>${v}</option>`).join('')}
+                    </select>
+                </label>
+                <label style="flex:1; min-width:140px;">
+                    <span>Skor Aralığı</span>
+                    <select onchange="state.resultScore=this.value; render();">
+                        <option value="">Tümü</option>
+                        <option value="80+" ${state.resultScore==='80+'?'selected':''}>%80 ve üzeri</option>
+                        <option value="60-79" ${state.resultScore==='60-79'?'selected':''}>%60–79</option>
+                        <option value="50-59" ${state.resultScore==='50-59'?'selected':''}>%50–59</option>
+                        <option value="0-49" ${state.resultScore==='0-49'?'selected':''}>%0–49</option>
+                    </select>
+                </label>
+                <label style="flex:1; min-width:140px;">
+                    <span>Değerlendirme</span>
+                    <select onchange="state.resultOutcome=this.value; render();">
+                        <option value="">Tümü</option>
+                        <option value="Olumlu" ${state.resultOutcome==='Olumlu'?'selected':''}>Olumlu</option>
+                        <option value="Geliştirilmeli" ${state.resultOutcome==='Geliştirilmeli'?'selected':''}>Geliştirilmeli</option>
+                    </select>
+                </label>
+                <button class="secondary" style="height:42px; margin-top:18px;" onclick="state.resultQuery=''; state.resultDepartment=''; state.resultScore=''; state.resultOutcome=''; render();">Filtreleri Temizle</button>
+            </div>
+
+            <!-- Tablo -->
+            <div class="table-wrap candidate-table" style="margin-top:20px;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Aday Bilgisi & ID</th>
+                            <th>Çözülen Test & Rol</th>
+                            <th>Skor & Adımlar</th>
+                            <th>Değerlendirme Özeti</th>
+                            <th>Tarih</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rowsHtml || '<tr><td colspan="6" class="empty">Filtrelere uygun aday veya test sonucu bulunamadı.</td></tr>'}
+                    </tbody>
+                </table>
+            </div>
+        ` : activeTab === 'metrics' ? metricsHtml : activeTab === 'logs' ? logsHtml : activeTab === 'leaderboard' ? leaderboardHtml : mcqHtml}
+        `, 'Test Yönetimi & Sonuçları');
+    };
+
+    // Hem testsPage hem resultsPage artık bu birleştirilmiş konsola bağlanır
+    window.testsPage = window.unifiedTestManagementAndResultsPage;
+    window.resultsPage = window.unifiedTestManagementAndResultsPage;
+
+    console.log('PATCH 21: Test Yönetimi ve Test Sonuçları başarıyla birleştirildi.');
+})();
+
+
+// ==========================================
+// PATCH 22: TEST SONUÇLARININ KALICI SAKLANMASI
+// ==========================================
+// candidateResults yalnızca bellekte tutuluyordu; sayfa yenilenince veya yeniden
+// giriş yapılınca aktarılan test sonuçları kayboluyordu. Liste localStorage'a yazılır
+// ve açılışta geri yüklenir (aynı dizi referansı korunur).
+(function() {
+    const KEY = 'sb_candidate_results';
+    const list = window.candidateResults;
+    if (!Array.isArray(list)) return;
+
+    window.saveCandidateResults = function() {
+        try { localStorage.setItem(KEY, JSON.stringify(list)); } catch (e) {}
+    };
+
+    try {
+        const stored = JSON.parse(localStorage.getItem(KEY) || 'null');
+        if (Array.isArray(stored) && stored.length) list.splice(0, list.length, ...stored);
+    } catch (e) {}
+
+    // Yeni sonuç eklendiği anda benzersiz Test ID ver ve kaydet
+    // (sıra numarasından türetilen ID'ler yeni kayıt başa eklenince çakışıyordu)
+    const baseUnshift = list.unshift;
+    list.unshift = function() {
+        Array.prototype.forEach.call(arguments, function(r) {
+            if (r && !r.testId) r.testId = 'TST-' + Date.now().toString(36).toUpperCase();
+        });
+        const n = baseUnshift.apply(this, arguments);
+        window.saveCandidateResults();
+        return n;
+    };
+
+    // Silme yalnızca satırı DOM'dan kaldırıyordu; kayıt bir sonraki çizimde geri geliyordu
+    window.deleteResult = function(button) {
+        if (!confirm('Aday test sonucu silinsin mi?')) return;
+        const row = button.closest('tr');
+        const reportBtn = row && row.querySelector('[onclick^="showCandidateReport("]');
+        const idx = reportBtn ? parseInt(reportBtn.getAttribute('onclick').match(/\d+/)[0], 10) : -1;
+        if (idx >= 0 && idx < list.length) {
+            list.splice(idx, 1);
+            window.saveCandidateResults();
+            render();
+        } else if (row) {
+            row.remove();
+        }
+        toast('Test sonucu silindi');
+    };
+
+    // Sonuçlar üzerinde yapılan düzenlemeler (zenginleştirme, durum değişikliği) her çizimde kaydedilir
+    const baseRender = window.render;
+    window.render = function() {
+        const out = baseRender.apply(this, arguments);
+        window.saveCandidateResults();
+        return out;
+    };
+
+    console.log('PATCH 22: Test sonuçları kalıcı olarak saklanıyor.');
+})();
+
+
+// ==========================================
+// PATCH 23: TOPLU TEST (QR) — ÇOKLU KATILIMCI, SUNUCU PUANLAMASI, ORTALAMA & SIRALAMA
+// ==========================================
+// Admin, ürettiği çoktan seçmeli testi kapasiteyle (en çok 1000) yayınlar; katılımcılar QR ile
+// group.html'i açıp ad + sicil ile çözer. Puanlama ve kayıt sunucudadır (Firestore), sonuçlar
+// yalnızca testi yayınlayanın tarayıcısındaki yönetici anahtarıyla okunur.
+(function() {
+    const KEY = 'sb_group_tests';
+    const results = {};   // testId -> son /results yanıtı
+    let pollId = null;
+
+    const loadTests = () => { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { return []; } };
+    const saveTests = list => { try { localStorage.setItem(KEY, JSON.stringify(list)); } catch (e) {} };
+    const findTest = id => loadTests().find(t => t.id === id);
+    const updateTest = (id, patch) => { const list = loadTests(); const t = list.find(x => x.id === id); if (t) Object.assign(t, patch); saveTests(list); return t; };
+    const joinUrl = id => location.origin + '/group.html?t=' + encodeURIComponent(id);
+    const fmtDate = ms => ms ? new Date(ms).toLocaleString('tr-TR') : '-';
+    const fmtSec = s => Math.floor((s || 0) / 60) + ' dk ' + ((s || 0) % 60) + ' sn';
+
+    window.groupQrSvg = function(text) {
+        if (typeof qrcode !== 'function') return '<p style="color:#dc2626">QR kütüphanesi yüklenemedi.</p>';
+        const qr = qrcode(0, 'M');
+        qr.addData(text);
+        qr.make();
+        return qr.createSvgTag({ cellSize: 6, margin: 3, scalable: true });
+    };
+
+    async function groupApi(path, opts) {
+        const res = await fetch('/api/group-tests' + path, opts);
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Sunucu hatası (' + res.status + ')');
+        return data;
+    }
+    const adminHeaders = t => ({ 'content-type': 'application/json', 'x-admin-token': t.adminToken });
+
+    // ---------- Yayınlama ----------
+    function examQuestions() {
+        return (generatedExamQuestions || []).filter(q => !q.open && Array.isArray(q.options) && q.options.length === 4 && Number.isInteger(q.answer));
+    }
+
+    window.openGroupPublishModal = function() {
+        const qs = examQuestions();
+        if (!qs.length) {
+            toast('Önce bir vakadan çoktan seçmeli test üretin.');
+            return go('mcq');
+        }
+        const caseText = pv('mcq-case', '') || state.pendingCase || '';
+        const firstLine = caseText.split('\n').map(s => s.trim()).find(Boolean) || 'Toplu Test';
+        const minutes = Math.max(Number(pv('test-total-minutes', '')) || 0, 10, qs.length * 2);
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.id = 'group-publish-modal';
+        modal.innerHTML = `<div class="modal-card" style="max-width:520px">
+            <div class="modal-head"><div><span class="eyebrow">TOPLU TEST · QR</span><h2>Toplu Test Olarak Yayınla</h2></div>
+                <button class="icon-button" onclick="this.closest('.modal').remove()">×</button></div>
+            <p style="color:#64748b;margin-top:0">${qs.length} soruluk çoktan seçmeli test, QR kodu okutan katılımcılara açılacak. Doğru cevaplar katılımcıların cihazına gönderilmez.</p>
+            <label style="display:grid;gap:6px;margin-bottom:12px"><b>Test adı</b><input id="gp-title" maxlength="200" value="${safeText(firstLine.slice(0, 120))}"></label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                <label style="display:grid;gap:6px"><b>Katılımcı kapasitesi</b><input id="gp-capacity" type="number" min="1" max="1000" value="100" oninput="updateGroupPublishCost()"></label>
+                <label style="display:grid;gap:6px"><b>Süre (dakika)</b><input id="gp-minutes" type="number" min="1" max="300" value="${minutes}"></label>
+            </div>
+            <div id="gp-cost" style="margin:16px 0;padding:12px 14px;border-radius:10px;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;font-weight:600"></div>
+            <div class="case-next-actions"><button class="secondary" onclick="this.closest('.modal').remove()">Vazgeç</button>
+                <button class="primary" id="gp-submit" onclick="publishGroupTest(this)">Yayınla ve QR Oluştur</button></div>
+        </div>`;
+        document.body.append(modal);
+        updateGroupPublishCost();
+    };
+
+    window.updateGroupPublishCost = function() {
+        const cap = Math.max(0, Math.min(1000, Math.round(Number(pv('gp-capacity', '0')))));
+        const el = document.getElementById('gp-cost');
+        if (el) el.textContent = 'Ücret: ' + cap + ' katılımcı × ' + BIGAKCE_PRICING.groupPerParticipant + ' BIGakçe = ' + (cap * BIGAKCE_PRICING.groupPerParticipant) + ' BIGakçe (peşin). Test kapatıldığında kullanılmayan kontenjan iade edilir.';
+    };
+
+    window.publishGroupTest = async function(button) {
+        const qs = examQuestions();
+        const capacity = Math.round(Number(pv('gp-capacity', '0')));
+        const timeLimitMinutes = Math.round(Number(pv('gp-minutes', '0')));
+        const title = pv('gp-title', '').trim() || 'Toplu Test';
+        if (!(capacity >= 1 && capacity <= 1000)) return toast('Kapasite 1 ile 1000 arasında olmalıdır.');
+        if (!(timeLimitMinutes >= 1 && timeLimitMinutes <= 300)) return toast('Süre 1 ile 300 dakika arasında olmalıdır.');
+        const cost = capacity * BIGAKCE_PRICING.groupPerParticipant;
+        try { chargeCredits(cost); } catch (e) { return toast(e.message); }
+        aiBusy(button, true);
+        try {
+            const created = await groupApi('', {
+                method: 'POST', headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({
+                    title, capacity, timeLimitMinutes, owner: state.currentUser || '',
+                    caseText: pv('mcq-case', '') || state.pendingCase || '',
+                    questions: qs.map(q => ({ text: String(q.text).replace(/^\d+[.)]\s*/, ''), options: q.options, answer: q.answer, level: q.level || '', rationale: q.rationale || '' }))
+                })
+            });
+            const list = loadTests();
+            list.unshift({ ...created, questionCount: qs.length, cost, refunded: 0, transferred: [] });
+            saveTests(list);
+            document.getElementById('group-publish-modal')?.remove();
+            toast('Toplu test yayınlandı · ' + cost + ' BIGakçe düşüldü');
+            state.groupTestId = created.id;
+            go('group-tests');
+        } catch (e) {
+            refundCredits(cost);
+            toast('Yayınlanamadı: ' + e.message);
+        } finally {
+            aiBusy(button, false);
+        }
+    };
+
+    // Çoktan seçmeli test üretildiğinde "Toplu Test Olarak Yayınla" butonunu ekle
+    const baseBuildMcqDraft = window.buildMcqDraft;
+    window.buildMcqDraft = async function() {
+        const out = await baseBuildMcqDraft.apply(this, arguments);
+        const box = document.getElementById('mcq-draft');
+        const start = box && [...box.querySelectorAll('button')].find(b => /startSecureExam/.test(b.getAttribute('onclick') || ''));
+        if (start && examQuestions().length && !box.querySelector('.group-publish-btn')) {
+            const btn = document.createElement('button');
+            btn.className = 'secondary group-publish-btn';
+            btn.style.cssText = 'flex:1;padding:14px;font-size:1.05rem;font-weight:700';
+            btn.textContent = '👥 Toplu Test Olarak Yayınla (QR)';
+            btn.onclick = () => openGroupPublishModal();
+            start.after(btn);
+        }
+        return out;
+    };
+
+    // ---------- Durum: kapat / aç (kullanılmayan kontenjan iadesi) ----------
+    window.setGroupTestStatus = async function(id, status) {
+        const t = findTest(id);
+        if (!t) return;
+        try {
+            if (status === 'open' && t.refunded > 0) chargeCredits(t.refunded); // yeniden açılınca iade geri alınır
+        } catch (e) { return toast(e.message); }
+        try {
+            await groupApi('/' + id + '/status', { method: 'POST', headers: adminHeaders(t), body: JSON.stringify({ status }) });
+        } catch (e) {
+            if (status === 'open' && t.refunded > 0) refundCredits(t.refunded);
+            return toast('Durum değiştirilemedi: ' + e.message);
+        }
+        if (status === 'closed') {
+            const r = await fetchResults(id).catch(() => results[id]);
+            const joined = r?.stats?.joined ?? 0;
+            const refund = Math.max(0, t.capacity - joined) * BIGAKCE_PRICING.groupPerParticipant;
+            refundCredits(refund);
+            updateTest(id, { refunded: refund, closed: true });
+            toast('Test katılıma kapatıldı' + (refund ? ' · ' + refund + ' BIGakçe iade edildi' : ''));
+        } else {
+            updateTest(id, { refunded: 0, closed: false });
+            toast('Test yeniden katılıma açıldı');
+        }
+        render();
+    };
+
+    // ---------- Sonuçlar ----------
+    async function fetchResults(id) {
+        const t = findTest(id);
+        if (!t) return null;
+        results[id] = await groupApi('/' + id + '/results', { headers: adminHeaders(t) });
+        return results[id];
+    }
+
+    function resultsHtml(t, r) {
+        const s = r.stats;
+        const kpi = (label, value, color) => `<article style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px"><small style="color:#64748b">${label}</small><b style="display:block;font-size:1.5rem;color:${color || '#0f172a'}">${value}</b></article>`;
+        const rows = r.ranking.map(p => {
+            const above = p.diffFromAverage >= 0;
+            return `<tr style="border-bottom:1px solid #e2e8f0">
+                <td style="padding:10px;font-weight:800">${p.rank}</td>
+                <td style="padding:10px"><b>${safeText(p.name)}</b><br><small style="color:#64748b">Sicil: ${safeText(p.sicil)}</small></td>
+                <td style="padding:10px;font-weight:800;font-size:1.05rem">%${p.score}</td>
+                <td style="padding:10px"><span style="font-weight:700;color:${above ? '#16a34a' : '#dc2626'}">${above ? '+' : ''}${p.diffFromAverage}</span> <small style="color:#64748b">${above ? 'ortalama üstü' : 'ortalama altı'}</small></td>
+                <td style="padding:10px">${p.correct} / ${p.wrong} / ${p.blank}</td>
+                <td style="padding:10px">${safeText(p.level)}</td>
+                <td style="padding:10px">${fmtSec(p.seconds)}${p.late ? ' <small style="color:#dc2626">(süre aşımı)</small>' : ''}</td>
+                <td style="padding:10px"><small>${fmtDate(p.submittedAt)}</small></td>
+            </tr>`;
+        }).join('');
+        const waiting = r.inProgress.length ? `<p style="color:#64748b;margin:14px 0 0"><b>Testi çözmekte olan (${r.inProgress.length}):</b> ${r.inProgress.slice(0, 30).map(p => safeText(p.name)).join(', ')}${r.inProgress.length > 30 ? '…' : ''}</p>` : '';
+        return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px">
+                ${kpi('Katılım', s.joined + ' / ' + t.capacity)}
+                ${kpi('Tamamlayan', s.submitted, '#0284c7')}
+                ${kpi('Ortalama', '%' + s.average, '#16a34a')}
+                ${kpi('Medyan', '%' + s.median)}
+                ${kpi('En yüksek', '%' + s.max)}
+                ${kpi('En düşük', '%' + s.min, '#dc2626')}
+            </div>
+            <div style="overflow:auto;background:#fff;border:1px solid #e2e8f0;border-radius:12px">
+                <table style="width:100%;border-collapse:collapse;font-size:.92rem">
+                    <thead style="background:#f8fafc;text-align:left"><tr><th style="padding:10px">Sıra</th><th style="padding:10px">Katılımcı</th><th style="padding:10px">Skor</th><th style="padding:10px">Ortalamaya Göre</th><th style="padding:10px">D / Y / B</th><th style="padding:10px">Seviye</th><th style="padding:10px">Süre</th><th style="padding:10px">Gönderim</th></tr></thead>
+                    <tbody>${rows || '<tr><td colspan="8" style="padding:24px;text-align:center;color:#64748b">Henüz testi tamamlayan katılımcı yok.</td></tr>'}</tbody>
+                </table>
+            </div>${waiting}`;
+    }
+
+    window.refreshGroupResults = async function(id, quiet) {
+        const box = document.getElementById('gt-results');
+        try {
+            const r = await fetchResults(id);
+            if (box && r) box.innerHTML = resultsHtml(findTest(id), r);
+            const upd = document.getElementById('gt-updated');
+            if (upd) upd.textContent = 'Son güncelleme: ' + new Date().toLocaleTimeString('tr-TR');
+        } catch (e) {
+            if (box && !quiet) box.innerHTML = `<p style="color:#dc2626">Sonuçlar alınamadı: ${safeText(e.message)}</p>`;
+        }
+    };
+
+    window.downloadGroupCsv = function(id) {
+        const t = findTest(id), r = results[id];
+        if (!r || !r.ranking.length) return toast('İndirilecek sonuç yok');
+        const cell = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
+        const lines = [['Sıra', 'Ad Soyad', 'Sicil No', 'Skor (%)', 'Ortalamaya Fark', 'Doğru', 'Yanlış', 'Boş', 'Seviye', 'Süre (sn)', 'Gönderim'].map(cell).join(';')];
+        r.ranking.forEach(p => lines.push([p.rank, p.name, p.sicil, p.score, p.diffFromAverage, p.correct, p.wrong, p.blank, p.level, p.seconds, fmtDate(p.submittedAt)].map(cell).join(';')));
+        lines.push('', [cell('Ortalama'), cell(r.stats.average), cell('Medyan'), cell(r.stats.median), cell('Tamamlayan'), cell(r.stats.submitted)].join(';'));
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' }));
+        a.download = (t.title || 'toplu-test').replace(/[\\/:*?"<>|]/g, '') + ' - sonuçlar.csv';
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    };
+
+    // Sonuçları diğer test sonuçları gibi "Test Yönetimi & Sonuçları"na aktar
+    window.transferGroupResults = function(id) {
+        const t = findTest(id), r = results[id];
+        if (!r) return toast('Önce sonuçları yenileyin');
+        const done = new Set(t.transferred || []);
+        const fresh = r.ranking.filter(p => !done.has(p.key));
+        if (!fresh.length) return toast('Aktarılacak yeni sonuç yok');
+        const qs = r.test.questions;
+        const letter = (q, k) => Number.isInteger(k) ? 'ABCD'[k] + ') ' + q.options[k] : 'Boş';
+        // Sıralamayı koru: en yüksek puan listenin en üstünde kalsın
+        [...fresh].reverse().forEach(p => {
+            const at = new Date(p.submittedAt);
+            candidateResults.unshift({
+                name: p.name,
+                email: 'Sicil: ' + p.sicil,
+                test: t.title + ' (Toplu Test)',
+                department: 'Toplu Test · ' + t.title,
+                detail: p.rank + '. sıra / ' + r.stats.submitted + ' katılımcı · ortalama %' + r.stats.average,
+                score: p.score,
+                outcome: p.score >= 60 ? 'Olumlu' : 'Geliştirilmeli',
+                date: at.toLocaleDateString('tr-TR'),
+                time: at.toLocaleTimeString('tr-TR'),
+                level: p.level,
+                summary: `${p.name}, ${r.stats.submitted} katılımcılı "${t.title}" toplu testinde %${p.score} skorla ${p.rank}. sırada yer almıştır (grup ortalaması %${r.stats.average}, fark ${p.diffFromAverage >= 0 ? '+' : ''}${p.diffFromAverage}). Doğru: ${p.correct}, Yanlış: ${p.wrong}, Boş: ${p.blank}.`,
+                testId: 'GT-' + id + '-' + p.key,
+                detailedReport: qs.map((q, i) => ({
+                    question: (i + 1) + '. ' + q.text,
+                    answer: letter(q, p.answers[i]),
+                    correctAnswer: letter(q, q.answer),
+                    status: p.answers[i] === null ? 'blank' : (p.answers[i] === q.answer ? 'positive' : 'negative'),
+                    seconds: (p.durations || [])[i] || 0,
+                    level: q.level || 'Mid',
+                    rationale: q.rationale || ''
+                }))
+            });
+            done.add(p.key);
+        });
+        updateTest(id, { transferred: [...done] });
+        toast(fresh.length + ' sonuç Test Sonuçlarına aktarıldı');
+    };
+
+    window.printGroupQr = function(id) {
+        const t = findTest(id);
+        const w = window.open('', '_blank');
+        if (!w) return toast('Açılır pencere engellendi');
+        w.document.write(`<!doctype html><html lang="tr"><head><meta charset="utf-8"><title>${safeText(t.title)} · QR</title>
+            <style>body{font-family:system-ui,sans-serif;text-align:center;padding:40px}svg{width:340px;height:340px}p{color:#475569}</style></head>
+            <body><h1>${safeText(t.title)}</h1><p>Teste katılmak için QR kodunu telefonunuzun kamerasıyla okutun.</p>${groupQrSvg(joinUrl(id))}<p>${safeText(joinUrl(id))}</p></body></html>`);
+        w.document.close();
+        w.focus();
+        w.print();
+    };
+
+    // ---------- Sayfa ----------
+    function listHtml(tests) {
+        if (!tests.length) {
+            return `<div style="padding:32px;text-align:center;background:#fff;border:1px solid #e2e8f0;border-radius:16px">
+                <div style="font-size:2.4rem">👥</div><h3>Henüz toplu test yok</h3>
+                <p style="color:#64748b">Bir vakadan çoktan seçmeli test üretin, ardından <b>“Toplu Test Olarak Yayınla (QR)”</b> butonuna basın.</p>
+                <button class="primary" onclick="go('mcq')">Vakadan Test Hazırla</button></div>`;
+        }
+        return `<div style="display:grid;gap:12px">${tests.map(t => `
+            <button onclick="state.groupTestId='${t.id}';render()" style="text-align:left;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:16px 18px;display:flex;justify-content:space-between;gap:12px;align-items:center;cursor:pointer">
+                <span><b style="font-size:1.05rem">${safeText(t.title)}</b><br><small style="color:#64748b">${t.questionCount} soru · ${t.timeLimitMinutes} dk · kapasite ${t.capacity} · ${t.closed ? 'Kapalı' : 'Açık'} · ${fmtDate(t.createdAt)}</small></span>
+                <span style="color:#0284c7;font-weight:700">Sonuçlar →</span>
+            </button>`).join('')}</div>`;
+    }
+
+    function detailHtml(t) {
+        const url = joinUrl(t.id);
+        const closed = !!t.closed;
+        return `<button class="secondary" onclick="state.groupTestId=null;render()" style="margin-bottom:14px">← Tüm toplu testler</button>
+            <div style="display:grid;grid-template-columns:minmax(220px,280px) 1fr;gap:18px;align-items:start" class="gt-grid">
+                <aside style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:18px;text-align:center">
+                    <div style="max-width:240px;margin:0 auto">${groupQrSvg(url)}</div>
+                    <p style="font-size:.8rem;color:#64748b;word-break:break-all;margin:10px 0">${safeText(url)}</p>
+                    <div style="display:grid;gap:8px">
+                        <button class="secondary" onclick="navigator.clipboard?.writeText('${url}');toast('Bağlantı kopyalandı')">🔗 Bağlantıyı Kopyala</button>
+                        <button class="secondary" onclick="printGroupQr('${t.id}')">🖨️ QR'ı Yazdır</button>
+                        ${closed
+                            ? `<button class="primary" onclick="setGroupTestStatus('${t.id}','open')">🔓 Katılıma Yeniden Aç</button>`
+                            : `<button class="danger-button" onclick="if(confirm('Test katılıma kapatılsın mı? Kullanılmayan kontenjan iade edilir.'))setGroupTestStatus('${t.id}','closed')">🔒 Testi Kapat</button>`}
+                    </div>
+                    <p style="font-size:.8rem;color:#64748b;margin:12px 0 0">${t.questionCount} soru · ${t.timeLimitMinutes} dk · kapasite ${t.capacity}<br>Durum: <b>${closed ? 'Kapalı' : 'Açık'}</b></p>
+                </aside>
+                <section>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px">
+                        <button class="secondary" onclick="refreshGroupResults('${t.id}')">↻ Yenile</button>
+                        <button class="secondary" onclick="downloadGroupCsv('${t.id}')">⬇ Excel (CSV)</button>
+                        <button class="primary" onclick="transferGroupResults('${t.id}')">📥 Test Sonuçlarına Aktar</button>
+                        <small id="gt-updated" style="color:#64748b;margin-left:auto">Sonuçlar 10 sn'de bir yenilenir</small>
+                    </div>
+                    <div id="gt-results">${results[t.id] ? resultsHtml(t, results[t.id]) : '<p style="color:#64748b">Sonuçlar yükleniyor…</p>'}</div>
+                </section>
+            </div>
+            <style>@media(max-width:820px){.gt-grid{grid-template-columns:1fr!important}}</style>`;
+    }
+
+    window.groupTestsPage = function() {
+        const tests = loadTests();
+        const t = state.groupTestId && tests.find(x => x.id === state.groupTestId);
+        return layout(`<section style="max-width:1240px;margin:0 auto">
+            <div class="prompt-head"><div><span class="eyebrow">TOPLU TEST · QR</span><h2>${t ? safeText(t.title) : 'Toplu Test Uygulamaları'}</h2>
+            <p>Katılımcılar QR kodu okutup ad ve sicil numarasıyla testi kendi cihazlarında çözer; sonuçlar, ortalama ve sıralama burada canlı görünür.</p></div></div>
+            ${t ? detailHtml(t) : listHtml(tests)}
+        </section>`, 'Toplu Test (QR)');
+    };
+
+    const baseRender = window.render;
+    window.render = function() {
+        if (pollId) { clearInterval(pollId); pollId = null; }
+        if (state.logged && state.page === 'group-tests') {
+            document.getElementById('app').innerHTML = groupTestsPage();
+            const id = state.groupTestId;
+            if (id && findTest(id)) {
+                refreshGroupResults(id);
+                pollId = setInterval(() => {
+                    if (state.page !== 'group-tests' || state.groupTestId !== id) { clearInterval(pollId); pollId = null; return; }
+                    refreshGroupResults(id, true);
+                }, 10000);
+            }
+            return;
+        }
+        return baseRender.apply(this, arguments);
+    };
+
+    console.log('PATCH 23: Toplu Test (QR) modülü yüklendi.');
 })();

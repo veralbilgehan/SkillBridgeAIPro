@@ -1,0 +1,13 @@
+.gcloudignore
+.git
+.gitignore
+node_modules/
+.openai/
+*.bat
+*.sqlite
+database.sqlite
+downloaded.js
+.env
+.env.*
+!.env.example
+data/

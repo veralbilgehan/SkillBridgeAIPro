@@ -21,7 +21,7 @@ Sınav oluşturmadan önce adayın çözeceği iş senaryosunu (vakayı) oluştu
 
 *   **📄 Belgeden Vaka Yarat:** Kurumunuza ait prosedür, eğitim veya teknik belgeleri (PDF, Word vb.) sisteme yükleyin. Yapay zeka, bu belgedeki bilgileri okuyarak seçtiğiniz sektör, departman ve pozisyona uygun gerçekçi bir kriz/vaka senaryosuna dönüştürür.
 *   **📋 Formdan Vaka Yarat:** Herhangi bir belge olmadan; sektör, yetkinlik, zorluk derecesi ve süreyi form üzerinden seçin. Ajanlar, belirlediğiniz parametrelere uygun ve teknik derinliği yüksek yepyeni bir iş vakası üretir.
-*   **🗣️ Meet & Teams Vaka (Konuşmadan Vaka):** Bir toplantı transkriptini (konuşma dökümünü) sisteme yapıştırın. Yapay zeka, toplantıdaki fikir ayrılıkları veya stratejik hedefleri algılayarak adayların çözmesi gereken bir karar verme vakası hazırlar.
+*   **📋 Metin Yapıştır Vaka:** Toplantı notu, e-posta, rapor veya herhangi bir metni kopyalayıp yapıştırın. **Vaka Hazırla** butonu metinden adayların çözmesi gereken bir karar verme vakası üretir; **Test Hazırla** butonu seçilen soru sayısıyla (10/25/50/100) doğrudan çoktan seçmeli test hazırlar.
 
 ### 2. Test Formatına Dönüştürme
 
@@ -33,6 +33,13 @@ Oluşturduğunuz vakayı test haline getirmek için iki seçeneğiniz bulunur:
 
 *   **Test Platformu:** Hazırlanan testler, **Test Yönetimi** ekranında listelenir. Adaya özel benzersiz bir oturum (Test ID) oluşturularak sınav başlatılır.
 *   **Aday Deneyimi:** Aday, sisteme adını ve Test ID'sini girerek vakayı okur, kısıtlı süre içerisinde kendi çözümünü yazar veya şıkları işaretler ve sınavı tamamlar.
+*   **👥 Toplu Test (QR):** Aynı vakayı 1000 kişiye kadar bir grubun çözmesi için kullanılır.
+    1. Vakadan çoktan seçmeli test üretin ve **Toplu Test Olarak Yayınla (QR)** butonuna basın. Test adı, katılımcı kapasitesi (en çok 1000) ve süreyi belirleyin.
+    2. Oluşan QR kodunu ekrana yansıtın, yazdırın veya bağlantıyı paylaşın. Katılımcılar QR'ı telefonlarıyla okutup **Ad Soyad** ve **Sicil / Personel No** ile testi kendi cihazlarında çözer. Aynı sicil numarasıyla ikinci kez giriş yapılamaz.
+    3. **Test Yönetimi → Toplu Test (QR)** sayfasında sonuçlar 10 saniyede bir yenilenir: katılım, ortalama, medyan, en yüksek/en düşük skor ve her katılımcının ortalamaya göre farkıyla sıralama.
+    4. **Test Sonuçlarına Aktar** ile katılımcılar diğer test sonuçları gibi detaylı raporlarıyla listeye eklenir; **Excel (CSV)** ile sıralama indirilir.
+    5. **Testi Kapat** ile yeni katılım durdurulur; kullanılmayan kontenjanın BIGakçe'si iade edilir.
+    *   Ücret: soru üretimi (11 BIGakçe/soru) + katılımcı kapasitesi × 1 BIGakçe (peşin). Doğru cevaplar katılımcı cihazına gönderilmez, puanlama sunucuda yapılır. Testin yönetici anahtarı onu yayınlayan tarayıcıda saklanır; sonuçlar yalnızca o tarayıcıdan görüntülenebilir.
 
 ### 4. AI Değerlendirmesi ve Detaylı Raporlar 📊
 

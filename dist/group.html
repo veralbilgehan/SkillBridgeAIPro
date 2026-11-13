@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SkillBridge Toplu Test</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%234aa16f'/%3E%3Cpath d='M18 20h29v8H28v5h15v8H28v5h19v8H18z' fill='white'/%3E%3C/svg%3E">
+  <style>
+    :root{--green:#4aa16f;--green-dark:#347b53;--ink:#0f172a;--muted:#64748b;--line:#e2e8f0;--bg:#f4f7f5;--danger:#dc2626}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+    header{background:#fff;border-bottom:1px solid var(--line);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:5}
+    header b{color:var(--green);font-size:1.15rem;letter-spacing:-.01em}
+    #timer{font-variant-numeric:tabular-nums;font-weight:800;background:#ecfdf3;color:var(--green-dark);padding:6px 12px;border-radius:999px;font-size:.95rem}
+    #timer.warn{background:#fef2f2;color:var(--danger)}
+    main{max-width:720px;margin:0 auto;padding:20px 16px 60px}
+    .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 6px 24px rgba(15,23,42,.05)}
+    h1{font-size:1.4rem;margin:0 0 6px}
+    h2{font-size:1.15rem;margin:0 0 14px;line-height:1.45}
+    .muted{color:var(--muted)}
+    .meta{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 20px}
+    .meta span{background:#f1f5f9;border-radius:999px;padding:5px 12px;font-size:.85rem;font-weight:600;color:#334155}
+    label{display:block;font-weight:700;font-size:.85rem;color:#334155;margin:14px 0 6px}
+    input[type=text]{width:100%;padding:13px 14px;border:1px solid #94a3b8;border-radius:10px;font-size:1rem}
+    .consent{display:flex;gap:10px;align-items:flex-start;font-weight:500;font-size:.88rem;color:var(--muted);margin-top:16px}
+    .consent input{width:20px;height:20px;margin-top:2px;flex:none}
+    button{font:inherit;cursor:pointer;border-radius:10px;padding:13px 18px;font-weight:700;border:1px solid var(--line);background:#fff;color:var(--ink)}
+    button.primary{background:var(--green);border-color:var(--green);color:#fff;width:100%;font-size:1.02rem}
+    button:disabled{opacity:.55;cursor:not-allowed}
+    .error{color:var(--danger);font-weight:600;margin-top:12px;min-height:1.2em}
+    .case{white-space:pre-wrap;background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:16px;max-height:55vh;overflow:auto;font-size:.95rem}
+    .progress{height:6px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin:0 0 18px}
+    .progress i{display:block;height:100%;background:var(--green);transition:width .25s}
+    .options{display:grid;gap:10px;margin:6px 0 18px}
+    .options button{text-align:left;display:flex;gap:12px;align-items:flex-start;padding:14px;font-weight:500}
+    .options button b{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#f1f5f9;font-size:.9rem}
+    .options button.sel{border-color:var(--green);background:#ecfdf3;box-shadow:0 0 0 2px rgba(74,161,111,.2)}
+    .options button.sel b{background:var(--green);color:#fff}
+    .row{display:flex;gap:10px}
+    .row button{flex:1}
+    details{margin-bottom:16px}
+    summary{cursor:pointer;font-weight:700;color:var(--green-dark);padding:4px 0}
+    .center{text-align:center}
+    .big{font-size:3rem;line-height:1;margin-bottom:10px}
+  </style>
+</head>
+<body>
+  <header><b>SkillBridge</b><span id="timer" hidden></span></header>
+  <main id="app"><div class="card center muted">Test yükleniyor…</div></main>
+  <script src="./group.js"></script>
+</body>
+</html>

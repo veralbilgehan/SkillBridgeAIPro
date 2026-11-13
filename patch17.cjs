@@ -52,7 +52,7 @@ const patchCode17 = `
                 <ul style="padding-left: 20px;">
                     <li><strong>Veri Bankası ile Formdan Vaka Yarat:</strong> Sistemdeki dev veri kütüphanesi sayesinde sektörünüzü seçin. CTRL/CMD tuşuna basılı tutarak birden fazla departman, uzmanlık ve sertifikayı aynı anda seçerek Ajan 8'in çok zorlu, derin teknik kurgular üretmesini sağlayın.</li>
                     <li><strong>Belgeden Vaka Yarat:</strong> Kurumunuza ait prosedür belgelerini (PDF, Word) sisteme yükleyin, ajanlar bu belgelerdeki bilgileri vaka senaryosuna dönüştürsün.</li>
-                    <li><strong>Meet & Teams Vaka:</strong> Toplantı dökümünüzü sisteme kopyalayın, yapay zeka toplantıdaki fikir ayrılıklarından bir kriz/karar senaryosu hazırlasın.</li>
+                    <li><strong>Metin Yapıştır Vaka:</strong> Toplantı notu, e-posta veya rapor metnini kopyalayıp yapıştırın; tek tıkla vaka ya da test hazırlansın.</li>
                     <li><strong>Açık Uçlu / Karşılaştırma:</strong> Üretilen vakaları açık uçlu teste dönüştürebilir veya evrak kutusundaki vakaları birbiriyle kıyaslayabilirsiniz.</li>
                 </ul>
 

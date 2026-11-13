@@ -12,7 +12,7 @@ SkillBridgeAIPro, kurumların işe alım, terfi ve yetenek gelişimi süreçleri
 - 📝 **Otomatik Vaka (Case Study) Üretimi:** 
   - **Veri Bankası:** Çoklu seçim (Multi-select) özellikli dev veri bankası sayesinde spesifik sektör, departman ve sertifika yetkinliklerini harmanlayan hibrit vakalar oluşturma.
   - **Belgeden Üretim:** Şirket içi PDF/Word belgelerini analiz ederek kurgusal senaryo yaratma.
-  - **Toplantı Analizi (Meet & Teams):** Konuşma dökümlerindeki kriz veya fikir ayrılıklarından vaka üretme.
+  - **Metin Yapıştır Vaka:** Kopyala-yapıştır ile girilen metinden (toplantı notu, e-posta, rapor) vaka veya test üretme.
 - 🎯 **AI Tabanlı Değerlendirme Merkezi:** Adayların açık uçlu cevaplarını %100 objektif, bias (yanlılık) olmadan saniyeler içinde analiz eder. Bilişsel, Teknik, Yönetsel radar grafikleri çıkarır, adayın mantıksal hatalarını (Hata Dedektörü) tespit eder ve 30 günlük "Nihai Mentor Kararı" yol haritası sunar.
 - 💳 **Paywall ve Kredi (Kontör) Yönetimi:**
   - **Sanal POS (PaynKolay) Entegrasyonu** ile 3D Secure abonelik paketleri alımı.
